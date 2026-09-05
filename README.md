@@ -1,0 +1,247 @@
+﻿# Sistem Reservasi & Pelaporan Fasilitas Kampus
+
+Aplikasi web untuk mengelola penggunaan fasilitas kampus (ruang kelas, aula, laboratorium, alat, lapangan). Pengguna dapat mengecek ketersediaan, mengajukan reservasi, dan melaporkan kerusakan. Petugas dan admin memproses kedua alur secara terpusat.
+
+---
+
+## Tech Stack
+
+| Layer | Teknologi |
+|-------|-----------|
+| **Frontend** | React 18 (Vite) + React Router v6 + Bootstrap 5 + Axios |
+| **Backend** | Laravel (REST API mode) |
+| **Auth** | Laravel Sanctum (token-based) |
+| **Database** | PostgreSQL 16 |
+| **Dev Environment** | XAMPP (PHP 8.5+), PostgreSQL, Composer, Node.js |
+| **Export** | maatwebsite/excel (v4) + barryvdh/laravel-dompdf |
+| **Kalender** | FullCalendar React |
+
+---
+
+## Struktur Folder
+
+```
+code/
+├── backend/                 # Laravel REST API
+├── frontend/                # React 18 SPA (Vite)
+├── CHANGELOG-agent.md       # Log eksekusi agent AI
+├── implementation_plan.md   # Panduan implementasi lengkap
+├── agentic-ai-sop.md        # SOP workflow AI agent
+└── README.md
+```
+
+---
+
+## Prasyarat
+
+Pastikan software berikut sudah terinstall di komputer kamu:
+
+- **PHP 8.5+** via XAMPP (bukan Herd Lite, karena butuh ekstensi lengkap)
+- **Composer 2.x**
+- **Node.js v18+** dan **npm 9+**
+- **PostgreSQL 16**
+- **Git**
+
+### Versi yang digunakan tim ini:
+```bash
+php --version      # PHP 8.5.10 (XAMPP)
+composer --version # Composer 2.x
+node --version     # v22.x
+npm --version      # 10.x
+```
+
+> PENTING: Pastikan PATH terminal mengarah ke PHP XAMPP, bukan XAMPP lama atau Herd Lite.
+> Cek dengan: `where.exe php` -> harus menampilkan `C:\xampp\php\php.exe`
+
+---
+
+## Cara Setup Lokal (Untuk Anggota Baru)
+
+### 1. Clone Repository
+
+```bash
+git clone <URL_REPO_GITHUB_KALIAN>
+cd code
+```
+
+### 2. Setup Backend (Laravel)
+
+```bash
+cd backend
+
+# Install dependencies
+composer install
+
+# Salin file environment
+cp .env.example .env
+
+# Generate application key
+php artisan key:generate
+```
+
+#### Konfigurasi .env
+
+Buka file `backend/.env` dan sesuaikan konfigurasi database:
+
+```env
+APP_NAME="Sistem Reservasi Fasilitas"
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=fasilitas_kampus
+DB_USERNAME=postgres
+DB_PASSWORD=your_password_here
+
+SANCTUM_STATEFUL_DOMAINS=localhost:5173
+SESSION_DOMAIN=localhost
+```
+
+#### Buat Database PostgreSQL
+
+Buka pgAdmin atau psql, lalu jalankan:
+```sql
+CREATE DATABASE fasilitas_kampus;
+```
+
+#### Jalankan Migrasi & Seeder
+
+```bash
+# Jalankan migrasi tabel
+php artisan migrate
+
+# Jalankan seeder (data dummy untuk demo)
+php artisan db:seed
+```
+
+#### Jalankan Backend Server
+
+```bash
+php artisan serve
+# Backend berjalan di: http://localhost:8000
+```
+
+---
+
+### 3. Setup Frontend (React)
+
+```bash
+cd ../frontend
+
+# Install dependencies
+npm install
+
+# Jalankan dev server
+npm run dev
+# Frontend berjalan di: http://localhost:5173
+```
+
+---
+
+## Akun Demo (Setelah Seeder Dijalankan)
+
+| Role | Email | Password | Status |
+|------|-------|----------|--------|
+| Admin | admin@kampus.ac.id | admin123 | active |
+| Petugas | petugas1@kampus.ac.id | petugas123 | active |
+| Mahasiswa | mhs1@kampus.ac.id | mhs123 | active |
+| Dosen | dosen1@kampus.ac.id | dosen123 | active |
+| Pending | mhs.baru@kampus.ac.id | mhs123 | pending |
+
+---
+
+## Package Yang Sudah Terinstall
+
+### Backend (backend/composer.json)
+- `laravel/sanctum` - Autentikasi token
+- `maatwebsite/excel:^4.0` - Export Excel
+- `barryvdh/laravel-dompdf` - Export PDF
+
+### Frontend (frontend/package.json)
+- `react-router-dom` - Routing SPA
+- `axios` - HTTP client
+- `@fullcalendar/react` + plugins - Kalender slot
+- `bootstrap` - UI framework
+
+---
+
+## Roadmap Implementasi (7 Fase)
+
+Lihat detail lengkap di `implementation_plan.md`.
+
+| Fase | Minggu | Deskripsi | Status |
+|------|--------|-----------|--------|
+| **1. Setup** | M1 (4-6 Sep) | Init Laravel + React + PostgreSQL, migrasi, seeder | Sedang dikerjakan |
+| **2. Auth** | M1 (7-10 Sep) | AuthController, Sanctum, LoginPage, RegisterPage, AuthContext | Belum |
+| **3. Fasilitas** | M2 (11-14 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | Belum |
+| **4. Reservasi** | M2-M3 (15-20 Sep) | Reservasi + conflict detection, form + antrian | Belum |
+| **5. Laporan** | M3 (21-25 Sep) | Laporan kerusakan + foto, riwayat + antrian | Belum |
+| **6. Admin** | M4 (26-30 Sep) | User management, rekap, export CSV/Excel/PDF | Belum |
+| **7. Polish** | M5 (1-10 Okt) | Bug fix, UI polish, persiapan presentasi | Belum |
+
+---
+
+## Pembagian Kerja Tim
+
+| Anggota | Fokus | Tanggung Jawab |
+|---------|-------|----------------|
+| **A** | Backend Core | Setup Laravel, migrations, Sanctum auth, middleware, CORS, seeder |
+| **B** | Backend Fitur | ReservationController, ReportController, FacilityController, validasi slot, conflict detection, upload foto |
+| **C** | Frontend Core | Setup React+Vite, React Router, AuthContext, AppLayout (Navbar, Sidebar), ProtectedRoute, halaman auth |
+| **D** | Frontend Fitur | Halaman reservasi, laporan, SlotCalendar (FullCalendar), form validasi client-side, komponen common |
+| **E** (jika 5) | Admin + Officer | Backend: Admin controllers, RecapController, export. Frontend: semua halaman admin + officer |
+
+---
+
+## API Endpoints Ringkasan
+
+| Grup | Base Path | Keterangan |
+|------|-----------|------------|
+| Auth | /api/auth/... | Register, Login, Logout, Me |
+| Fasilitas | /api/facilities/... | CRUD + slots |
+| Reservasi | /api/reservations/... | Ajukan, riwayat, antrian, approve/reject |
+| Laporan | /api/reports/... | Buat laporan, riwayat, antrian, update status |
+| Admin | /api/admin/... | User management, rekap, export |
+
+Detail lengkap ada di `implementation_plan.md` bagian API Endpoints.
+
+---
+
+## Troubleshooting Umum
+
+### PHP tidak terdeteksi / versi salah
+```powershell
+# Pastikan PATH mengarah ke XAMPP
+where.exe php
+# Jika salah, jalankan:
+$env:PATH = "C:\xampp\php;" + $env:PATH
+```
+
+### Error extension=gd tidak aktif
+Buka `C:\xampp\php\php.ini`, pastikan baris ini TIDAK diawali titik koma (;):
+```ini
+extension=gd
+extension=pdo_pgsql
+extension=pgsql
+```
+
+### Error koneksi PostgreSQL
+- Pastikan PostgreSQL service sedang berjalan
+- Cek konfigurasi DB_USERNAME, DB_PASSWORD, dan DB_DATABASE di backend/.env
+
+### CORS error saat frontend request ke backend
+Pastikan `SANCTUM_STATEFUL_DOMAINS=localhost:5173` sudah ada di `backend/.env`.
+
+---
+
+## Catatan Pengembangan
+
+- Gunakan `CHANGELOG-agent.md` untuk mencatat setiap perubahan besar
+- Panduan implementasi lengkap ada di `implementation_plan.md`
+- Workflow penggunaan AI agent ada di `agentic-ai-sop.md`
+- **Deadline: 11 Oktober 2026**
+
+---
+
+Dibuat untuk mata kuliah PPK - Universitas Diponegoro

@@ -1,0 +1,32 @@
+﻿# ========================
+# OS & Editor Files
+# ========================
+.DS_Store
+Thumbs.db
+*.suo
+.vscode/
+.idea/
+
+# ========================
+# Backend (Laravel)
+# ========================
+backend/.env
+backend/.env.*
+!backend/.env.example
+backend/vendor/
+backend/node_modules/
+backend/storage/app/public/reports/
+backend/storage/*.key
+backend/storage/pail/
+backend/public/storage/
+backend/database/database.sqlite
+backend/*.log
+
+# ========================
+# Frontend (React/Vite)
+# ========================
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+frontend/*.log
