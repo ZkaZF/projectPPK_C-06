@@ -192,22 +192,71 @@ code/
 
 ### 2. Skema Database (PostgreSQL)
 
+#### Tabel `roles`
+
+| Kolom | Tipe | Constraint | Keterangan |
+|-------|------|-----------|-----------|
+| `role_id` | `INT` | PK, IDENTITY | |
+| `role_name` | `VARCHAR(20)` | NOT NULL, UNIQUE | `pengguna` / `petugas` / `admin` |
+
+#### Tabel `user_statuses`
+
+| Kolom | Tipe | Constraint | Keterangan |
+|-------|------|-----------|-----------|
+| `u_stat_id` | `INT` | PK, IDENTITY | |
+| `u_status_name` | `VARCHAR(30)` | NOT NULL, UNIQUE | `pending` / `active` / `rejected` |
+
+#### Tabel `facility_types`
+
+| Kolom | Tipe | Constraint | Keterangan |
+|-------|------|-----------|-----------|
+| `fac_type_id` | `INT` | PK, IDENTITY | |
+| `fac_type_name` | `VARCHAR(30)` | NOT NULL, UNIQUE | `ruang_kelas` / `aula` / `laboratorium` / `alat` / `lapangan` |
+
+#### Tabel `facility_statuses`
+
+| Kolom | Tipe | Constraint | Keterangan |
+|-------|------|-----------|-----------|
+| `fac_stat_id` | `INT` | PK, IDENTITY | |
+| `fac_status_name` | `VARCHAR(20)` | NOT NULL, UNIQUE | `aktif` / `dalam_perbaikan` / `nonaktif` |
+
+#### Tabel `reservation_statuses`
+
+| Kolom | Tipe | Constraint | Keterangan |
+|-------|------|-----------|-----------|
+| `res_stat_id` | `INT` | PK, IDENTITY | |
+| `res_status_name` | `VARCHAR(20)` | NOT NULL, UNIQUE | `pending` / `approved` / `rejected` / `cancelled` |
+
+#### Tabel `report_categories`
+
+| Kolom | Tipe | Constraint | Keterangan |
+|-------|------|-----------|-----------|
+| `rep_cat_id` | `INT` | PK, IDENTITY | |
+| `rep_cat_name` | `VARCHAR(30)` | NOT NULL, UNIQUE | `kerusakan_ringan` / `kerusakan_berat` / `kebersihan` / `keamanan` / `lainnya` |
+
+#### Tabel `report_statuses`
+
+| Kolom | Tipe | Constraint | Keterangan |
+|-------|------|-----------|-----------|
+| `rep_stat_id` | `INT` | PK, IDENTITY | |
+| `rep_status_name` | `VARCHAR(20)` | NOT NULL, UNIQUE | `baru` / `diproses` / `selesai` / `ditolak` |
+
 #### Tabel `users`
 
 | Kolom | Tipe | Constraint | Keterangan |
 |-------|------|-----------|-----------|
-| `id` | `BIGINT` | PK, AUTO INCREMENT | |
-| `name` | `VARCHAR(100)` | NOT NULL | Nama lengkap |
+| `user_id` | `BIGINT` | PK, IDENTITY | |
+| `full_name` | `VARCHAR(100)` | NOT NULL | Nama lengkap |
 | `email` | `VARCHAR(150)` | NOT NULL, UNIQUE | Untuk login |
-| `password` | `VARCHAR(255)` | NOT NULL | Bcrypt hash |
-| `role` | `VARCHAR(20)` | NOT NULL, DEFAULT 'pengguna' | `pengguna` / `petugas` / `admin` |
+| `user_password` | `VARCHAR(255)` | NOT NULL | Bcrypt hash |
+| `role_id` | `INT` | FK → roles.role_id, NOT NULL, DEFAULT 1 | Lihat tabel `roles` |
 | `nim_nip` | `VARCHAR(30)` | NULLABLE | NIM mahasiswa / NIP dosen-staf |
-| `status` | `VARCHAR(20)` | NOT NULL, DEFAULT 'pending' | `pending` / `active` / `rejected` |
-| `created_at` | `TIMESTAMP` | | |
-| `updated_at` | `TIMESTAMP` | | |
+| `u_stat_id` | `INT` | FK → user_statuses.u_stat_id, NOT NULL, DEFAULT 1 | Lihat tabel `user_statuses` |
+| `created_at` | `TIMESTAMP` | DEFAULT now() | |
+| `updated_at` | `TIMESTAMP` | DEFAULT now() | |
 
 > [!NOTE]
-> PostgreSQL tidak mendukung `ENUM` secara native seperti MySQL. Menggunakan `VARCHAR` dengan validasi di level Laravel (`Rule::in(...)`) adalah pendekatan standar yang lebih fleksibel.
+> `role` dan `status` sebelumnya berupa `VARCHAR` dengan validasi di Laravel. Sekarang dipisah menjadi tabel lookup (`roles`, `user_statuses`) yang direferensikan lewat FK, agar integritas nilai dijaga langsung oleh database (mencegah typo / nilai tidak valid).
 
 ---
 
@@ -215,19 +264,18 @@ code/
 
 | Kolom | Tipe | Constraint | Keterangan |
 |-------|------|-----------|-----------|
-| `id` | `BIGINT` | PK, AUTO INCREMENT | |
-| `name` | `VARCHAR(150)` | NOT NULL | Nama fasilitas |
-| `type` | `VARCHAR(30)` | NOT NULL | `ruang_kelas` / `aula` / `laboratorium` / `alat` / `lapangan` |
-| `location` | `VARCHAR(200)` | NOT NULL | Gedung / lantai / area |
-| `capacity` | `INTEGER` | NULLABLE | Kapasitas orang (null untuk alat) |
-| `description` | `TEXT` | NULLABLE | Deskripsi fasilitas |
-| `status` | `VARCHAR(20)` | NOT NULL, DEFAULT 'aktif' | `aktif` / `dalam_perbaikan` / `nonaktif` |
-| `image` | `VARCHAR(255)` | NULLABLE | Path gambar fasilitas |
-| `created_at` | `TIMESTAMP` | | |
-| `updated_at` | `TIMESTAMP` | | |
+| `fac_id` | `BIGINT` | PK, IDENTITY | |
+| `fac_name` | `VARCHAR(150)` | NOT NULL | Nama fasilitas |
+| `fac_type_id` | `INT` | FK → facility_types.fac_type_id, NOT NULL | Lihat tabel `facility_types` |
+| `fac_location` | `VARCHAR(200)` | NOT NULL | Gedung / lantai / area |
+| `fac_capacity` | `INTEGER` | NULLABLE | Kapasitas orang (null untuk alat) |
+| `fac_description` | `TEXT` | NULLABLE | Deskripsi fasilitas |
+| `fac_stat_id` | `INT` | FK → facility_statuses.fac_stat_id, NOT NULL, DEFAULT 1 | Lihat tabel `facility_statuses` |
+| `fac_image` | `VARCHAR(255)` | NULLABLE | Path gambar fasilitas |
+| `created_at` | `TIMESTAMP` | DEFAULT now() | |
+| `updated_at` | `TIMESTAMP` | DEFAULT now() | |
 
-**Index:** `type`, `status`, `location`
-
+**Index:** `fac_type_id`, `fac_stat_id`, `fac_location`
 ---
 
 #### Tabel `reservations`
@@ -260,26 +308,32 @@ CHECK (EXTRACT(MINUTE FROM start_time) IN (0, 30) AND EXTRACT(MINUTE FROM end_ti
 
 | Kolom | Tipe | Constraint | Keterangan |
 |-------|------|-----------|-----------|
-| `id` | `BIGINT` | PK, AUTO INCREMENT | |
-| `user_id` | `BIGINT` | FK → users.id, NOT NULL | Pelapor |
-| `facility_id` | `BIGINT` | FK → facilities.id, NOT NULL | Fasilitas yang dilaporkan |
-| `category` | `VARCHAR(30)` | NOT NULL | `kerusakan_ringan` / `kerusakan_berat` / `kebersihan` / `keamanan` / `lainnya` |
-| `description` | `TEXT` | NOT NULL | Deskripsi masalah |
-| `photo` | `VARCHAR(255)` | NULLABLE | Path foto (relative) |
-| `status` | `VARCHAR(20)` | NOT NULL, DEFAULT 'baru' | `baru` / `diproses` / `selesai` / `ditolak` |
-| `handled_by` | `BIGINT` | FK → users.id, NULLABLE | Petugas yang menangani |
-| `resolution_note` | `TEXT` | NULLABLE | Catatan resolusi |
-| `created_at` | `TIMESTAMP` | | |
-| `updated_at` | `TIMESTAMP` | | |
+| `rep_id` | `BIGINT` | PK, IDENTITY | |
+| `user_id` | `BIGINT` | FK → users.user_id, NOT NULL | Pelapor |
+| `fac_id` | `BIGINT` | FK → facilities.fac_id, NOT NULL | Fasilitas yang dilaporkan |
+| `rep_cat_id` | `INT` | FK → report_categories.rep_cat_id, NOT NULL | Lihat tabel `report_categories` |
+| `rep_description` | `TEXT` | NOT NULL | Deskripsi masalah |
+| `rep_photo` | `VARCHAR(255)` | NULLABLE | Path foto (relative) |
+| `rep_stat_id` | `INT` | FK → report_statuses.rep_stat_id, NOT NULL, DEFAULT 1 | Lihat tabel `report_statuses` |
+| `handled_by` | `BIGINT` | FK → users.user_id, NULLABLE | Petugas yang menangani |
+| `rep_resolution_note` | `TEXT` | NULLABLE | Catatan resolusi |
+| `created_at` | `TIMESTAMP` | DEFAULT now() | |
+| `updated_at` | `TIMESTAMP` | DEFAULT now() | |
 
-**Index:** `facility_id`, `user_id`, `status`
-
+**Index:** `fac_id`, `user_id`, `rep_stat_id`
 ---
 
 #### Entity Relationship Diagram
 
 ```mermaid
 erDiagram
+    ROLES ||--o{ USERS : "mengklasifikasi"
+    USER_STATUSES ||--o{ USERS : "mengklasifikasi"
+    FACILITY_TYPES ||--o{ FACILITIES : "mengklasifikasi"
+    FACILITY_STATUSES ||--o{ FACILITIES : "mengklasifikasi"
+    RESERVATION_STATUSES ||--o{ RESERVATIONS : "mengklasifikasi"
+    REPORT_CATEGORIES ||--o{ REPORTS : "mengklasifikasi"
+    REPORT_STATUSES ||--o{ REPORTS : "mengklasifikasi"
     USERS ||--o{ RESERVATIONS : "mengajukan"
     USERS ||--o{ REPORTS : "melaporkan"
     USERS ||--o{ RESERVATIONS : "memproses"
@@ -287,49 +341,84 @@ erDiagram
     FACILITIES ||--o{ RESERVATIONS : "direservasi"
     FACILITIES ||--o{ REPORTS : "dilaporkan"
 
+    ROLES {
+        int role_id PK
+        varchar role_name
+    }
+
+    USER_STATUSES {
+        int u_stat_id PK
+        varchar u_status_name
+    }
+
+    FACILITY_TYPES {
+        int fac_type_id PK
+        varchar fac_type_name
+    }
+
+    FACILITY_STATUSES {
+        int fac_stat_id PK
+        varchar fac_status_name
+    }
+
+    RESERVATION_STATUSES {
+        int res_stat_id PK
+        varchar res_status_name
+    }
+
+    REPORT_CATEGORIES {
+        int rep_cat_id PK
+        varchar rep_cat_name
+    }
+
+    REPORT_STATUSES {
+        int rep_stat_id PK
+        varchar rep_status_name
+    }
+
     USERS {
-        bigint id PK
-        varchar name
+        bigint user_id PK
+        varchar full_name
         varchar email UK
-        varchar password
-        varchar role "pengguna/petugas/admin"
+        varchar user_password
+        int role_id FK
         varchar nim_nip "nullable"
-        varchar status "pending/active/rejected"
+        int u_stat_id FK
     }
 
     FACILITIES {
-        bigint id PK
-        varchar name
-        varchar type
-        varchar location
-        int capacity "nullable"
-        text description "nullable"
-        varchar status "aktif/dalam_perbaikan/nonaktif"
+        bigint fac_id PK
+        varchar fac_name
+        int fac_type_id FK
+        varchar fac_location
+        int fac_capacity "nullable"
+        text fac_description "nullable"
+        int fac_stat_id FK
     }
 
     RESERVATIONS {
-        bigint id PK
+        bigint res_id PK
         bigint user_id FK
-        bigint facility_id FK
-        date reservation_date
-        time start_time
-        time end_time
-        text purpose
-        varchar status "pending/approved/rejected/cancelled"
+        bigint fac_id FK
+        date res_date
+        time res_start
+        time res_end
+        text res_purpose
+        int res_stat_id FK
         bigint processed_by FK "nullable"
-        text cancel_reason "nullable"
+        text res_cancel_reason "nullable"
     }
 
     REPORTS {
-        bigint id PK
+        bigint rep_id PK
         bigint user_id FK
-        bigint facility_id FK
-        varchar category
-        text description
-        varchar photo "nullable"
-        varchar status "baru/diproses/selesai/ditolak"
+        bigint fac_id FK
+        int rep_cat_id FK
+        text rep_description
+        varchar rep_photo "nullable"
+        int rep_stat_id FK
         bigint handled_by FK "nullable"
-        text resolution_note "nullable"
+        text rep_resolution_note "nullable"
     }
 ```
 
