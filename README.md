@@ -88,11 +88,12 @@ APP_NAME="Sistem Reservasi Fasilitas"
 APP_URL=http://localhost:8000
 
 DB_CONNECTION=pgsql
-DB_HOST=127.0.0.1
-DB_PORT=5432
+DB_HOST=pg-142719bd-ppk-4datab4se.g.aivencloud.com
+DB_PORT=16399
 DB_DATABASE=fasilitas_kampus
-DB_USERNAME=postgres
-DB_PASSWORD=your_password_here
+DB_USERNAME=avnadmin
+DB_PASSWORD=the_password_that_is_sent_in_group
+DB_SSLMODE=require
 
 SANCTUM_STATEFUL_DOMAINS=localhost:5173
 SESSION_DOMAIN=localhost
