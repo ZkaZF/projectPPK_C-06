@@ -1,4 +1,4 @@
-﻿# Sistem Reservasi & Pelaporan Fasilitas Kampus
+# Sistem Reservasi & Pelaporan Fasilitas Kampus
 
 Aplikasi web untuk mengelola penggunaan fasilitas kampus (ruang kelas, aula, laboratorium, alat, lapangan). Pengguna dapat mengecek ketersediaan, mengajukan reservasi, dan melaporkan kerusakan. Petugas dan admin memproses kedua alur secara terpusat.
 
@@ -97,6 +97,9 @@ DB_SSLMODE=require
 
 SANCTUM_STATEFUL_DOMAINS=localhost:5173
 SESSION_DOMAIN=localhost
+SESSION_DRIVER=file
+QUEUE_CONNECTION=sync
+CACHE_STORE=file
 ```
 
 #### Buat Database PostgreSQL
@@ -173,7 +176,7 @@ Lihat detail lengkap di `implementation_plan.md`.
 
 | Fase | Minggu | Deskripsi | Status |
 |------|--------|-----------|--------|
-| **1. Setup** | M1 (4-6 Sep) | Init Laravel + React + PostgreSQL, migrasi, seeder | Sedang dikerjakan |
+| **1. Setup** | M1 (4-6 Sep) | Init Laravel + React + PostgreSQL, migrasi, seeder | Selesai |
 | **2. Auth** | M1 (7-10 Sep) | AuthController, Sanctum, LoginPage, RegisterPage, AuthContext | Belum |
 | **3. Fasilitas** | M2 (11-14 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | Belum |
 | **4. Reservasi** | M2-M3 (15-20 Sep) | Reservasi + conflict detection, form + antrian | Belum |
