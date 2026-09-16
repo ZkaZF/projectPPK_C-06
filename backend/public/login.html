@@ -75,7 +75,7 @@
 
         if (res.ok && data.token) {
           localStorage.setItem('auth_token', data.token);
-          showLoggedIn(data.user);
+          window.location.href = '/dashboard.html';
         } else {
           msgEl.style.color = 'red';
           msgEl.innerText = data.message || 'Login failed.';
