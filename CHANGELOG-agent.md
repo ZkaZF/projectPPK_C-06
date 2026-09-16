@@ -10,3 +10,22 @@
     - Membuat project frontend dengan `npm create vite@latest frontend -- --template react`
     - Instalasi package frontend: `react-router-dom`, `axios`, `@fullcalendar/react` dkk, `bootstrap`
     - User memutuskan untuk pause pekerjaan (stop di setup awal) untuk melakukan commit dan push ke GitHub.
+
+## 2026-09-16
+- **[Fase 1] Lanjutan Setup (Database, Migrations & Seeders)**
+  - **Status:** ✅ Selesai
+  - **Detail Eksekusi:**
+    - Teman user telah membuat database PostgreSQL di Aiven Cloud.
+    - Konfigurasi `.env` telah disesuaikan oleh user.
+    - File migrations (`backend/database/migrations/*`) dan seeder (`DatabaseSeeder.php`) telah berjalan sukses.
+    - Telah diverifikasi bahwa terdapat data dummy (misal `Users` = 3 data) hasil eksekusi dari seeder.
+
+- **[Fase 1] Lanjutan Setup (Eloquent Models & CORS)**
+  - **Status:** ✅ Selesai
+  - **Detail Eksekusi:**
+    - Dibuat 9 Eloquent Model baru: `Facility`, `Reservation`, `Report` (model utama) + `Role`, `UserStatus`, `FacilityType`, `FacilityStatus`, `ReservationStatus`, `ReportCategory`, `ReportStatus` (model lookup).
+    - Diperbarui `User.php`: tambah trait `HasApiTokens` (Sanctum), custom primary key `user_id`, custom password column `user_password`, dan semua relasi ke model lain.
+    - Dibuat `config/cors.php`: izinkan `localhost:5173` (React) akses ke API Laravel.
+    - `routes/api.php` sudah ada (dibuat oleh `php artisan install:api`).
+    - **Pending:** Tabel `personal_access_tokens` belum dibuat — user perlu jalankan SQL via Beekeeper Studio (lihat README).
+

@@ -104,20 +104,38 @@ CACHE_STORE=file
 
 #### Buat Database PostgreSQL
 
-Buka pgAdmin atau psql, lalu jalankan:
-```sql
-CREATE DATABASE fasilitas_kampus;
-```
+Database dan semua tabel dikelola oleh **DBA tim** (teman yang memegang akses Aiven Cloud). Beritahu DBA untuk membuat tabel berikut jika belum ada:
 
-#### Jalankan Migrasi & Seeder
+> **Tabel yang dibuat oleh Laravel migrations** (sudah ada, Batch 1):
+> `roles`, `user_statuses`, `facility_types`, `facility_statuses`, `reservation_statuses`, `report_categories`, `report_statuses`, `users`, `facilities`, `reservations`, `reports`
+
+> **Tabel tambahan untuk Laravel Sanctum** — minta DBA jalankan SQL ini:
+> ```sql
+> -- Tabel untuk menyimpan token autentikasi (Laravel Sanctum)
+> CREATE TABLE personal_access_tokens (
+>     id BIGSERIAL PRIMARY KEY,
+>     tokenable_type VARCHAR(255) NOT NULL,
+>     tokenable_id BIGINT NOT NULL,
+>     name VARCHAR(255) NOT NULL,
+>     token VARCHAR(64) NOT NULL UNIQUE,
+>     abilities TEXT NULL,
+>     last_used_at TIMESTAMP WITH TIME ZONE NULL,
+>     expires_at TIMESTAMP WITH TIME ZONE NULL,
+>     created_at TIMESTAMP WITH TIME ZONE NULL,
+>     updated_at TIMESTAMP WITH TIME ZONE NULL
+> );
+> CREATE INDEX personal_access_tokens_tokenable_idx
+>     ON personal_access_tokens (tokenable_type, tokenable_id);
+> ```
+
+#### Jalankan Seeder
 
 ```bash
-# Jalankan migrasi tabel
-php artisan migrate
-
-# Jalankan seeder (data dummy untuk demo)
+# Tabel sudah dibuat oleh DBA — langsung jalankan seeder saja
 php artisan db:seed
 ```
+
+> **Catatan:** Jangan jalankan `php artisan migrate` karena semua tabel sudah dibuat manual oleh DBA di Aiven Cloud. Jalankan migrate hanya jika setup di database lokal sendiri.
 
 #### Jalankan Backend Server
 
@@ -170,15 +188,38 @@ npm run dev
 
 ---
 
+## Status Kode Saat Ini
+
+### Backend (`backend/`)
+| Komponen | Status | Keterangan |
+|----------|--------|------------|
+| Project Laravel | ✅ Ada | `composer install` cukup |
+| Database migrations | ✅ Ran (Batch 1) | 11 tabel di Aiven Cloud |
+| Seeder | ✅ Ran | Data demo sudah ada di DB |
+| `routes/api.php` | ✅ Ada | Siap diisi routes auth & fitur |
+| `config/cors.php` | ✅ Ada | Sudah dikonfigurasi untuk `localhost:5173` |
+| Eloquent Models | ✅ Ada | `User`, `Facility`, `Reservation`, `Report` + 7 model lookup |
+| `personal_access_tokens` | ⏳ Pending | Buat manual via Beekeeper (lihat SQL di atas) |
+| AuthController, Middleware | ❌ Belum | Target Fase 2 |
+| FacilityController, dll. | ❌ Belum | Target Fase 3 |
+
+### Frontend (`frontend/`)
+| Komponen | Status | Keterangan |
+|----------|--------|------------|
+| Project React + Vite | ✅ Ada | `npm install` cukup |
+| Halaman & komponen | ❌ Belum | Target Fase 2–6 |
+
+---
+
 ## Roadmap Implementasi (7 Fase)
 
 Lihat detail lengkap di `implementation_plan.md`.
 
 | Fase | Minggu | Deskripsi | Status |
 |------|--------|-----------|--------|
-| **1. Setup** | M1 (4-6 Sep) | Init Laravel + React + PostgreSQL, migrasi, seeder | Selesai |
-| **2. Auth** | M1 (7-10 Sep) | AuthController, Sanctum, LoginPage, RegisterPage, AuthContext | Belum |
-| **3. Fasilitas** | M2 (11-14 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | Belum |
+| **1. Setup** | M1 (4-6 Sep) | Init Laravel + React + PostgreSQL, migrasi, seeder | ✅ Selesai |
+| **2. Auth** | M1 (7-10 Sep) | AuthController, Sanctum, LoginPage, RegisterPage, AuthContext | 🔄 In Progress |
+| **3. Fasilitas** | M2 (11-14 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | 🔄 In Progress |
 | **4. Reservasi** | M2-M3 (15-20 Sep) | Reservasi + conflict detection, form + antrian | Belum |
 | **5. Laporan** | M3 (21-25 Sep) | Laporan kerusakan + foto, riwayat + antrian | Belum |
 | **6. Admin** | M4 (26-30 Sep) | User management, rekap, export CSV/Excel/PDF | Belum |
@@ -235,7 +276,10 @@ extension=pgsql
 - Cek konfigurasi DB_USERNAME, DB_PASSWORD, dan DB_DATABASE di backend/.env
 
 ### CORS error saat frontend request ke backend
-Pastikan `SANCTUM_STATEFUL_DOMAINS=localhost:5173` sudah ada di `backend/.env`.
+`config/cors.php` sudah dikonfigurasi untuk `localhost:5173`.
+Jika masih error, cek dua hal:
+1. `SANCTUM_STATEFUL_DOMAINS=localhost:5173` ada di `backend/.env`
+2. Backend dijalankan via `php artisan serve` (bukan langsung via Apache/Nginx)
 
 ---
 
