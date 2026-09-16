@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Auth Test</title>
+</head>
+<body style="font-family: Arial, sans-serif; background: #ffffff; color: #000000; padding: 20px; max-width: 600px;">
+
+  <h2>Auth API Test</h2>
+  <p>Pre-seeded accounts: <b>admin@kampus.ac.id</b>, <b>petugas@kampus.ac.id</b>, <b>user@kampus.ac.id</b> (password: <b>password123</b>)</p>
+  
+  <hr>
+
+  <h3>1. Register</h3>
+  <label>Full Name:</label><br>
+  <input type="text" id="reg_name" value="Budi Santoso"><br><br>
+
+  <label>Email:</label><br>
+  <input type="email" id="reg_email" value="budi@undip.ac.id"><br><br>
+
+  <label>NIM/NIP (optional):</label><br>
+  <input type="text" id="reg_nim" value="24060122120001"><br><br>
+
+  <label>Password:</label><br>
+  <input type="password" id="reg_pass" value="password123"><br><br>
+
+  <label>Confirm Password:</label><br>
+  <input type="password" id="reg_pass_conf" value="password123"><br><br>
+
+  <button onclick="register()">Register</button>
+
+  <hr>
+
+  <h3>2. Login</h3>
+  <label>Email:</label><br>
+  <input type="email" id="login_email" value="user@kampus.ac.id"><br><br>
+
+  <label>Password:</label><br>
+  <input type="password" id="login_pass" value="password123"><br><br>
+
+  <button onclick="login()">Login</button>
+
+  <hr>
+
+  <h3>3. Token Actions</h3>
+  <p>Current Token: <span id="tokenText">None</span></p>
+  <button onclick="getMe()">GET /api/auth/me</button>
+  <button onclick="logout()">POST /api/auth/logout</button>
+
+  <hr>
+
+  <h3>API Response:</h3>
+  <p><b>Status:</b> <span id="statusText">-</span></p>
+  <pre id="output" style="background: #f4f4f4; border: 1px solid #ccc; padding: 10px; white-space: pre-wrap;">No response yet.</pre>
+
+  <script>
+    let token = '';
+
+    function updateToken() {
+      document.getElementById('tokenText').innerText = token ? token.substring(0, 25) + '...' : 'None';
+    }
+
+    async function register() {
+      const payload = {
+        full_name: document.getElementById('reg_name').value,
+        email: document.getElementById('reg_email').value,
+        nim_nip: document.getElementById('reg_nim').value,
+        password: document.getElementById('reg_pass').value,
+        password_confirmation: document.getElementById('reg_pass_conf').value,
+      };
+
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      showResponse(res.status, data);
+    }
+
+    async function login() {
+      const payload = {
+        email: document.getElementById('login_email').value,
+        password: document.getElementById('login_pass').value,
+      };
+
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      showResponse(res.status, data);
+
+      if (res.ok && data.token) {
+        token = data.token;
+        updateToken();
+      }
+    }
+
+    async function getMe() {
+      if (!token) {
+        alert('Please login first to get a token.');
+        return;
+      }
+
+      const res = await fetch('/api/auth/me', {
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Accept': 'application/json'
+        }
+      });
+      const data = await res.json();
+      showResponse(res.status, data);
+    }
+
+    async function logout() {
+      if (!token) {
+        alert('You are not logged in.');
+        return;
+      }
+
+      const res = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Accept': 'application/json'
+        }
+      });
+      const data = await res.json();
+      showResponse(res.status, data);
+
+      if (res.ok) {
+        token = '';
+        updateToken();
+      }
+    }
+
+    function showResponse(status, data) {
+      document.getElementById('statusText').innerText = status;
+      document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+    }
+  </script>
+
+</body>
+</html>
