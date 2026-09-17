@@ -19,7 +19,7 @@ class EnsureUserIsActive
 
          if (! $user || $user->userStatus?->u_status_name !== 'active') {
              return response()->json([
-                 'message' => 'Your account is not yet active bruv, waiting for an approval from the admin(s).',
+                 'message' => 'Your account is not yet active, waiting for approval from an admin(s).',
              ], 403);
          }
 
