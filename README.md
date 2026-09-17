@@ -196,12 +196,14 @@ npm run dev
 | Project Laravel | ✅ Ada | `composer install` cukup |
 | Database migrations | ✅ Ran (Batch 1) | 11 tabel di Aiven Cloud |
 | Seeder | ✅ Ran | Data demo sudah ada di DB |
-| `routes/api.php` | ✅ Ada | Siap diisi routes auth & fitur |
-| `config/cors.php` | ✅ Ada | Sudah dikonfigurasi untuk `localhost:5173` |
+| `routes/api.php` | ✅ Ada | Auth + Facility routes terdaftar |
+| `config/cors.php` | ✅ Ada | Dikonfigurasi untuk `localhost:5173` |
 | Eloquent Models | ✅ Ada | `User`, `Facility`, `Reservation`, `Report` + 7 model lookup |
 | `personal_access_tokens` | ⏳ Pending | Buat manual via Beekeeper (lihat SQL di atas) |
-| AuthController, Middleware | ❌ Belum | Target Fase 2 |
-| FacilityController, dll. | ❌ Belum | Target Fase 3 |
+| `AuthController` + Middleware | ✅ Ada | register, login, logout, me — `RoleMiddleware`, `EnsureUserIsActive` |
+| `FacilityController` | ✅ Ada | index, show, slots, store, update, updateStatus |
+| `ReservationController` | 🔄 Sebagian | Mulai dikerjakan, belum lengkap |
+| `ReportController`, Admin | ❌ Belum | Target Fase 5–6 |
 
 ### Frontend (`frontend/`)
 | Komponen | Status | Keterangan |
@@ -218,8 +220,8 @@ Lihat detail lengkap di `implementation_plan.md`.
 | Fase | Minggu | Deskripsi | Status |
 |------|--------|-----------|--------|
 | **1. Setup** | M1 (4-6 Sep) | Init Laravel + React + PostgreSQL, migrasi, seeder | ✅ Selesai |
-| **2. Auth** | M1 (7-10 Sep) | AuthController, Sanctum, LoginPage, RegisterPage, AuthContext | 🔄 In Progress |
-| **3. Fasilitas** | M2 (11-14 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | 🔄 In Progress |
+| **2. Auth** | M1 (7-10 Sep) | AuthController, Sanctum, LoginPage, RegisterPage, AuthContext | ✅ Backend Selesai / ❌ Frontend Belum |
+| **3. Fasilitas** | M2 (11-14 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | ✅ Backend Selesai / ❌ Frontend Belum |
 | **4. Reservasi** | M2-M3 (15-20 Sep) | Reservasi + conflict detection, form + antrian | Belum |
 | **5. Laporan** | M3 (21-25 Sep) | Laporan kerusakan + foto, riwayat + antrian | Belum |
 | **6. Admin** | M4 (26-30 Sep) | User management, rekap, export CSV/Excel/PDF | Belum |

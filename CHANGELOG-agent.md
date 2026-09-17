@@ -11,7 +11,16 @@
     - Instalasi package frontend: `react-router-dom`, `axios`, `@fullcalendar/react` dkk, `bootstrap`
     - User memutuskan untuk pause pekerjaan (stop di setup awal) untuk melakukan commit dan push ke GitHub.
 
-## 2026-09-16
+## 2026-09-17
+- **[Fase 2 & 3] Merge PR #3 — Backend Auth & Fasilitas (Orang 1 / Akka)**
+  - **Status:** ✅ Selesai (Backend)
+  - **Detail:**
+    - PR `feat/backend-auth-facility` di-review oleh PM dan di-merge ke `main`.
+    - File yang masuk: `AuthController`, `FacilityController`, `ReservationController` (sebagian), `RoleMiddleware`, `EnsureUserIsActive`, `RegisterRequest`, `LoginRequest`, `StoreFacilityRequest`, update `routes/api.php` dan `bootstrap/app.php`.
+    - File HTML test (`login.html`, `register.html`, `dashboard.html`, `test-auth.html`) dihapus dari `main` setelah merge.
+    - **Catatan review yang ditemukan:** password `min` tidak konsisten di `LoginRequest` (seharusnya min:8), pesan error middleware masih casual ("bruv").
+    - **Frontend Fase 2 & 3** belum dikerjakan — menunggu Orang 2 & 3 push branch mereka.
+
 - **[Fase 1] Lanjutan Setup (Database, Migrations & Seeders)**
   - **Status:** ✅ Selesai
   - **Detail Eksekusi:**
