@@ -22,3 +22,7 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+public/login.html
+public/dashboard.html
+public/register.html
+public/test-auth.html
