@@ -3,18 +3,24 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard</title>
+  <title>Facility Reservation Dashboard</title>
 </head>
 
-<body style="font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto;">
+<body style="font-family: Arial, sans-serif; padding: 20px; max-width: 900px; margin: 0 auto;">
 
-  <div id="header">
-    <b id="welcomeText">Loading...</b>
-    <button onclick="handleLogout()" style="float: right; padding: 6px 12px; cursor: pointer;">Logout</button>
+  <!-- Header Section -->
+  <div id="header" style="margin-bottom: 20px;">
+    <span id="userInfo"><b>Guest Mode</b> (Read Only)</span>
+    <div id="authButtons" style="float: right;">
+      <a href="/login.html" id="btnLogin" style="padding: 6px 12px;">Login</a>
+      <button id="btnLogout" onclick="handleLogout()"
+        style="display: none; padding: 6px 12px; cursor: pointer;">Logout</button>
+    </div>
+    <div style="clear: both;"></div>
     <hr>
   </div>
 
-  <!-- Facilities List -->
+  <!-- Facilities Section (Public) -->
   <h3>Facilities</h3>
   <div>
     <label>Filter Type:</label>
@@ -27,7 +33,7 @@
       <option value="lapangan">Lapangan</option>
     </select>
     <label style="margin-left: 10px;">Location:</label>
-    <input type="text" id="filterLocation" placeholder="search..." onkeyup="loadFacilities()">
+    <input type="text" id="filterLocation" placeholder="Search..." onkeyup="loadFacilities()">
   </div>
   <br>
   <table border="1" cellpadding="6" cellspacing="0" width="100%" id="facilityTable">
@@ -51,7 +57,7 @@
 
   <hr>
 
-  <!-- Check Slots -->
+  <!-- Check Time Slots (Public) -->
   <h3>Check Time Slots</h3>
   <label>Facility ID:</label>
   <input type="number" id="slotFacId" value="1" style="width: 60px;">
@@ -62,9 +68,107 @@
 
   <hr>
 
-  <!-- Add Facility (admin only) -->
+  <!-- User Reservation Section (Pengguna Only) -->
+  <div id="userSection" style="display: none;">
+    <h3>Create Reservation</h3>
+    <form onsubmit="createReservation(event)" style="margin-bottom: 20px;">
+      <div style="margin-bottom: 8px;">
+        <label>Facility ID:</label><br>
+        <input type="number" id="resFacId" required style="width: 80px;">
+      </div>
+      <div style="margin-bottom: 8px;">
+        <label>Date:</label><br>
+        <input type="date" id="resDate" required>
+      </div>
+      <div style="margin-bottom: 8px;">
+        <label>Start Time (HH:MM:SS):</label><br>
+        <input type="text" id="resStart" placeholder="09:00:00" required>
+      </div>
+      <div style="margin-bottom: 8px;">
+        <label>End Time (HH:MM:SS):</label><br>
+        <input type="text" id="resEnd" placeholder="11:00:00" required>
+      </div>
+      <div style="margin-bottom: 8px;">
+        <label>Purpose:</label><br>
+        <input type="text" id="resPurpose" style="width: 100%;" required>
+      </div>
+      <button type="submit" style="padding: 6px 14px; cursor: pointer;">Submit Reservation</button>
+    </form>
+    <p id="resMsg"></p>
+
+    <h3>My Reservations</h3>
+    <table border="1" cellpadding="6" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Facility</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Purpose</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="myResBody">
+        <tr>
+          <td colspan="7">Loading...</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+  </div>
+
+  <!-- Petugas / Admin Management Queue Section -->
+  <div id="officerSection" style="display: none;">
+    <h3>Pending Reservation Requests (Officer/Admin Queue)</h3>
+    <table border="1" cellpadding="6" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Facility</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Purpose</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="queueBody">
+        <tr>
+          <td colspan="7">Loading...</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+  </div>
+
+  <!-- Approved Reservations (Officer/Admin Management) -->
+  <div id="approvedSection" style="display: none;">
+    <h3>Approved Reservations</h3>
+    <table border="1" cellpadding="6" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Facility</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Purpose</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="approvedBody">
+        <tr>
+          <td colspan="7">Loading...</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+  </div>
+
+  <!-- Admin Add Facility Section -->
   <div id="adminSection" style="display: none;">
-    <h3>Add New Facility (Admin)</h3>
+    <h3>Add New Facility (Admin Only)</h3>
     <div style="margin-bottom: 8px;">
       <label>Name:</label><br>
       <input type="text" id="addName" style="width: 100%;">
@@ -84,11 +188,11 @@
       <input type="text" id="addLocation" style="width: 100%;">
     </div>
     <div style="margin-bottom: 8px;">
-      <label>Capacity (optional):</label><br>
+      <label>Capacity:</label><br>
       <input type="number" id="addCapacity">
     </div>
     <div style="margin-bottom: 8px;">
-      <label>Description (optional):</label><br>
+      <label>Description:</label><br>
       <textarea id="addDescription" style="width: 100%;"></textarea>
     </div>
     <div style="margin-bottom: 8px;">
@@ -101,66 +205,70 @@
     </div>
     <button onclick="addFacility()" style="padding: 6px 14px; cursor: pointer;">Create Facility</button>
     <p id="addResult"></p>
+    <hr>
   </div>
-
-  <!-- Response Viewer -->
-  <hr>
-  <h3>Last API Response</h3>
-  <pre id="responseBox"
-    style="background: #f4f4f4; border: 1px solid #ccc; padding: 10px; white-space: pre-wrap; max-height: 300px; overflow-y: auto;">No response yet.</pre>
 
   <script>
     const token = localStorage.getItem('auth_token');
+    let currentUser = null;
 
-    // Redirect to login if no token
-    if (!token) {
-      window.location.href = '/login.html';
-    }
-
-    // Set today's date as default for slot checker
-    document.getElementById('slotDate').value = new Date().toISOString().split('T')[0];
-
-    // Load user info
-    fetchApi('/api/auth/me').then(data => {
-      if (data && data.user) {
-        const u = data.user;
-        const role = u.role ? u.role.role_name : (u.role_name || '-');
-        document.getElementById('welcomeText').innerText =
-          'Welcome, ' + (u.full_name) + ' | Role: ' + role;
-
-        // Show admin section if admin
-        if (role === 'admin') {
-          document.getElementById('adminSection').style.display = 'block';
-        }
-      } else {
-        localStorage.removeItem('auth_token');
-        window.location.href = '/login.html';
-      }
-    });
-
-    // Load facilities on page load
-    loadFacilities();
-
-    // ─── API Helper ────────────────────────────────────
+    // API Helper
     async function fetchApi(url, options = {}) {
       const headers = {
         'Accept': 'application/json',
-        'Authorization': 'Bearer ' + token,
+        ...(token ? { 'Authorization': 'Bearer ' + token } : {}),
         ...options.headers
       };
       try {
         const res = await fetch(url, { ...options, headers });
-        const data = await res.json();
-        document.getElementById('responseBox').innerText =
-          'HTTP ' + res.status + '\n' + JSON.stringify(data, null, 2);
-        return data;
+        if (!res.ok) {
+          console.error(`HTTP error! status: ${res.status}`);
+        }
+        return await res.json();
       } catch (err) {
-        document.getElementById('responseBox').innerText = 'Error: ' + err.message;
+        console.error('API Error:', err);
         return null;
       }
     }
 
-    // ─── Facilities ────────────────────────────────────
+    // Initialize page sequence safely after DOM loads
+    document.addEventListener('DOMContentLoaded', async () => {
+      const slotDateInput = document.getElementById('slotDate');
+      if (slotDateInput) {
+        slotDateInput.value = new Date().toISOString().split('T')[0];
+      }
+
+      if (token) {
+        const data = await fetchApi('/api/auth/me');
+        if (data && data.user) {
+          currentUser = data.user;
+          const role = currentUser.role ? currentUser.role.role_name : (currentUser.role_name || 'pengguna');
+
+          document.getElementById('userInfo').innerHTML = `Welcome, <b>${currentUser.full_name}</b> | Role: <b>${role}</b>`;
+          document.getElementById('btnLogin').style.display = 'none';
+          document.getElementById('btnLogout').style.display = 'inline-block';
+
+          if (role === 'pengguna') {
+            document.getElementById('userSection').style.display = 'block';
+            await loadMyReservations();
+          } else if (role === 'petugas' || role === 'admin') {
+            document.getElementById('officerSection').style.display = 'block';
+            document.getElementById('approvedSection').style.display = 'block';
+            await loadQueue();
+            await loadApproved();
+            if (role === 'admin') {
+              document.getElementById('adminSection').style.display = 'block';
+            }
+          }
+        } else {
+          localStorage.removeItem('auth_token');
+        }
+      }
+
+      await loadFacilities();
+    });
+
+    // Load Facilities
     async function loadFacilities() {
       const type = document.getElementById('filterType').value;
       const location = document.getElementById('filterLocation').value;
@@ -184,16 +292,16 @@
           <td>${f.fac_location}</td>
           <td>${f.fac_capacity || '-'}</td>
           <td>${f.status ? f.status.fac_status_name : '-'}</td>
-          <td><button onclick="document.getElementById('slotFacId').value=${f.fac_id}; loadSlots();" style="cursor:pointer;">Slots</button></td>
+          <td><button onclick="document.getElementById('slotFacId').value=${f.fac_id}; loadSlots();">Slots</button></td>
         </tr>
       `).join('');
     }
 
-    // ─── Slots ─────────────────────────────────────────
+    // Load Time Slots
     async function loadSlots() {
       const facId = document.getElementById('slotFacId').value;
       const date = document.getElementById('slotDate').value;
-      const data = await fetchApi('/api/facilities/' + facId + '/slots?date=' + date);
+      const data = await fetchApi(`/api/facilities/${facId}/slots?date=${date}`);
       const container = document.getElementById('slotsResult');
 
       if (!data || !data.slots) {
@@ -210,7 +318,147 @@
       container.innerHTML = html;
     }
 
-    // ─── Add Facility ──────────────────────────────────
+    // User: Create Reservation
+    async function createReservation(e) {
+      e.preventDefault();
+      const msg = document.getElementById('resMsg');
+      const body = {
+        fac_id: parseInt(document.getElementById('resFacId').value),
+        res_date: document.getElementById('resDate').value,
+        res_start: document.getElementById('resStart').value,
+        res_end: document.getElementById('resEnd').value,
+        res_purpose: document.getElementById('resPurpose').value
+      };
+
+      const data = await fetchApi('/api/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (data && data.status === 'success') {
+        msg.style.color = 'green';
+        msg.innerText = data.message;
+        loadMyReservations();
+      } else {
+        msg.style.color = 'red';
+        msg.innerText = data ? (data.message || 'Failed to submit') : 'Error occurred';
+      }
+    }
+
+    // User: Load My Reservations
+    async function loadMyReservations() {
+      const data = await fetchApi('/api/reservations/my');
+      const tbody = document.getElementById('myResBody');
+
+      const requests = Array.isArray(data) ? data : (data && data.data ? data.data : []);
+
+      if (!requests || requests.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7">No reservations found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = requests.map(r => `
+        <tr>
+          <td>${r.res_id}</td>
+          <td>${r.fac_name || (r.facility ? r.facility.fac_name : r.fac_id)}</td>
+          <td>${r.res_date}</td>
+          <td>${r.res_start} - ${r.res_end}</td>
+          <td>${r.res_purpose}</td>
+          <td>${r.res_status_name || (r.status ? r.status.res_status_name : r.res_stat_id)}</td>
+          <td>${r.res_stat_id === 1 ? `<button onclick="cancelReservation(${r.res_id})" style="cursor:pointer;">Cancel</button>` : '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    // User: Cancel Reservation
+    async function cancelReservation(id) {
+      const data = await fetchApi(`/api/reservations/${id}/cancel`, { method: 'PATCH' });
+      alert(data.message || 'Updated');
+      loadMyReservations();
+    }
+
+    // Officer/Admin: Load Pending Queue
+    async function loadQueue() {
+      const data = await fetchApi('/api/reservations/queue');
+
+      const tbody = document.getElementById('queueBody');
+
+      const requests = Array.isArray(data) ? data : (data && data.data ? data.data : []);
+
+      if (!requests || requests.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7">No pending requests.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = requests.map(r => `
+        <tr>
+          <td>${r.res_id}</td>
+          <td>${r.full_name || (r.user ? r.user.full_name : r.user_id)}</td>
+          <td>${r.fac_name || (r.facility ? r.facility.fac_name : r.fac_id)}</td>
+          <td>${r.res_date}</td>
+          <td>${r.res_start} - ${r.res_end}</td>
+          <td>${r.res_purpose}</td>
+          <td>
+            <button onclick="updateReservationStatus(${r.res_id}, 'approve')" style="color:green; cursor:pointer;">Approve</button>
+            <button onclick="updateReservationStatus(${r.res_id}, 'reject')" style="color:red; cursor:pointer;">Reject</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Officer/Admin: Approve/Reject
+    async function updateReservationStatus(id, action) {
+      const data = await fetchApi(`/api/reservations/${id}/${action}`, { method: 'PATCH' });
+      alert(data.message || 'Processed');
+      loadQueue();
+    }
+
+    // Officer/Admin: Load Approved Reservations
+    async function loadApproved() {
+      const data = await fetchApi('/api/reservations/approved');
+      const tbody = document.getElementById('approvedBody');
+
+      const requests = Array.isArray(data) ? data : (data && data.data ? data.data : []);
+
+      if (!requests || requests.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7">No approved reservations.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = requests.map(r => `
+        <tr>
+          <td>${r.res_id}</td>
+          <td>${r.full_name || (r.user ? r.user.full_name : r.user_id)}</td>
+          <td>${r.fac_name || (r.facility ? r.facility.fac_name : r.fac_id)}</td>
+          <td>${r.res_date}</td>
+          <td>${r.res_start} - ${r.res_end}</td>
+          <td>${r.res_purpose}</td>
+          <td><button onclick="forceCancelReservation(${r.res_id})" style="color:red; cursor:pointer;">Force Cancel</button></td>
+        </tr>
+      `).join('');
+    }
+
+    // Officer/Admin: Force Cancel an approved reservation
+    async function forceCancelReservation(id) {
+      const reason = prompt('Enter a reason for cancelling this reservation (min 5 characters):');
+      if (reason === null) return;
+      if (reason.trim().length < 5) {
+        alert('Cancel reason must be at least 5 characters.');
+        return;
+      }
+
+      const data = await fetchApi(`/api/reservations/${id}/force-cancel`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cancel_reason: reason })
+      });
+
+      alert(data.message || 'Processed');
+      loadApproved();
+    }
+
+    // Admin: Add Facility
     async function addFacility() {
       const body = {
         fac_name: document.getElementById('addName').value,
@@ -219,7 +467,6 @@
         fac_capacity: document.getElementById('addCapacity').value ? parseInt(document.getElementById('addCapacity').value) : null,
         fac_description: document.getElementById('addDescription').value || null,
         fac_stat_id: parseInt(document.getElementById('addStatus').value),
-        fac_image: null,
       };
 
       const data = await fetchApi('/api/facilities', {
@@ -229,21 +476,21 @@
       });
 
       const resultEl = document.getElementById('addResult');
-      if (data && data.message) {
+      if (data && data.fac_id) {
         resultEl.style.color = 'green';
-        resultEl.innerText = data.message;
-        loadFacilities(); // refresh table
+        resultEl.innerText = 'Facility created successfully!';
+        loadFacilities();
       } else {
         resultEl.style.color = 'red';
-        resultEl.innerText = 'Failed. Check API response below.';
+        resultEl.innerText = data.message || 'Failed to create facility.';
       }
     }
 
-    // ─── Logout ────────────────────────────────────────
+    // Logout
     async function handleLogout() {
       await fetchApi('/api/auth/logout', { method: 'POST' });
       localStorage.removeItem('auth_token');
-      window.location.href = '/login.html';
+      window.location.reload();
     }
   </script>
 </body>
