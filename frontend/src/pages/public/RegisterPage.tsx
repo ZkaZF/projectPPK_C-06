@@ -170,7 +170,7 @@ export const RegisterPage = () => {
                   id="reg-email"
                   className="form-input"
                   type="email"
-                  placeholder="nama@kampus.ac.id"
+                  placeholder="nama@status.undip.ac.id"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
