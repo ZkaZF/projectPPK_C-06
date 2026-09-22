@@ -1,5 +1,11 @@
 export function validateSlot(startTime,endTime){
 	const errors = [];
+
+	if(!startTime||!endTime){
+		errors.push('Waktu mulai dan waktu selesai wajib diisi!');
+		return errors;
+	}
+
 	const [sH,sM] = startTime.split(':').map(Number);
 	const [eH,eM] = endTime.split(':').map(Number);
 	const startMin = sH*60+sM;
