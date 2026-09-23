@@ -55,7 +55,7 @@ export default function SlotCalendar({ facilityId, date, onSlotSelect }) {
       height="auto"
       events={events}
       eventClick={handleEventClick}
-      eventTextColor="#fff"
+
     />
   );
 }
