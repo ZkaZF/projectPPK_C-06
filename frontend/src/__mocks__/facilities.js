@@ -66,7 +66,7 @@ export function mockSlots(facId,date){
 			const endH = m === 30 ? h + 1 : h;
 			const endM = m === 30 ? 0 : 30;
 			const end = `${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`;
-			slots.push({start,end,status:Math.random()>0.8 ? 'booked' : 'available'.});
+			slots.push({start,end,status:Math.random()>0.8 ? 'booked' : 'available',});
 		}
 	}
 	return slots;
