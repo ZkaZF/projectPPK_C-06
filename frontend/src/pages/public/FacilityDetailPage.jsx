@@ -65,9 +65,9 @@ export default function FacilityDetailPage() {
           <span className="badge bg-info text-dark mb-2">
             {facility.fac_type?.fac_type_name}
           </span>
-          <p className="text-muted mb-1">{facility.fac_location}</p>
+          <p className="text-white-50 mb-1">{facility.fac_location}</p>
           {facility.fac_capacity != null && (
-            <p className="text-muted mb-1">Kapasitas: {facility.fac_capacity} orang</p>
+            <p className="text-white-50 mb-1">Kapasitas: {facility.fac_capacity} orang</p>
           )}
           <p>{facility.fac_description}</p>
 
