@@ -18,7 +18,7 @@ export default function SlotCalendar({ facilityId, date, onSlotSelect }) {
   useEffect(() => {
     if (!facilityId || !date) return;
     getSlotsApi(facilityId, date)
-     .then((res) => setSlots(res.data.data ?? res.data))
+     .then((res) => setSlots(res.data.slots ?? []))
      .catch((err) => {
        console.error(err);
        setSlots([]);
