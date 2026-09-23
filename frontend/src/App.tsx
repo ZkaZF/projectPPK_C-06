@@ -5,10 +5,12 @@ import { AppLayout } from "./components/layout/AppLayout";
 import { LoginPage } from "./pages/public/LoginPage";
 import { RegisterPage } from "./pages/public/RegisterPage";
 import { ForbiddenPage } from "./pages/public/ForbiddenPage";
+import HomePage from "./pages/public/HomePage";
+import FacilityDetailPage from "./pages/public/FacilityDetailPage";
 
 // ── Placeholder pages (ganti nanti dengan halaman asli) ──────────────────────
 const DashboardPage      = () => <h1>Dashboard</h1>;
-const FacilityDetailPage = () => <h1>Detail Fasilitas</h1>;
+//const FacilityDetailPage = () => <h1>Detail Fasilitas</h1>;
 const ReservationsPage   = () => <h1>Reservasi Saya</h1>;
 const NewReservationPage  = () => <h1>Ajukan Reservasi</h1>;
 const ReportsPage        = () => <h1>Laporan Saya</h1>;
@@ -32,7 +34,10 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Public */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          //<Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/facilities/:id" element={<FacilityDetailPage />} />
+
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/403" element={<ForbiddenPage />} />
@@ -41,7 +46,8 @@ function App() {
           <Route element={<ProtectedRoute roles={["pengguna", "petugas", "admin"]} />}>
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/facilities/:id" element={<FacilityDetailPage />} />
+              //<Route path="/facilities/:id" element={<FacilityDetailPage />} />
+
               <Route path="/reservations" element={<ReservationsPage />} />
               <Route path="/reservations/new" element={<NewReservationPage />} />
               <Route path="/reports" element={<ReportsPage />} />
