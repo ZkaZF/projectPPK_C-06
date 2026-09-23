@@ -188,44 +188,53 @@ npm run dev
 
 ---
 
-## Status Kode Saat Ini
+## Status Kode Saat Ini (Update: 23 Sep 2026)
 
 ### Backend (`backend/`)
 | Komponen | Status | Keterangan |
 |----------|--------|------------|
 | Project Laravel | ✅ Ada | `composer install` cukup |
 | Database migrations | ✅ Ran (Batch 1) | 11 tabel di Aiven Cloud |
-| Seeder | ✅ Ran | Data demo sudah ada di DB |
+| Seeder | ✅ Ran | 3 user dummy + data master |
 | `routes/api.php` | ✅ Ada | Auth + Facility routes terdaftar |
 | `config/cors.php` | ✅ Ada | Dikonfigurasi untuk `localhost:5173` |
 | Eloquent Models | ✅ Ada | `User`, `Facility`, `Reservation`, `Report` + 7 model lookup |
-| `personal_access_tokens` | ⏳ Pending | Buat manual via Beekeeper (lihat SQL di atas) |
+| `personal_access_tokens` | ⏳ Pending | **Harus dibuat sebelum auth bisa jalan!** |
 | `AuthController` + Middleware | ✅ Ada | register, login, logout, me — `RoleMiddleware`, `EnsureUserIsActive` |
 | `FacilityController` | ✅ Ada | index, show, slots, store, update, updateStatus |
-| `ReservationController` | 🔄 Sebagian | Mulai dikerjakan, belum lengkap |
-| `ReportController`, Admin | ❌ Belum | Target Fase 5–6 |
+| `ReservationController` | 🔄 Stub | Method signatures ada, isi masih kosong — target Fase 4 |
+| `ReportController` | ❌ Belum | Target Fase 5 |
+| Admin Controllers | ❌ Belum | Target Fase 6 |
 
 ### Frontend (`frontend/`)
 | Komponen | Status | Keterangan |
 |----------|--------|------------|
 | Project React + Vite | ✅ Ada | `npm install` cukup |
-| Halaman & komponen | ❌ Belum | Target Fase 2–6 |
+| API Layer (axios, auth) | ✅ Ada | `api/axios.ts`, `api/auth.ts` |
+| AuthContext + useAuth | ✅ Ada | Login/logout state global |
+| Layout (AppLayout, Navbar, Sidebar) | ✅ Ada | Sidebar role-based |
+| ProtectedRoute | ✅ Ada | Guard auth + role check |
+| LoginPage, RegisterPage | ✅ Ada | Sudah terintegrasi dengan backend |
+| Common Components | ✅ Ada | StatusBadge, ConfirmModal, Pagination, LoadingSpinner, Alert |
+| Routing (App.tsx) | ✅ Ada | Public, user, officer, admin routes |
+| Fasilitas UI | 🟡 Di branch | `feat/frontend-facility` — perlu merge + resolve konflik |
+| Reservasi, Laporan, Admin UI | ❌ Belum | Target Fase 4–6 |
 
 ---
 
 ## Roadmap Implementasi (7 Fase)
 
-Lihat detail lengkap di `implementation_plan.md`.
+Lihat detail lengkap di `implementation_plan.md` dan `parallel_work_plan.md`.
 
 | Fase | Minggu | Deskripsi | Status |
 |------|--------|-----------|--------|
 | **1. Setup** | M1 (4-6 Sep) | Init Laravel + React + PostgreSQL, migrasi, seeder | ✅ Selesai |
-| **2. Auth** | M1 (7-10 Sep) | AuthController, Sanctum, LoginPage, RegisterPage, AuthContext | ✅ Backend Selesai / ❌ Frontend Belum |
-| **3. Fasilitas** | M2 (11-14 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | ✅ Backend Selesai / ❌ Frontend Belum |
-| **4. Reservasi** | M2-M3 (15-20 Sep) | Reservasi + conflict detection, form + antrian | Belum |
-| **5. Laporan** | M3 (21-25 Sep) | Laporan kerusakan + foto, riwayat + antrian | Belum |
-| **6. Admin** | M4 (26-30 Sep) | User management, rekap, export CSV/Excel/PDF | Belum |
-| **7. Polish** | M5 (1-10 Okt) | Bug fix, UI polish, persiapan presentasi | Belum |
+| **2. Auth** | M1 (7-17 Sep) | AuthController, Sanctum, LoginPage, RegisterPage, AuthContext | ✅ Selesai (BE + FE) |
+| **3. Fasilitas** | M2 (11-23 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | ✅ BE Selesai / 🟡 FE perlu merge |
+| **4. Reservasi** | M3 (23-27 Sep) | Reservasi + conflict detection, form + antrian | 🔴 Mulai sekarang |
+| **5. Laporan** | M3-M4 (27-30 Sep) | Laporan kerusakan + foto, riwayat + antrian | ⬜ Belum |
+| **6. Admin** | M4 (1-5 Okt) | User management, rekap, export CSV/Excel/PDF | ⬜ Belum |
+| **7. Polish** | M5 (6-10 Okt) | Bug fix, UI polish, persiapan presentasi | ⬜ Belum |
 
 ---
 
