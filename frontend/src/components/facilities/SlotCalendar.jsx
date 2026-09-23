@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { mockSlots } from '../../__mocks__/facilities';
-// import { getSlotsApi } from '../../api/facilities'; // aktifkan saat backend siap
+
+import { getSlotsApi } from '../../api/facilities'; // aktifkan saat backend siap
 
 /**
  * Kalender slot 30 menit untuk satu fasilitas.
@@ -17,9 +17,14 @@ export default function SlotCalendar({ facilityId, date, onSlotSelect }) {
 
   useEffect(() => {
     if (!facilityId || !date) return;
-    // Sementara pakai mock. Ganti dengan:
-    // getSlotsApi(facilityId, date).then((res) => setSlots(res.data.data));
-    setSlots(mockSlots(facilityId, date));
+    getSlotsApi(facilityId, date)
+     .then((res) => setSlots(res.data.data ?? res.data))
+     .catch((err) => {
+       console.error(err);
+       setSlots([]);
+     });
+
+
   }, [facilityId, date]);
 
   const events = useMemo(

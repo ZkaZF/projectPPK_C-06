@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import FacilityCard from '../../components/facilities/FacilityCard';
 import FacilityFilter, { EMPTY_FILTERS } from '../../components/facilities/FacilityFilter';
-import { mockFacilities } from '../../__mocks__/facilities';
-// import { getFacilitiesApi } from '../../api/facilities'; // aktifkan saat backend siap
+
+import { getFacilitiesApi } from '../../api/facilities'; // aktifkan saat backend siap
 
 export default function HomePage() {
   const [facilities, setFacilities] = useState([]);
@@ -10,15 +10,13 @@ export default function HomePage() {
   const [filters, setFilters] = useState(EMPTY_FILTERS);
 
   useEffect(() => {
-    // Sementara pakai mock. Ganti dengan:
-    // getFacilitiesApi(filters).then((res) => setFacilities(res.data.data));
     setLoading(true);
-    const timer = setTimeout(() => {
-      setFacilities(mockFacilities);
-      setLoading(false);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, []);
+    setError(null);
+    getFacilitiesApi().then((res) => setFacilities(res.data.data ?? res.data)).catch((err) => {
+      console.error(err);
+      setError('Gagal memuat daftar fasilitas. Coba lagi nanti.');
+      }).finally(() => setLoading(false));
+      }, []);
 
   const filtered = useMemo(() => {
     return facilities.filter((f) => {

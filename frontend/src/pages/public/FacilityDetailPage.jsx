@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import SlotCalendar from '../../components/facilities/SlotCalendar';
-import { getMockFacilityById } from '../../__mocks__/facilities';
-// import { getFacilityApi } from '../../api/facilities'; // aktifkan saat backend siap
+
+import { getFacilityApi } from '../../api/facilities'; // aktifkan saat backend siap
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
@@ -19,13 +19,13 @@ export default function FacilityDetailPage() {
 
   useEffect(() => {
     setLoading(true);
-    // Sementara pakai mock. Ganti dengan:
-    // getFacilityApi(id).then((res) => setFacility(res.data.data));
-    const timer = setTimeout(() => {
-      setFacility(getMockFacilityById(id));
-      setLoading(false);
-    }, 200);
-    return () => clearTimeout(timer);
+    getFacilityApi(id)
+     .then((res) => setFacility(res.data.data ?? res.data))
+     .catch((err) => {
+       console.error(err);
+       setFacility(null);
+     })
+     .finally(() => setLoading(false));	
   }, [id]);
 
   const handleReserve = () => {
