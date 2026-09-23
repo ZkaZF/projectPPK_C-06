@@ -7,11 +7,11 @@ export const getFacilitiesApi = (filters = {}) =>
 
 // method mengembalikan detail satu fasilitas
 export const getFacilityApi = (id) =>
-	api.get('facilities/${id}');
+	api.get(`facilities/${id}`);
 
 // method mengembalikan daftar slot 30 menit untuk tanggal tertentu
 export const getSlotsApi = (id,date) =>
-	api.get('/facilities/${id}/slots',{params:{date}});
+	api.get(`/facilities/${id}/slots`,{params:{date}});
 
 // method membuat fasilitas baru
 export const createFacilityApi = (data) =>
@@ -19,9 +19,9 @@ export const createFacilityApi = (data) =>
 
 // method mengubah fasilitas
 export const updateFacilityApi = (id,data) =>
-	api.put('/facilities/${id}',data);
+	api.put(`/facilities/${id}`,data);
 
 // method mengubah status fasilitas
 export const updateFacilityStatusApi = (id,facStatId) =>
-	api.patch('/facilities/${id}/status',{fac_stat_id:facStatId});
+	api.patch(`/facilities/${id}/status`,{fac_stat_id:facStatId});
 
