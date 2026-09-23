@@ -1,7 +1,7 @@
 import axiosInstance from "./axios";
 
 export const loginApi = async (email: string, password: string) => {
-  const response = await axiosInstance.post("/api/auth/login", {
+  const response = await axiosInstance.post("/auth/login", {
     email,
     password,
   });
@@ -16,19 +16,19 @@ export const registerApi = async (data: {
   password: string;
   password_confirmation: string;
 }) => {
-  const response = await axiosInstance.post("/api/auth/register", data);
+  const response = await axiosInstance.post("/auth/register", data);
 
   return response.data;
 };
 
 export const logoutApi = async () => {
-  const response = await axiosInstance.post("/api/auth/logout");
+  const response = await axiosInstance.post("/auth/logout");
 
   return response.data;
 };
 
 export const getMeApi = async () => {
-  const response = await axiosInstance.get("/api/auth/me");
+  const response = await axiosInstance.get("/auth/me");
 
   return response.data;
 };
