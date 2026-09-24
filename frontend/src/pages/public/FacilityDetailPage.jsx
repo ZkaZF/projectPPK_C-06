@@ -58,7 +58,8 @@ export default function FacilityDetailPage() {
         <div className="col-12 col-lg-5 mb-4">
           <img
             src={facility.fac_image || 'https://placehold.co/500x300?text=Fasilitas'}
-            className="img-fluid rounded mb-3"
+            onError={(e) => { e.target.src = 'https://placehold.co/500x300?text=Fasilitas'; }}
+	    className="img-fluid rounded mb-3"
             alt={facility.fac_name}
           />
           <h2>{facility.fac_name}</h2>
