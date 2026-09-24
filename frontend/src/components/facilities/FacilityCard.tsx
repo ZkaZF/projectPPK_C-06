@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
+import type { Facility } from '../../types/facility';
 
-const STATUS_BADGE = {
+const STATUS_BADGE: Record<string, string> = {
   aktif: 'bg-success',
   dalam_perbaikan: 'bg-warning text-dark',
   nonaktif: 'bg-secondary',
 };
 
-const TYPE_LABEL = {
+const TYPE_LABEL: Record<string, string> = {
   ruang_kelas: 'Ruang Kelas',
   aula: 'Aula',
   laboratorium: 'Laboratorium',
@@ -14,7 +15,11 @@ const TYPE_LABEL = {
   lapangan: 'Lapangan',
 };
 
-export default function FacilityCard({ facility }) {
+interface FacilityCardProps {
+  facility: Facility;
+}
+
+export default function FacilityCard({ facility }: FacilityCardProps) {
   const {
     fac_id,
     fac_name,
@@ -25,8 +30,11 @@ export default function FacilityCard({ facility }) {
     fac_image,
   } = facility;
 
-  const statusClass = STATUS_BADGE[fac_status?.fac_status_name] || 'bg-secondary';
-  const typeLabel = TYPE_LABEL[fac_type?.fac_type_name] || fac_type?.fac_type_name;
+  const statusName = fac_status?.fac_status_name || '';
+  const typeName = fac_type?.fac_type_name || '';
+
+  const statusClass = STATUS_BADGE[statusName] || 'bg-secondary';
+  const typeLabel = TYPE_LABEL[typeName] || typeName;
 
   return (
     <div className="col-12 col-sm-6 col-lg-4 mb-4">
