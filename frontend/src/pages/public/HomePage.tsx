@@ -1,30 +1,35 @@
 import { useEffect, useMemo, useState } from 'react';
 import FacilityCard from '../../components/facilities/FacilityCard';
 import FacilityFilter, { EMPTY_FILTERS } from '../../components/facilities/FacilityFilter';
+import type { Facility, FacilityFilterState } from '../../types/facility';
 
-import { getFacilitiesApi } from '../../api/facilities'; // aktifkan saat backend siap
+// @ts-ignore
+import { getFacilitiesApi } from '../../api/facilities';
 
 export default function HomePage() {
-  const [facilities, setFacilities] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [filters, setFilters] = useState(EMPTY_FILTERS);
+  const [facilities, setFacilities] = useState<Facility[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<FacilityFilterState>(EMPTY_FILTERS);
 
   useEffect(() => {
     setLoading(true);
     setError(null);
-    getFacilitiesApi().then((res) => setFacilities(res.data.data ?? res.data)).catch((err) => {
-      console.error(err);
-      setError('Gagal memuat daftar fasilitas. Coba lagi nanti.');
-      }).finally(() => setLoading(false));
-      }, []);
+    getFacilitiesApi()
+      .then((res: any) => setFacilities(res.data.data ?? res.data))
+      .catch((err: any) => {
+        console.error(err);
+        setError('Gagal memuat daftar fasilitas. Coba lagi nanti.');
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const filtered = useMemo(() => {
     return facilities.filter((f) => {
       if (filters.type && f.fac_type?.fac_type_name !== filters.type) return false;
       if (
         filters.location &&
-        !f.fac_location.toLowerCase().includes(filters.location.toLowerCase())
+        !f.fac_location?.toLowerCase().includes(filters.location.toLowerCase())
       )
         return false;
       if (filters.capacity && (f.fac_capacity ?? 0) < Number(filters.capacity))
@@ -42,6 +47,8 @@ export default function HomePage() {
         onFilterChange={setFilters}
         onReset={() => setFilters(EMPTY_FILTERS)}
       />
+
+      {error && <div className="alert alert-danger">{error}</div>}
 
       {loading && (
         <div className="text-center py-5">
