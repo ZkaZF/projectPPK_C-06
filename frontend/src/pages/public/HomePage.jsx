@@ -7,6 +7,7 @@ import { getFacilitiesApi } from '../../api/facilities'; // aktifkan saat backen
 export default function HomePage() {
   const [facilities, setFacilities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filters, setFilters] = useState(EMPTY_FILTERS);
 
   useEffect(() => {
