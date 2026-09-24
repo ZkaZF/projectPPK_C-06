@@ -1,9 +1,21 @@
+import React from 'react';
+import type { FacilityFilterState, FacilityType } from '../../types/facility';
+
+// @ts-ignore
 import { mockFacilityTypes } from '../../__mocks__/facilities';
 
-const EMPTY_FILTERS = { type: '', location: '', capacity: '' };
+const EMPTY_FILTERS: FacilityFilterState = { type: '', location: '', capacity: '' };
 
-export default function FacilityFilter({ filters, onFilterChange, onReset }) {
-  const handleChange = (field) => (e) => {
+interface FacilityFilterProps {
+  filters: FacilityFilterState;
+  onFilterChange: (filters: FacilityFilterState) => void;
+  onReset?: () => void;
+}
+
+export default function FacilityFilter({ filters, onFilterChange, onReset }: FacilityFilterProps) {
+  const handleChange = (field: keyof FacilityFilterState) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     onFilterChange({ ...filters, [field]: e.target.value });
   };
 
@@ -18,7 +30,7 @@ export default function FacilityFilter({ filters, onFilterChange, onReset }) {
             onChange={handleChange('type')}
           >
             <option value="">Semua Tipe</option>
-            {mockFacilityTypes.map((t) => (
+            {mockFacilityTypes.map((t: FacilityType) => (
               <option key={t.fac_type_id} value={t.fac_type_name}>
                 {t.fac_type_name}
               </option>
@@ -53,7 +65,10 @@ export default function FacilityFilter({ filters, onFilterChange, onReset }) {
           <button
             type="button"
             className="btn btn-outline-secondary w-100"
-            onClick={() => onFilterChange(EMPTY_FILTERS) || onReset?.()}
+            onClick={() => {
+              onFilterChange(EMPTY_FILTERS);
+              onReset?.();
+            }}
           >
             Reset
           </button>
