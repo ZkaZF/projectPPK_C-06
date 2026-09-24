@@ -2,29 +2,29 @@ import { useEffect, useMemo, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import type { EventClickArg } from '@fullcalendar/core';
+import type { Slot } from '../../types/facility';
 
-import { getSlotsApi } from '../../api/facilities'; // aktifkan saat backend siap
+// @ts-ignore
+import { getSlotsApi } from '../../api/facilities';
 
-/**
- * Kalender slot 30 menit untuk satu fasilitas.
- * props:
- *  - facilityId: id fasilitas
- *  - date: 'YYYY-MM-DD' tanggal yang sedang dilihat
- *  - onSlotSelect(start, end): dipanggil saat user klik slot yang available
- */
-export default function SlotCalendar({ facilityId, date, onSlotSelect }) {
-  const [slots, setSlots] = useState([]);
+interface SlotCalendarProps {
+  facilityId: string | number;
+  date: string;
+  onSlotSelect?: (start: string, end: string) => void;
+}
+
+export default function SlotCalendar({ facilityId, date, onSlotSelect }: SlotCalendarProps) {
+  const [slots, setSlots] = useState<Slot[]>([]);
 
   useEffect(() => {
     if (!facilityId || !date) return;
     getSlotsApi(facilityId, date)
-     .then((res) => setSlots(res.data.slots ?? []))
-     .catch((err) => {
-       console.error(err);
-       setSlots([]);
-     });
-
-
+      .then((res: any) => setSlots(res.data.slots ?? []))
+      .catch((err: any) => {
+        console.error(err);
+        setSlots([]);
+      });
   }, [facilityId, date]);
 
   const events = useMemo(
@@ -41,7 +41,7 @@ export default function SlotCalendar({ facilityId, date, onSlotSelect }) {
     [slots, date]
   );
 
-  const handleEventClick = (info) => {
+  const handleEventClick = (info: EventClickArg) => {
     const { status, start, end } = info.event.extendedProps;
     if (status !== 'available') return;
     onSlotSelect?.(start, end);
@@ -60,7 +60,6 @@ export default function SlotCalendar({ facilityId, date, onSlotSelect }) {
       height="auto"
       events={events}
       eventClick={handleEventClick}
-
     />
   );
 }
