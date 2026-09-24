@@ -1,35 +1,43 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import SlotCalendar from '../../components/facilities/SlotCalendar';
+import type { Facility } from '../../types/facility';
 
-import { getFacilityApi } from '../../api/facilities'; // aktifkan saat backend siap
+// @ts-ignore
+import { getFacilityApi } from '../../api/facilities';
 
-function todayStr() {
+function todayStr(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+interface SelectedSlot {
+  start: string;
+  end: string;
+}
+
 export default function FacilityDetailPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [facility, setFacility] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [date, setDate] = useState(todayStr());
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [facility, setFacility] = useState<Facility | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [date, setDate] = useState<string>(todayStr());
+  const [selectedSlot, setSelectedSlot] = useState<SelectedSlot | null>(null);
 
   useEffect(() => {
+    if (!id) return;
     setLoading(true);
     getFacilityApi(id)
-     .then((res) => setFacility(res.data.data ?? res.data))
-     .catch((err) => {
-       console.error(err);
-       setFacility(null);
-     })
-     .finally(() => setLoading(false));	
+      .then((res: any) => setFacility(res.data.data ?? res.data))
+      .catch((err: any) => {
+        console.error(err);
+        setFacility(null);
+      })
+      .finally(() => setLoading(false));
   }, [id]);
 
   const handleReserve = () => {
-    if (!selectedSlot) return;
+    if (!selectedSlot || !id) return;
     // Halaman form reservasi dibuat di Fase 4 — sementara arahkan dengan state.
     navigate('/reservations/new', {
       state: { facilityId: id, date, ...selectedSlot },
@@ -58,8 +66,10 @@ export default function FacilityDetailPage() {
         <div className="col-12 col-lg-5 mb-4">
           <img
             src={facility.fac_image || 'https://placehold.co/500x300?text=Fasilitas'}
-            onError={(e) => { e.target.src = 'https://placehold.co/500x300?text=Fasilitas'; }}
-	    className="img-fluid rounded mb-3"
+            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+              e.currentTarget.src = 'https://placehold.co/500x300?text=Fasilitas';
+            }}
+            className="img-fluid rounded mb-3"
             alt={facility.fac_name}
           />
           <h2>{facility.fac_name}</h2>
@@ -97,11 +107,13 @@ export default function FacilityDetailPage() {
               }}
             />
           </div>
-          <SlotCalendar
-            facilityId={id}
-            date={date}
-            onSlotSelect={(start, end) => setSelectedSlot({ start, end })}
-          />
+          {id && (
+            <SlotCalendar
+              facilityId={id}
+              date={date}
+              onSlotSelect={(start, end) => setSelectedSlot({ start, end })}
+            />
+          )}
         </div>
       </div>
     </div>
