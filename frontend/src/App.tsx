@@ -34,7 +34,7 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Public */}
-          //<Route path="/" element={<Navigate to="/login" replace />} />
+
           <Route path="/" element={<HomePage />} />
           <Route path="/facilities/:id" element={<FacilityDetailPage />} />
 
@@ -46,7 +46,7 @@ function App() {
           <Route element={<ProtectedRoute roles={["pengguna", "petugas", "admin"]} />}>
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
-              //<Route path="/facilities/:id" element={<FacilityDetailPage />} />
+
 
               <Route path="/reservations" element={<ReservationsPage />} />
               <Route path="/reservations/new" element={<NewReservationPage />} />
