@@ -3,50 +3,51 @@
 
 /* ── Design Tokens ────────────────────────────────────────────── */
 :root {
-  /* Colors */
-  --primary:        #d6a84f;
-  --primary-dark:   #9a6b13;
-  --primary-light:  #f5cf72;
-  --primary-glow:   rgba(214, 168, 79, 0.35);
-  --primary-bg:     rgba(214, 168, 79, 0.1);
+  /* Colors - Bunny.net Theme */
+  --primary:        #ff7a53; /* Coral Launch */
+  --primary-dark:   #fd8d32; /* Signal Orange */
+  --primary-light:  #ffa84a;
+  --primary-glow:   rgba(255, 122, 83, 0.35);
+  --primary-bg:     rgba(255, 122, 83, 0.1);
 
-  --secondary:      #f08c2b;
-  --secondary-dark: #c45a13;
+  --secondary:      #8bb3da; /* Signal Blue */
+  --secondary-dark: #183d6d; /* Edge Navy */
 
   --success:        #10b981;
   --warning:        #f59e0b;
   --danger:         #ef4444;
 
   /* Surface */
-  --bg:             #17100b;
-  --surface:        #21150d;
-  --surface-2:      #2d1c10;
-  --surface-3:      #3d2715;
-  --border:         rgba(255, 255, 255, 0.08);
-  --border-strong:  rgba(255, 255, 255, 0.15);
+  --bg:             #e1f2ff; /* Cloud Canvas */
+  --surface:        #ffffff; /* White Surface */
+  --surface-2:      #eff8ff; /* Ice Surface */
+  --surface-3:      #d3e2f1; /* Mist Divider */
+  --surface-dark:   #051e38; /* Launch Bay */
+  --border:         #d3e2f1; /* Mist Divider */
+  --border-strong:  #8bb3da; /* Signal Blue */
 
   /* Text */
-  --text:           #c7b8a3;
-  --text-muted:     #8f7c65;
-  --text-h:         #fff4df;
+  --text:           #666666; /* Graphite */
+  --text-muted:     #8bb3da; /* Signal Blue */
+  --text-h:         #183d6d; /* Edge Navy */
   --text-white:     #ffffff;
 
   /* Effects */
-  --shadow-sm:      0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
-  --shadow:         0 4px 24px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
-  --shadow-lg:      0 20px 60px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.4);
-  --shadow-glow:    0 0 40px rgba(214, 168, 79, 0.25);
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+  --shadow:         0 4px 11px rgb(212, 211, 221);
+  --shadow-lg:      0 6px 40px rgba(0, 0, 0, 0.04);
+  --shadow-glow:    0 0 40px rgba(255, 122, 83, 0.25);
 
   /* Layout */
   --sidebar-w:      260px;
   --navbar-h:       64px;
-  --radius-sm:      8px;
-  --radius:         12px;
-  --radius-lg:      16px;
+  --radius-sm:      6px;
+  --radius:         10px;
+  --radius-lg:      20px;
   --radius-xl:      24px;
 
   /* Typography */
-  --font:           'Inter', system-ui, -apple-system, sans-serif;
+  --font:           'Rubik', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   /* Transitions */
   --transition:     all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -119,7 +120,7 @@ a:hover { color: var(--primary); }
 
 .auth-bg {
   position: relative;
-  background: linear-gradient(135deg, #17100b 0%, #2a1a0e 52%, #3a1c0c 100%);
+  background: var(--surface-dark);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -133,8 +134,8 @@ a:hover { color: var(--primary); }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(214, 168, 79, 0.2) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(240, 140, 43, 0.14) 0%, transparent 60%);
+    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(253, 141, 50, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(139, 179, 218, 0.15) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -287,7 +288,7 @@ a:hover { color: var(--primary); }
 .auth-tagline {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text-h);
+  color: #ffffff;
   line-height: 1.2;
   margin-bottom: 16px;
   letter-spacing: -0.03em;
@@ -480,13 +481,13 @@ a:hover { color: var(--primary); }
 .btn:active { transform: scale(0.98); }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: #1a1408;
-  box-shadow: 0 4px 15px rgba(214, 168, 79, 0.35);
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(255, 122, 83, 0.35);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 6px 25px rgba(240, 140, 43, 0.45);
+  box-shadow: 0 6px 25px rgba(255, 122, 83, 0.45);
   transform: translateY(-1px);
 }
 
@@ -601,7 +602,7 @@ a:hover { color: var(--primary); }
   left: 0;
   right: 0;
   height: var(--navbar-h);
-  background: rgba(33, 21, 13, 0.88);
+  background: var(--surface-dark);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
@@ -642,7 +643,7 @@ a:hover { color: var(--primary); }
   font-family: 'Bell MT', Georgia, serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-h);
+  color: #ffffff;
   letter-spacing: -0.02em;
   position: relative;
   padding-bottom: -4px;
@@ -670,7 +671,7 @@ a:hover { color: var(--primary); }
 .navbar-user-name {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--text);
+  color: #ffffff;
 }
 
 .navbar-avatar {

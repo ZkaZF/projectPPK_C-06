@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { UniversityLogo } from "../../components/common/UniversityLogo";
+import { CursorGrid } from "../../components/common/CursorGrid";
+import { Mail, Lock, Calendar, FileText, Eye, EyeOff } from "lucide-react";
 
 export const LoginPage = () => {
   const { login } = useAuth();
@@ -45,8 +47,24 @@ export const LoginPage = () => {
     <div className="auth-page">
       {/* Left — branding panel */}
       <div className="auth-bg">
-        <div className="auth-bg-grid" />
-        <div className="auth-bg-content">
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <CursorGrid
+            cellSize={50}
+            color="#f5cf72"
+            radius={150}
+            falloff="smooth"
+            holdTime={400}
+            fadeDuration={800}
+            lineWidth={1}
+            maxOpacity={0.6}
+            fillOpacity={0.1}
+            gridOpacity={0.05}
+            cellRadius={0}
+            clickPulse={true}
+            pulseSpeed={600}
+          />
+        </div>
+        <div className="auth-bg-content" style={{ pointerEvents: "none" }}>
           <div className="auth-logo">
             <UniversityLogo className="auth-logo-icon" />
             <span className="auth-logo-text">
@@ -59,21 +77,11 @@ export const LoginPage = () => {
             Kelola Fasilitas<br />
             <span>Kampus dengan Mudah</span>
           </h1>
-          <p className="auth-desc">
+          <p className="auth-desc" style={{ maxWidth: "420px", fontSize: "1.1rem" }}>
             Platform reservasi dan pelaporan fasilitas kampus yang cerdas, cepat, dan transparan.
           </p>
 
-          <div className="auth-features">
-            <div className="auth-feature">
-              <span className="auth-feature-icon">📅</span>
-              <span className="auth-feature-label">Reservasi fasilitas secara online kapan saja</span>
-            </div>
-            <div className="auth-feature">
-              <span className="auth-feature-icon">📝</span>
-              <span className="auth-feature-label">Laporkan kerusakan dengan mudah dan cepat</span>
-            </div>
- 
-          </div>
+
         </div>
       </div>
 
@@ -96,7 +104,7 @@ export const LoginPage = () => {
             <div className="form-group">
               <label className="form-label" htmlFor="login-email">Email</label>
               <div className="form-input-wrap">
-                <span className="form-input-icon">✉️</span>
+                <span className="form-input-icon"><Mail size={17} /></span>
                 <input
                   id="login-email"
                   className="form-input"
@@ -114,7 +122,7 @@ export const LoginPage = () => {
             <div className="form-group">
               <label className="form-label" htmlFor="login-password">Password</label>
               <div className="form-input-wrap">
-                <span className="form-input-icon">🔒</span>
+                <span className="form-input-icon"><Lock size={17} /></span>
                 <input
                   id="login-password"
                   className="form-input"
@@ -123,7 +131,7 @@ export const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  autoComplete="current-password"
+                  autoComplete="off"
                   style={{ paddingRight: "48px" }}
                 />
                 <button
@@ -142,7 +150,7 @@ export const LoginPage = () => {
                   }}
                   aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
                 >
-                  {showPassword ? "🙈" : "👁️"}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>

@@ -41,7 +41,7 @@ export const Navbar = () => {
           <>
             <div style={{ textAlign: "right" }}>
               <div className="navbar-user-name">{user.full_name}</div>
-              <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+              <div style={{ fontSize: "0.75rem", color: "rgba(255, 255, 255, 0.7)" }}>
                 {roleLabel[user.role.role_name] ?? user.role.role_name}
               </div>
             </div>

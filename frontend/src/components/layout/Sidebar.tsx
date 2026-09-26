@@ -1,29 +1,34 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
+import { 
+  Home, Calendar, FileText, ClipboardList, Wrench, 
+  BarChart, Building2, Users, CheckCircle, TrendingUp 
+} from "lucide-react";
+
 interface NavItem {
   to: string;
-  icon: string;
+  icon: React.ReactNode;
   label: string;
 }
 
 const userMenuItems: NavItem[] = [
-  { to: "/dashboard",    icon: "🏠", label: "Dashboard" },
-  { to: "/reservations", icon: "📅", label: "Reservasi Saya" },
-  { to: "/reports",      icon: "📝", label: "Laporan Saya" },
+  { to: "/dashboard",    icon: <Home size={20} />, label: "Dashboard" },
+  { to: "/reservations", icon: <Calendar size={20} />, label: "Reservasi Saya" },
+  { to: "/reports",      icon: <FileText size={20} />, label: "Laporan Saya" },
 ];
 
 const officerMenuItems: NavItem[] = [
-  { to: "/officer/reservations", icon: "📋", label: "Antrian Reservasi" },
-  { to: "/officer/reports",      icon: "🔧", label: "Antrian Laporan" },
+  { to: "/officer/reservations", icon: <ClipboardList size={20} />, label: "Antrian Reservasi" },
+  { to: "/officer/reports",      icon: <Wrench size={20} />, label: "Antrian Laporan" },
 ];
 
 const adminMenuItems: NavItem[] = [
-  { to: "/admin",            icon: "📊", label: "Dashboard Admin" },
-  { to: "/admin/facilities", icon: "🏢", label: "Kelola Fasilitas" },
-  { to: "/admin/users",      icon: "👥", label: "Kelola User" },
-  { to: "/admin/verify",     icon: "✅", label: "Verifikasi Akun" },
-  { to: "/admin/recap",      icon: "📈", label: "Rekap Data" },
+  { to: "/admin",            icon: <BarChart size={20} />, label: "Dashboard Admin" },
+  { to: "/admin/facilities", icon: <Building2 size={20} />, label: "Kelola Fasilitas" },
+  { to: "/admin/users",      icon: <Users size={20} />, label: "Kelola User" },
+  { to: "/admin/verify",     icon: <CheckCircle size={20} />, label: "Verifikasi Akun" },
+  { to: "/admin/recap",      icon: <TrendingUp size={20} />, label: "Rekap Data" },
 ];
 
 const SidebarItem = ({ to, icon, label }: NavItem) => (

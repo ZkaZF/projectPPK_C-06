@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerApi } from "../../api/auth";
 import { UniversityLogo } from "../../components/common/UniversityLogo";
+import { CursorGrid } from "../../components/common/CursorGrid";
+import { Lock, Shield, BarChart2, Bell, User, Mail, GraduationCap, Key, Eye, EyeOff, AlertCircle, CheckCircle, PartyPopper } from "lucide-react";
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
@@ -47,8 +49,24 @@ export const RegisterPage = () => {
     return (
       <div className="auth-page">
         <div className="auth-bg">
-          <div className="auth-bg-grid" />
-          <div className="auth-bg-content">
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <CursorGrid
+            cellSize={50}
+            color="#f5cf72"
+            radius={150}
+            falloff="smooth"
+            holdTime={400}
+            fadeDuration={800}
+            lineWidth={1}
+            maxOpacity={0.6}
+            fillOpacity={0.1}
+            gridOpacity={0.05}
+            cellRadius={0}
+            clickPulse={true}
+            pulseSpeed={600}
+          />
+        </div>
+          <div className="auth-bg-content" style={{ pointerEvents: "none" }}>
             <div className="auth-logo">
               <UniversityLogo className="auth-logo-icon" />
               <span className="auth-logo-text">
@@ -64,7 +82,7 @@ export const RegisterPage = () => {
         </div>
         <div className="auth-panel">
           <div className="auth-form-wrap" style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "4rem", marginBottom: "24px" }}>🎉</div>
+            <div style={{ fontSize: "4rem", marginBottom: "24px" }}><PartyPopper size={64} color="var(--primary)" /></div>
             <h2 style={{ marginBottom: "12px" }}>Pendaftaran Berhasil!</h2>
             <p style={{ color: "var(--text-muted)", marginBottom: "32px", lineHeight: 1.7 }}>
               Akun Anda sedang menunggu verifikasi dari admin. Anda akan bisa login
@@ -75,7 +93,7 @@ export const RegisterPage = () => {
               role="alert"
               style={{ marginBottom: "32px" }}
             >
-              <span>✅</span>
+              <span><CheckCircle size={20} /></span>
               <span>Data berhasil dikirim. Harap menunggu konfirmasi admin.</span>
             </div>
             <button
@@ -94,8 +112,24 @@ export const RegisterPage = () => {
     <div className="auth-page">
       {/* Left — branding panel */}
       <div className="auth-bg">
-        <div className="auth-bg-grid" />
-        <div className="auth-bg-content">
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <CursorGrid
+            cellSize={50}
+            color="#f5cf72"
+            radius={150}
+            falloff="smooth"
+            holdTime={400}
+            fadeDuration={800}
+            lineWidth={1}
+            maxOpacity={0.6}
+            fillOpacity={0.1}
+            gridOpacity={0.05}
+            cellRadius={0}
+            clickPulse={true}
+            pulseSpeed={600}
+          />
+        </div>
+        <div className="auth-bg-content" style={{ pointerEvents: "none" }}>
           <div className="auth-logo">
             <UniversityLogo className="auth-logo-icon" />
             <span className="auth-logo-text">
@@ -105,27 +139,14 @@ export const RegisterPage = () => {
           </div>
 
           <h1 className="auth-tagline">
-            Bergabung dan<br />
-            <span>Nikmati Kemudahan</span>
+            Platform Fasilitas<br />
+            <span>Kampus Terpadu</span>
           </h1>
-          <p className="auth-desc">
-            Buat akun baru untuk mengakses sistem reservasi dan pelaporan fasilitas kampus.
+          <p className="auth-desc" style={{ maxWidth: "420px", fontSize: "1.1rem" }}>
+            Buat akun baru untuk mengakses sistem reservasi dan pelaporan fasilitas kampus Universitas Diponegoro secara real-time.
           </p>
 
-          <div className="auth-features">
-            <div className="auth-feature">
-              <span className="auth-feature-icon">🔐</span>
-              <span className="auth-feature-label">Akun aman dengan verifikasi admin</span>
-            </div>
-            <div className="auth-feature">
-              <span className="auth-feature-icon">📊</span>
-              <span className="auth-feature-label">Dashboard personal untuk memantau aktivitas</span>
-            </div>
-            <div className="auth-feature">
-              <span className="auth-feature-icon">🔔</span>
-              <span className="auth-feature-label">Notifikasi status reservasi & laporan</span>
-            </div>
-          </div>
+
         </div>
       </div>
 
@@ -139,7 +160,7 @@ export const RegisterPage = () => {
 
           {error && (
             <div className="alert alert-error" role="alert">
-              <span>⚠️</span>
+              <span><AlertCircle size={20} /></span>
               <span>{error}</span>
             </div>
           )}
@@ -148,7 +169,7 @@ export const RegisterPage = () => {
             <div className="form-group">
               <label className="form-label" htmlFor="reg-fullname">Nama Lengkap</label>
               <div className="form-input-wrap">
-                <span className="form-input-icon">👤</span>
+                <span className="form-input-icon"><User size={17} /></span>
                 <input
                   id="reg-fullname"
                   className="form-input"
@@ -165,7 +186,7 @@ export const RegisterPage = () => {
             <div className="form-group">
               <label className="form-label" htmlFor="reg-email">Email</label>
               <div className="form-input-wrap">
-                <span className="form-input-icon">✉️</span>
+                <span className="form-input-icon"><Mail size={17} /></span>
                 <input
                   id="reg-email"
                   className="form-input"
@@ -182,7 +203,7 @@ export const RegisterPage = () => {
             <div className="form-group">
               <label className="form-label" htmlFor="reg-nimnip">NIM / NIP</label>
               <div className="form-input-wrap">
-                <span className="form-input-icon">🎓</span>
+                <span className="form-input-icon"><GraduationCap size={17} /></span>
                 <input
                   id="reg-nimnip"
                   className="form-input"
@@ -197,7 +218,7 @@ export const RegisterPage = () => {
             <div className="form-group">
               <label className="form-label" htmlFor="reg-password">Password</label>
               <div className="form-input-wrap">
-                <span className="form-input-icon">🔒</span>
+                <span className="form-input-icon"><Lock size={17} /></span>
                 <input
                   id="reg-password"
                   className="form-input"
@@ -225,7 +246,7 @@ export const RegisterPage = () => {
                   }}
                   aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
                 >
-                  {showPassword ? "🙈" : "👁️"}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
@@ -233,7 +254,7 @@ export const RegisterPage = () => {
             <div className="form-group">
               <label className="form-label" htmlFor="reg-confirm">Konfirmasi Password</label>
               <div className="form-input-wrap">
-                <span className="form-input-icon">🔑</span>
+                <span className="form-input-icon"><Key size={17} /></span>
                 <input
                   id="reg-confirm"
                   className="form-input"
