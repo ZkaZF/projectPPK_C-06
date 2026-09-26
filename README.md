@@ -165,11 +165,9 @@ npm run dev
 
 | Role | Email | Password | Status |
 |------|-------|----------|--------|
-| Admin | admin@kampus.ac.id | admin123 | active |
-| Petugas | petugas1@kampus.ac.id | petugas123 | active |
-| Mahasiswa | mhs1@kampus.ac.id | mhs123 | active |
-| Dosen | dosen1@kampus.ac.id | dosen123 | active |
-| Pending | mhs.baru@kampus.ac.id | mhs123 | pending |
+| Admin | admin@kampus.ac.id | password123 | active |
+| Petugas | petugas@kampus.ac.id | password123 | active |
+| Pengguna | user@kampus.ac.id | password123 | active |
 
 ---
 

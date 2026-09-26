@@ -5,7 +5,7 @@
 
 ---
 
-## 👑 PM (Project Manager) — Peran Kamu
+## PM (Project Manager) —
 
 Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 
