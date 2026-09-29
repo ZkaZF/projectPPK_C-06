@@ -6,6 +6,8 @@ import { AppLayout } from "./components/layout/AppLayout";
 import { LoginPage } from "./pages/public/LoginPage";
 import { RegisterPage } from "./pages/public/RegisterPage";
 import { ForbiddenPage } from "./pages/public/ForbiddenPage";
+import HomePage from "./pages/public/HomePage";
+import FacilityDetailPage from "./pages/public/FacilityDetailPage";
 
 // ── Placeholder pages (ganti nanti dengan halaman asli) ──────────────────────
 const DummyPage = ({ title, icon: Icon, desc }: { title: string, icon: any, desc: string }) => (
@@ -45,7 +47,6 @@ const DummyPage = ({ title, icon: Icon, desc }: { title: string, icon: any, desc
 );
 
 const DashboardPage      = () => <DummyPage title="Dashboard" icon={LayoutDashboard} desc="Ringkasan aktivitas dan status fasilitas Anda hari ini." />;
-const FacilityDetailPage = () => <DummyPage title="Detail Fasilitas" icon={Building2} desc="Informasi lengkap dan jadwal ketersediaan fasilitas." />;
 const ReservationsPage   = () => <DummyPage title="Reservasi Saya" icon={Ticket} desc="Daftar reservasi yang sedang diajukan atau sudah disetujui." />;
 const NewReservationPage = () => <DummyPage title="Ajukan Reservasi" icon={Ticket} desc="Formulir pengajuan peminjaman fasilitas baru." />;
 const ReportsPage        = () => <DummyPage title="Laporan Saya" icon={FolderKanban} desc="Riwayat pelaporan kerusakan atau keluhan fasilitas." />;
@@ -69,7 +70,10 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Public */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+
+          <Route path="/" element={<HomePage />} />
+          <Route path="/facilities/:id" element={<FacilityDetailPage />} />
+
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/403" element={<ForbiddenPage />} />
@@ -78,7 +82,8 @@ function App() {
           <Route element={<ProtectedRoute roles={["pengguna", "petugas", "admin"]} />}>
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/facilities/:id" element={<FacilityDetailPage />} />
+
+
               <Route path="/reservations" element={<ReservationsPage />} />
               <Route path="/reservations/new" element={<NewReservationPage />} />
               <Route path="/reports" element={<ReportsPage />} />

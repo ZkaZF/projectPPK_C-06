@@ -70,18 +70,60 @@
 
 ---
 
-## Ringkasan Status Per Fase (23 Sep 2026)
+## 2026-09-29
+- **[PM] Merge PR #7 — Frontend Fasilitas (Orang 3)**
+  - **Status:** ✅ Selesai
+  - **Detail:**
+    - Fetch branch `feat/frontend-facility` dari remote (commit terbaru: `98453ed`).
+    - Orang 3 sudah memperbaiki 6 poin review PM (migrasi JSX → TSX, fix bug `setError`, typo `eh`, komentar JSX).
+    - Merge ke `main` menghasilkan 2 konflik:
+      - `frontend/src/App.tsx` — Resolved: pertahankan DummyPage (main) + gunakan import HomePage/FacilityDetailPage (PR).
+      - `frontend/package-lock.json` — Resolved: terima versi PR (dependensi baru FullCalendar dkk).
+    - File baru yang masuk ke `main`:
+      - `pages/public/HomePage.tsx`, `FacilityDetailPage.tsx`
+      - `components/facilities/FacilityCard.tsx`, `FacilityFilter.tsx`, `FacilityForm.tsx`, `SlotCalendar.tsx`
+      - `api/facilities.js`, `__mocks__/facilities.js`
+      - `types/facility.ts`, `utils/slotValidation.js`
+
+- **[PM] Merge branch `feat/ui-redesign` ke `main`**
+  - **Status:** ✅ Selesai
+  - **Detail:**
+    - Redesign halaman auth (Login, Register) dengan tema bunny.net.
+    - Integrasi komponen `CursorGrid` — animasi grid interaktif mengikuti kursor mouse di panel kiri halaman auth.
+    - Integrasi `lucide-react` sebagai icon library (Mail, Lock, Eye, EyeOff, dll).
+    - Custom CSS lengkap (21KB+): design tokens, typography, scrollbar, auth pages, form elements, buttons, navbar, sidebar, error page, badges, responsive breakpoints, fade-in animations.
+
+- **[PM] Re-branding "UniSpace" → "Uni-FaRe"**
+  - **Status:** ✅ Selesai
+  - **File diubah:** `LoginPage.tsx`, `RegisterPage.tsx`, `Navbar.tsx`, `index.html`
+  - Semua teks "UniSpace" diganti menjadi "Uni-FaRe" (University Facility Reservations).
+
+- **[PM] Animasi tombol Show/Hide Password**
+  - **Status:** ✅ Selesai
+  - **Detail:** Menambahkan class CSS `.password-toggle-btn` dengan efek "Pop & Hover Highlight":
+    - Hover: background bulat muncul dengan scale transition.
+    - Click: ikon mengecil (scale 0.85) + rotate 15°.
+    - Transisi menggunakan cubic-bezier spring effect.
+
+- **[PM] Maintenance & Dokumentasi**
+  - Menambahkan `.archify/` ke `.gitignore`.
+  - Membuat dokumentasi arsitektur teknis (4 prompt Archify: System Architecture, Page Flow, Backend Data Flow, Frontend Component Tree).
+  - Update `README.md`, `parallel_work_plan.md`, `CHANGELOG-agent.md`.
+
+---
+
+## Ringkasan Status Per Fase (29 Sep 2026)
 
 | Fase | Backend | Frontend | Status Keseluruhan |
 |------|---------|----------|--------------------|
 | **1. Setup** | ✅ Laravel, DB, Models, CORS | ✅ React+Vite, Axios, folder structure | ✅ **Selesai** |
 | **2. Auth** | ✅ AuthController, Sanctum, Middleware | ✅ LoginPage, RegisterPage, AuthContext, ProtectedRoute | ✅ **Selesai** |
-| **3. Fasilitas** | ✅ FacilityController (CRUD + slots) | 🟡 FacilityCard, SlotCalendar, HomePage (di branch, belum merge) | 🟡 **Backend selesai, Frontend perlu merge** |
-| **4. Reservasi** | 🔄 ReservationController (stub kosong) | ❌ Belum ada | 🔴 **Belum dikerjakan** |
+| **3. Fasilitas** | ✅ FacilityController (CRUD + slots) | ✅ FacilityCard, SlotCalendar, HomePage (merged 29 Sep) | ✅ **Selesai** |
+| **4. Reservasi** | 🔄 ReservationController (stub kosong) | ❌ Belum ada | 🔴 **Harus dimulai sekarang** |
 | **5. Laporan** | ❌ ReportController belum ada | ❌ Belum ada | 🔴 **Belum dikerjakan** |
 | **6. Admin** | ❌ Admin controllers belum ada | ❌ Belum ada | 🔴 **Belum dikerjakan** |
-| **7. Polish** | — | — | ⬜ Nanti |
+| **7. Polish** | — | 🟡 UI redesign + branding Uni-FaRe (dimulai) | 🟡 **Sebagian dimulai** |
 
 ### Blocking Issues
-- **Tabel `personal_access_tokens`** — Belum dibuat. Auth Sanctum tidak bisa berjalan di production tanpa tabel ini.
-- **Branch `feat/frontend-facility`** — Perlu di-merge ke `main` dengan resolusi konflik.
+- ~~**Tabel `personal_access_tokens`** — Sudah dibuat.~~ ✅
+- ~~**Branch `feat/frontend-facility`** — Sudah di-merge ke `main` (29 Sep).~~ ✅

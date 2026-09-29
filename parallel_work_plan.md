@@ -1,6 +1,6 @@
-# Pembagian Kerja Paralel — Update 23 September 2026
+# Pembagian Kerja Paralel — Update 29 September 2026
 
-> **Deadline Proyek: 11 Oktober 2026** (tersisa ±18 hari)
+> **Deadline Proyek: 11 Oktober 2026** (tersisa ±12 hari)
 > Dokumen ini sudah diperbarui dengan progress terkini. Bagian yang sudah selesai ditandai ✅.
 
 ---
@@ -9,24 +9,34 @@
 
 Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 
-### Fase 1–3 (Ongoing)
+### Fase 1–3 (Selesai ✅)
 - [x] Setup awal proyek (Laravel + React + PostgreSQL)
 - [x] Review & merge PR Orang 1 (`feat/backend-auth-facility`)
 - [x] Review & merge PR Orang 2 (`feat/frontend-core`)
-- [ ] Review & merge PR Orang 3 (`feat/frontend-facility`) — **resolve konflik**
-- [ ] Update dokumentasi (CHANGELOG, README, parallel_work_plan)
+- [x] Review & merge PR Orang 3 (`feat/frontend-facility`) — **resolve konflik** ✅ (29 Sep)
+- [x] Update dokumentasi (CHANGELOG, README, parallel_work_plan) ✅ (29 Sep)
+
+### PM — Pekerjaan UI & Branding (29 Sep)
+- [x] Membuat branch `feat/ui-redesign` — redesign auth pages dan app layout dengan tema bunny.net
+- [x] Integrasi komponen `CursorGrid` sebagai animasi interaktif di halaman login/register
+- [x] Integrasi `lucide-react` sebagai icon library menggantikan emoji
+- [x] Re-branding nama proyek dari "UniSpace" → **"Uni-FaRe"** (University Facility Reservations)
+- [x] Menambahkan animasi "Pop & Hover Highlight" pada tombol show/hide password
+- [x] Menambahkan `.archify/` ke `.gitignore`
+- [x] Membuat dokumentasi arsitektur teknis (prompt Archify) untuk visualisasi tim
+- [x] Review PR #7 dari Orang 3 — memberikan feedback 6 poin (3 bug kritis + 3 minor)
 
 ### Fase 4–6 (Checkpoint Review)
 - [ ] Review & test setiap PR sebelum merge ke `main`
 - [ ] Test end-to-end setelah merge (Login → Fasilitas → Reservasi → Laporan → Admin)
 - [ ] Koordinasi antar anggota jika ada bottleneck / dependency
-- [ ] Pastikan semua blocking issue terselesaikan (misal tabel `personal_access_tokens`)
+- [x] Pastikan semua blocking issue terselesaikan (misal tabel `personal_access_tokens`) ✅
 
 ### Fase 7 — UI Finishing & Polish (Ini bagianmu!)
-- [ ] Review seluruh tampilan UI secara menyeluruh
-- [ ] Perbaiki konsistensi warna, spacing, font, dan layout antar halaman
+- [x] Review seluruh tampilan UI secara menyeluruh (dimulai 29 Sep)
+- [x] Perbaiki konsistensi warna, spacing, font, dan layout antar halaman (design.md)
 - [ ] Pastikan responsiveness di mobile (375px) dan desktop (1440px)
-- [ ] Polish micro-interactions: hover effects, transisi halaman, loading states
+- [x] Polish micro-interactions: hover effects, transisi halaman, loading states (sebagian)
 - [ ] Pastikan error states ditampilkan dengan baik (form validation, 404, 403, network error)
 - [ ] Review dan rapikan CSS/styling secara keseluruhan
 - [ ] Finalisasi seed data untuk demo presentasi
@@ -51,22 +61,24 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 - Common components (StatusBadge, ConfirmModal, Pagination, LoadingSpinner, Alert) ✅
 - App.tsx routing lengkap (public, user, officer, admin) ✅
 
-### 🟡 Orang 3 (Frontend Fasilitas Engineer) — PERLU MERGE
-- **Branch:** `feat/frontend-facility` → **Sudah push, belum di-merge**
+### ✅ Orang 3 (Frontend Fasilitas Engineer) — MERGED (29 Sep)
+- **Branch:** `feat/frontend-facility` → **Di-merge ke `main`** (29 Sep, conflict resolved oleh PM)
 - FacilityCard, FacilityFilter, SlotCalendar, FacilityForm ✅
 - HomePage, FacilityDetailPage ✅
 - Mock data + API layer facilities ✅
 - slotValidation.js ✅
-- **⚠️ Branch ini fork dari `main` sebelum PR #3 dan #5 masuk. Saat merge kemungkinan ada konflik yang perlu di-resolve.**
+- Migrasi semua komponen dari .jsx ke .tsx ✅ (commit terbaru)
+- Type definitions (`types/facility.ts`) ✅
+- **Catatan:** PM sudah review PR #7 dan memberikan 6 poin feedback (3 bug kritis, 3 minor). Orang 3 sudah fix dan push ulang.
 
 ---
 
-## 🚨 Blocking Issue — Harus Segera Diselesaikan
+## ✅ Blocking Issue — Sudah Diselesaikan
 
-| # | Issue | Siapa | Cara |
-|---|-------|-------|------|
-| 1 | Tabel `personal_access_tokens` belum ada | **Orang 1** | Jalankan `php artisan install:api` lalu `php artisan migrate`, atau buat manual via Beekeeper |
-| 2 | Branch `feat/frontend-facility` belum di-merge | **PM** | Review → resolve konflik → merge ke `main` |
+| # | Issue | Status | Diselesaikan |
+|---|-------|--------|------|
+| 1 | Tabel `personal_access_tokens` belum ada | ✅ Selesai | Sudah dibuat di database Aiven Cloud |
+| 2 | Branch `feat/frontend-facility` belum di-merge | ✅ Selesai (29 Sep) | PM resolve konflik di `App.tsx` dan `package-lock.json`, lalu merge ke `main` |
 
 ---
 
@@ -230,7 +242,8 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 main
 ├── feat/backend-auth-facility     ← Orang 1 (✅ Merged PR #3)
 ├── feat/frontend-core             ← Orang 2 (✅ Merged PR #5)
-├── feat/frontend-facility         ← Orang 3 (🟡 Perlu merge + resolve konflik)
+├── feat/frontend-facility         ← Orang 3 (✅ Merged 29 Sep, conflict resolved)
+├── feat/ui-redesign               ← PM (✅ Merged — UI redesign + rebranding Uni-FaRe)
 │
 ├── feat/backend-reservation       ← Orang 1 (🔴 Fase 4 — MULAI SEKARANG)
 ├── feat/frontend-reservation      ← Orang 2 (🔴 Fase 4 — MULAI SEKARANG)

@@ -1,6 +1,6 @@
-# Sistem Reservasi & Pelaporan Fasilitas Kampus
+# Uni-FaRe — University Facility Reservations
 
-Aplikasi web untuk mengelola penggunaan fasilitas kampus (ruang kelas, aula, laboratorium, alat, lapangan). Pengguna dapat mengecek ketersediaan, mengajukan reservasi, dan melaporkan kerusakan. Petugas dan admin memproses kedua alur secara terpusat.
+Aplikasi web **Uni-FaRe** untuk mengelola penggunaan fasilitas kampus (ruang kelas, aula, laboratorium, alat, lapangan). Pengguna dapat mengecek ketersediaan, mengajukan reservasi, dan melaporkan kerusakan. Petugas dan admin memproses kedua alur secara terpusat.
 
 ---
 
@@ -8,7 +8,7 @@ Aplikasi web untuk mengelola penggunaan fasilitas kampus (ruang kelas, aula, lab
 
 | Layer | Teknologi |
 |-------|-----------|
-| **Frontend** | React 18 (Vite) + React Router v6 + Bootstrap 5 + Axios |
+| **Frontend** | React 18 (Vite) + TypeScript + React Router v6 + Vanilla CSS + Axios + Lucide React |
 | **Backend** | Laravel (REST API mode) |
 | **Auth** | Laravel Sanctum (token-based) |
 | **Database** | PostgreSQL 16 |
@@ -84,7 +84,7 @@ php artisan key:generate
 Buka file `backend/.env` dan sesuaikan konfigurasi database:
 
 ```env
-APP_NAME="Sistem Reservasi Fasilitas"
+APP_NAME="Uni-FaRe"
 APP_URL=http://localhost:8000
 
 DB_CONNECTION=pgsql
@@ -181,12 +181,12 @@ npm run dev
 ### Frontend (frontend/package.json)
 - `react-router-dom` - Routing SPA
 - `axios` - HTTP client
+- `lucide-react` - Icon library
 - `@fullcalendar/react` + plugins - Kalender slot
-- `bootstrap` - UI framework
 
 ---
 
-## Status Kode Saat Ini (Update: 23 Sep 2026)
+## Status Kode Saat Ini (Update: 29 Sep 2026)
 
 ### Backend (`backend/`)
 | Komponen | Status | Keterangan |
@@ -197,7 +197,7 @@ npm run dev
 | `routes/api.php` | ✅ Ada | Auth + Facility routes terdaftar |
 | `config/cors.php` | ✅ Ada | Dikonfigurasi untuk `localhost:5173` |
 | Eloquent Models | ✅ Ada | `User`, `Facility`, `Reservation`, `Report` + 7 model lookup |
-| `personal_access_tokens` | ⏳ Pending | **Harus dibuat sebelum auth bisa jalan!** |
+| `personal_access_tokens` | ✅ Selesai | Tabel sudah dibuat di Aiven Cloud |
 | `AuthController` + Middleware | ✅ Ada | register, login, logout, me — `RoleMiddleware`, `EnsureUserIsActive` |
 | `FacilityController` | ✅ Ada | index, show, slots, store, update, updateStatus |
 | `ReservationController` | 🔄 Stub | Method signatures ada, isi masih kosong — target Fase 4 |
@@ -210,12 +210,13 @@ npm run dev
 | Project React + Vite | ✅ Ada | `npm install` cukup |
 | API Layer (axios, auth) | ✅ Ada | `api/axios.ts`, `api/auth.ts` |
 | AuthContext + useAuth | ✅ Ada | Login/logout state global |
-| Layout (AppLayout, Navbar, Sidebar) | ✅ Ada | Sidebar role-based |
+| Layout (AppLayout, Navbar, Sidebar) | ✅ Ada | Sidebar role-based, redesign tema Uni-FaRe |
 | ProtectedRoute | ✅ Ada | Guard auth + role check |
-| LoginPage, RegisterPage | ✅ Ada | Sudah terintegrasi dengan backend |
-| Common Components | ✅ Ada | StatusBadge, ConfirmModal, Pagination, LoadingSpinner, Alert |
+| LoginPage, RegisterPage | ✅ Ada | Sudah terintegrasi + animasi CursorGrid + lucide-react |
+| Common Components | ✅ Ada | StatusBadge, ConfirmModal, Pagination, LoadingSpinner, Alert, CursorGrid, UniversityLogo |
 | Routing (App.tsx) | ✅ Ada | Public, user, officer, admin routes |
-| Fasilitas UI | 🟡 Di branch | `feat/frontend-facility` — perlu merge + resolve konflik |
+| Fasilitas UI | ✅ Merged | HomePage, FacilityDetailPage, FacilityCard, FacilityFilter, SlotCalendar, FacilityForm |
+| UI Redesign + Branding | ✅ Merged | Tema bunny.net, rebranding Uni-FaRe, animasi password toggle |
 | Reservasi, Laporan, Admin UI | ❌ Belum | Target Fase 4–6 |
 
 ---
@@ -228,8 +229,8 @@ Lihat detail lengkap di `implementation_plan.md` dan `parallel_work_plan.md`.
 |------|--------|-----------|--------|
 | **1. Setup** | M1 (4-6 Sep) | Init Laravel + React + PostgreSQL, migrasi, seeder | ✅ Selesai |
 | **2. Auth** | M1 (7-17 Sep) | AuthController, Sanctum, LoginPage, RegisterPage, AuthContext | ✅ Selesai (BE + FE) |
-| **3. Fasilitas** | M2 (11-23 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | ✅ BE Selesai / 🟡 FE perlu merge |
-| **4. Reservasi** | M3 (23-27 Sep) | Reservasi + conflict detection, form + antrian | 🔴 Mulai sekarang |
+| **3. Fasilitas** | M2 (11-23 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | ✅ **Selesai** (BE + FE merged 29 Sep) |
+| **4. Reservasi** | M3 (23-27 Sep) | Reservasi + conflict detection, form + antrian | 🔴 Harus dimulai sekarang |
 | **5. Laporan** | M3-M4 (27-30 Sep) | Laporan kerusakan + foto, riwayat + antrian | ⬜ Belum |
 | **6. Admin** | M4 (1-5 Okt) | User management, rekap, export CSV/Excel/PDF | ⬜ Belum |
 | **7. Polish** | M5 (6-10 Okt) | Bug fix, UI polish, persiapan presentasi | ⬜ Belum |
