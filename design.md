@@ -430,7 +430,7 @@ Create a Network Deep 10px-radius promotion banner with 30px 32px padding, a whi
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-xl: rgba(0, 0, 0, 0.04) 0px 6px 40px 0px;
+  --shadow-xl: rgba(0, 0, 0, 0.04) 0px 6px 40px  0px;
   --shadow-md: rgb(212, 211, 221) 0px 4px 11px 0px;
 }
 ```
