@@ -70,8 +70,8 @@ export const RegisterPage = () => {
             <div className="auth-logo">
               <UniversityLogo className="auth-logo-icon" />
               <span className="auth-logo-text">
-                <span className="auth-logo-text-light">Uni</span>
-                <span className="auth-logo-text-gold">Space</span>
+                <span className="auth-logo-text-light">Uni-</span>
+                <span className="auth-logo-text-gold">FaRe</span>
               </span>
             </div>
             <h1 className="auth-tagline">
@@ -133,8 +133,8 @@ export const RegisterPage = () => {
           <div className="auth-logo">
             <UniversityLogo className="auth-logo-icon" />
             <span className="auth-logo-text">
-              <span className="auth-logo-text-light">Uni</span>
-              <span className="auth-logo-text-gold">Space</span>
+              <span className="auth-logo-text-light">Uni-</span>
+              <span className="auth-logo-text-gold">FaRe</span>
             </span>
           </div>
 

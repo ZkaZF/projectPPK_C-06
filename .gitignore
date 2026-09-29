@@ -1,4 +1,4 @@
-﻿# ========================
+# ========================
 # OS & Editor Files
 # ========================
 .DS_Store
@@ -31,3 +31,8 @@ frontend/dist-ssr/
 frontend/*.local
 frontend/*.log
 "backend/check_pass.php" 
+
+# ========================
+# Archify & Diagram Tools
+# ========================
+.archify/

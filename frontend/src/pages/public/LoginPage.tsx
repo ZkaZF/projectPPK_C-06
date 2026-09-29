@@ -68,8 +68,8 @@ export const LoginPage = () => {
           <div className="auth-logo">
             <UniversityLogo className="auth-logo-icon" />
             <span className="auth-logo-text">
-              <span className="auth-logo-text-light">Uni</span>
-              <span className="auth-logo-text-gold">Space</span>
+              <span className="auth-logo-text-light">Uni-</span>
+              <span className="auth-logo-text-gold">FaRe</span>
             </span>
           </div>
 
@@ -136,18 +136,8 @@ export const LoginPage = () => {
                 />
                 <button
                   type="button"
+                  className="password-toggle-btn"
                   onClick={() => setShowPassword((v) => !v)}
-                  style={{
-                    position: "absolute",
-                    right: "14px",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    color: "var(--text-muted)",
-                    fontSize: "16px",
-                    padding: 0,
-                    lineHeight: 1,
-                  }}
                   aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}

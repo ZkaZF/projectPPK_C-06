@@ -30,7 +30,7 @@ export const Navbar = () => {
       {/* Brand */}
       <Link to="/dashboard" className="navbar-brand">
         <UniversityLogo className="navbar-brand-icon" />
-        <span className="navbar-brand-name">UniSpace</span>
+        <span className="navbar-brand-name">Uni-FaRe</span>
       </Link>
 
       <div className="navbar-spacer" />
