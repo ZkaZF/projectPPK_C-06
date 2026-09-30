@@ -28,16 +28,16 @@ export const Navbar = () => {
   return (
     <nav className="navbar">
       {/* Brand */}
-      <Link to="/dashboard" className="navbar-brand">
+      <Link to="/" className="navbar-brand">
         <UniversityLogo className="navbar-brand-icon" />
         <span className="navbar-brand-name">Uni-FaRe</span>
       </Link>
 
       <div className="navbar-spacer" />
 
-      {/* User section */}
+      {/* User section / Auth links */}
       <div className="navbar-user">
-        {user && (
+        {user ? (
           <>
             <div style={{ textAlign: "right" }}>
               <div className="navbar-user-name">{user.full_name}</div>
@@ -48,17 +48,27 @@ export const Navbar = () => {
             <div className="navbar-avatar" title={user.full_name}>
               {initials}
             </div>
+            <button
+              className="btn btn-danger"
+              onClick={handleLogout}
+              style={{ padding: "8px 16px", fontSize: "0.875rem" }}
+            >
+              Keluar
+            </button>
           </>
+        ) : (
+          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+            <Link to="/login" style={{ color: "var(--text-white)", fontSize: "0.9rem", fontWeight: 500, textDecoration: "none" }}>
+              Masuk
+            </Link>
+            <Link to="/register" style={{
+              background: "var(--primary)", color: "#fff", padding: "8px 16px",
+              borderRadius: "var(--radius-sm)", fontSize: "0.9rem", fontWeight: 600, textDecoration: "none"
+            }}>
+              Daftar
+            </Link>
+          </div>
         )}
-
-        <button
-          id="navbar-logout"
-          className="btn btn-danger"
-          onClick={handleLogout}
-          style={{ padding: "8px 16px", fontSize: "0.875rem" }}
-        >
-          Keluar
-        </button>
       </div>
     </nav>
   );

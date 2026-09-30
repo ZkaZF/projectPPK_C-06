@@ -182,42 +182,61 @@ npm run dev
 - `react-router-dom` - Routing SPA
 - `axios` - HTTP client
 - `lucide-react` - Icon library
-- `@fullcalendar/react` + plugins - Kalender slot
+- `@fullcalendar/react@^6.1.15` + plugins - Kalender slot (**pastikan versi 6.x, bukan 7.x**)
+
+> ⚠️ **Penting:** Setelah `npm install`, pastikan versi `@fullcalendar/react` adalah **6.x** (bukan 7.x).
+> Jika salah versi, jalankan: `npm install @fullcalendar/react@6.1.15`
+
+### Storage Symlink (wajib dijalankan sekali)
+Agar foto laporan bisa diakses via URL publik:
+```bash
+# Di folder backend/
+php artisan storage:link
+```
 
 ---
 
-## Status Kode Saat Ini (Update: 29 Sep 2026)
+## Status Kode Saat Ini (Update: 1 Okt 2026)
 
 ### Backend (`backend/`)
 | Komponen | Status | Keterangan |
 |----------|--------|------------|
 | Project Laravel | ✅ Ada | `composer install` cukup |
 | Database migrations | ✅ Ran (Batch 1) | 11 tabel di Aiven Cloud |
-| Seeder | ✅ Ran | 3 user dummy + data master |
-| `routes/api.php` | ✅ Ada | Auth + Facility routes terdaftar |
+| Seeder (DatabaseSeeder) | ✅ Ran | 3 user dummy + data master |
+| Seeder (FacilitySeeder) | ✅ Ran | 10 fasilitas dummy (semua tipe) |
+| `routes/api.php` | ✅ Ada | Auth + Facility + Reservation + Report routes |
 | `config/cors.php` | ✅ Ada | Dikonfigurasi untuk `localhost:5173` |
 | Eloquent Models | ✅ Ada | `User`, `Facility`, `Reservation`, `Report` + 7 model lookup |
 | `personal_access_tokens` | ✅ Selesai | Tabel sudah dibuat di Aiven Cloud |
 | `AuthController` + Middleware | ✅ Ada | register, login, logout, me — `RoleMiddleware`, `EnsureUserIsActive` |
 | `FacilityController` | ✅ Ada | index, show, slots, store, update, updateStatus |
-| `ReservationController` | 🔄 Stub | Method signatures ada, isi masih kosong — target Fase 4 |
-| `ReportController` | ❌ Belum | Target Fase 5 |
+| `ReservationController` | ✅ Selesai | store, myList, show, cancel, queue, approve, reject, forceCancel + conflict detection |
+| `StoreReservationRequest` | ✅ Selesai | Validasi lengkap pengajuan reservasi |
+| `ReportController` | ✅ Selesai | store (+ foto upload), myList, queue, updateStatus |
+| `StoreReportRequest` | ✅ Selesai | Validasi laporan + foto |
+| Storage symlink | ✅ Selesai | `php artisan storage:link` sudah dijalankan |
 | Admin Controllers | ❌ Belum | Target Fase 6 |
 
 ### Frontend (`frontend/`)
 | Komponen | Status | Keterangan |
 |----------|--------|------------|
 | Project React + Vite | ✅ Ada | `npm install` cukup |
-| API Layer (axios, auth) | ✅ Ada | `api/axios.ts`, `api/auth.ts` |
+| API Layer | ✅ Ada | `api/axios.ts`, `api/auth.ts`, `api/facilities.js`, `api/reservations.ts`, `api/reports.ts` |
 | AuthContext + useAuth | ✅ Ada | Login/logout state global |
-| Layout (AppLayout, Navbar, Sidebar) | ✅ Ada | Sidebar role-based, redesign tema Uni-FaRe |
+| Layout (AppLayout, Navbar, Sidebar, PublicLayout) | ✅ Ada | Sidebar role-based, redesign tema Uni-FaRe |
 | ProtectedRoute | ✅ Ada | Guard auth + role check |
-| LoginPage, RegisterPage | ✅ Ada | Sudah terintegrasi + animasi CursorGrid + lucide-react |
+| LoginPage, RegisterPage | ✅ Ada | + Link kembali ke beranda |
 | Common Components | ✅ Ada | StatusBadge, ConfirmModal, Pagination, LoadingSpinner, Alert, CursorGrid, UniversityLogo |
 | Routing (App.tsx) | ✅ Ada | Public, user, officer, admin routes |
-| Fasilitas UI | ✅ Merged | HomePage, FacilityDetailPage, FacilityCard, FacilityFilter, SlotCalendar, FacilityForm |
-| UI Redesign + Branding | ✅ Merged | Tema bunny.net, rebranding Uni-FaRe, animasi password toggle |
-| Reservasi, Laporan, Admin UI | ❌ Belum | Target Fase 4–6 |
+| Fasilitas UI | ✅ Ada | HomePage, FacilityDetailPage, FacilityCard, FacilityFilter, SlotCalendar (custom grid) |
+| UI Redesign + Branding | ✅ Ada | Tema bunny.net, rebranding Uni-FaRe, Navbar publik dengan Masuk/Daftar |
+| DashboardPage | ✅ Ada | Info user, ringkasan statistik fasilitas kampus |
+| NewReservationPage | ✅ Ada | Form ajukan reservasi + fasilitas picker + waktu mulai/selesai |
+| MyReservationsPage | ✅ Ada | List reservasi + badge status + tombol batalkan |
+| NewReportPage | ✅ Ada | Form laporan + upload foto + preview |
+| MyReportsPage | ✅ Ada | List laporan + thumbnail foto + badge status/kategori |
+| Officer / Admin UI | ❌ Belum | Target Fase 6 |
 
 ---
 
@@ -230,9 +249,9 @@ Lihat detail lengkap di `implementation_plan.md` dan `parallel_work_plan.md`.
 | **1. Setup** | M1 (4-6 Sep) | Init Laravel + React + PostgreSQL, migrasi, seeder | ✅ Selesai |
 | **2. Auth** | M1 (7-17 Sep) | AuthController, Sanctum, LoginPage, RegisterPage, AuthContext | ✅ Selesai (BE + FE) |
 | **3. Fasilitas** | M2 (11-23 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | ✅ **Selesai** (BE + FE merged 29 Sep) |
-| **4. Reservasi** | M3 (23-27 Sep) | Reservasi + conflict detection, form + antrian | 🔴 Harus dimulai sekarang |
-| **5. Laporan** | M3-M4 (27-30 Sep) | Laporan kerusakan + foto, riwayat + antrian | ⬜ Belum |
-| **6. Admin** | M4 (1-5 Okt) | User management, rekap, export CSV/Excel/PDF | ⬜ Belum |
+| **4. Reservasi** | M3 (23-27 Sep) | Reservasi + conflict detection, form + antrian | ✅ **Selesai** (Backend + Frontend, 1 Okt) |
+| **5. Laporan** | M3-M4 (27-30 Sep) | Laporan kerusakan + foto, riwayat + antrian | ✅ **Selesai** (Backend + Frontend, 1 Okt) |
+| **6. Admin** | M4 (1-5 Okt) | User management, rekap, export CSV/Excel/PDF | 🔴 Harus dimulai sekarang |
 | **7. Polish** | M5 (6-10 Okt) | Bug fix, UI polish, persiapan presentasi | ⬜ Belum |
 
 ---

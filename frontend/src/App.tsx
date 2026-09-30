@@ -3,11 +3,17 @@ import { LayoutDashboard, Ticket, FolderKanban, Users, ShieldCheck, Database, Bu
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute";
 import { AppLayout } from "./components/layout/AppLayout";
+import { PublicLayout } from "./components/layout/PublicLayout";
 import { LoginPage } from "./pages/public/LoginPage";
 import { RegisterPage } from "./pages/public/RegisterPage";
 import { ForbiddenPage } from "./pages/public/ForbiddenPage";
 import HomePage from "./pages/public/HomePage";
 import FacilityDetailPage from "./pages/public/FacilityDetailPage";
+import DashboardPage from "./pages/user/DashboardPage";
+import NewReservationPage from "./pages/user/NewReservationPage";
+import MyReservationsPage from "./pages/user/MyReservationsPage";
+import NewReportPage from "./pages/user/NewReportPage";
+import MyReportsPage from "./pages/user/MyReportsPage";
 
 // ── Placeholder pages (ganti nanti dengan halaman asli) ──────────────────────
 const DummyPage = ({ title, icon: Icon, desc }: { title: string, icon: any, desc: string }) => (
@@ -46,11 +52,10 @@ const DummyPage = ({ title, icon: Icon, desc }: { title: string, icon: any, desc
   </div>
 );
 
-const DashboardPage      = () => <DummyPage title="Dashboard" icon={LayoutDashboard} desc="Ringkasan aktivitas dan status fasilitas Anda hari ini." />;
-const ReservationsPage   = () => <DummyPage title="Reservasi Saya" icon={Ticket} desc="Daftar reservasi yang sedang diajukan atau sudah disetujui." />;
-const NewReservationPage = () => <DummyPage title="Ajukan Reservasi" icon={Ticket} desc="Formulir pengajuan peminjaman fasilitas baru." />;
-const ReportsPage        = () => <DummyPage title="Laporan Saya" icon={FolderKanban} desc="Riwayat pelaporan kerusakan atau keluhan fasilitas." />;
-const NewReportPage      = () => <DummyPage title="Buat Laporan" icon={FolderKanban} desc="Laporkan kendala fasilitas kepada petugas." />;
+const ReservationsPage   = MyReservationsPage;
+const NewReservationPageRoute = NewReservationPage;
+const ReportsPage        = MyReportsPage;
+const NewReportPageRoute = NewReportPage;
 
 // Officer
 const OfficerDashboardPage = () => <DummyPage title="Dashboard Petugas" icon={LayoutDashboard} desc="Ringkasan tugas dan antrian penanganan fasilitas." />;
@@ -70,9 +75,10 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Public */}
-
-          <Route path="/" element={<HomePage />} />
-          <Route path="/facilities/:id" element={<FacilityDetailPage />} />
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/facilities/:id" element={<FacilityDetailPage />} />
+          </Route>
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -85,9 +91,9 @@ function App() {
 
 
               <Route path="/reservations" element={<ReservationsPage />} />
-              <Route path="/reservations/new" element={<NewReservationPage />} />
+              <Route path="/reservations/new" element={<NewReservationPageRoute />} />
               <Route path="/reports" element={<ReportsPage />} />
-              <Route path="/reports/new" element={<NewReportPage />} />
+              <Route path="/reports/new" element={<NewReportPageRoute />} />
             </Route>
           </Route>
 

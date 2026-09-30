@@ -767,3 +767,53 @@ php artisan test
 4. **Laporan:** Buat laporan + foto → petugas update status → fasilitas ditandai 'dalam perbaikan'
 5. **Export:** Download rekap CSV, Excel, dan PDF dari halaman admin
 6. **Responsiveness:** Cek tampilan di mobile (375px) dan desktop (1440px)
+
+---
+
+## Progress Update — 1 Oktober 2026
+
+> Dokumen ini diperbarui untuk mencerminkan progress implementasi terbaru yang dikerjakan PM.
+
+### Komponen yang Sudah Diimplementasi (di luar rencana awal)
+
+#### Backend
+
+| File | Status | Catatan |
+|------|--------|---------|
+| `app/Http/Requests/StoreReservationRequest.php` | ✅ Selesai | Validasi: facility_id, reservation_date, start_time, end_time, purpose |
+| `app/Http/Controllers/ReservationController.php` | ✅ Selesai | 8 method + `hasConflict()` private helper (inline, tanpa Service class terpisah) |
+| `app/Http/Requests/StoreReportRequest.php` | ✅ Selesai | Validasi: fac_id, rep_cat_id, rep_description, rep_photo |
+| `app/Http/Controllers/ReportController.php` | ✅ Selesai | 4 method + upload foto ke `storage/public/reports/` |
+| `routes/api.php` | ✅ Diperbarui | +8 route reservasi, +4 route laporan |
+| Storage symlink | ✅ Selesai | `php artisan storage:link` sudah dijalankan |
+
+#### Frontend
+
+| File | Status | Catatan |
+|------|--------|---------|
+| `src/api/reservations.ts` | ✅ Selesai | createReservation, getMyReservations, cancelReservation, getReservationQueue, approve, reject, forceCancel |
+| `src/api/reports.ts` | ✅ Selesai | createReport (multipart), getMyReports, getReportQueue, updateReportStatus |
+| `src/pages/user/NewReservationPage.tsx` | ✅ Selesai | Form lengkap + success state |
+| `src/pages/user/MyReservationsPage.tsx` | ✅ Selesai | List + badge status + batalkan |
+| `src/pages/user/NewReportPage.tsx` | ✅ Selesai | Form + upload foto + preview |
+| `src/pages/user/MyReportsPage.tsx` | ✅ Selesai | List + thumbnail + badge |
+| `src/components/layout/PublicLayout.tsx` | ✅ Selesai | Layout publik dengan Navbar |
+| `src/components/facilities/SlotCalendar.tsx` | ✅ Diganti | Custom slot grid (FullCalendar dihapus karena crash) |
+| `src/components/layout/Sidebar.tsx` | ✅ Diperbarui | +Ajukan Reservasi, +Buat Laporan |
+
+### Deviasi dari Rencana Awal
+
+| # | Rencana | Implementasi Aktual | Alasan |
+|---|---------|---------------------|--------|
+| 1 | `ReservationService.php` terpisah | Logic `hasConflict()` langsung di controller | Lebih simpel untuk skala proyek ini |
+| 2 | FullCalendar untuk SlotCalendar | Custom slot grid dengan tombol | FullCalendar v7 crash fatal, versi 6 tidak kompatibel |
+| 3 | Kategori laporan dari DB | Hardcoded 5 kategori di frontend | Backend sudah ada tabel, tapi belum ada endpoint GET untuk kategori |
+
+### Yang Masih Harus Dikerjakan (Fase 6)
+
+- [ ] `Admin/UserController.php` — index, store, verify
+- [ ] `Admin/RecapController.php` — index, export CSV/Excel/PDF
+- [ ] `src/pages/admin/` — semua halaman admin
+- [ ] `src/pages/officer/ReservationQueuePage.tsx` — antrian petugas
+- [ ] `src/pages/officer/ReportQueuePage.tsx` — antrian laporan
+- [ ] `GET /api/report-categories` — endpoint untuk load kategori dinamis di frontend

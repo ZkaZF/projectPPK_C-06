@@ -11,8 +11,8 @@ export interface FacilityStatus {
 export interface Facility {
   fac_id: number | string;
   fac_name: string;
-  fac_type?: FacilityType;
-  fac_status?: FacilityStatus;
+  type?: FacilityType;
+  status?: FacilityStatus;
   fac_location?: string;
   fac_capacity?: number | null;
   fac_description?: string;

@@ -33,15 +33,34 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 - [x] Pastikan semua blocking issue terselesaikan (misal tabel `personal_access_tokens`) ✅
 
 ### Fase 7 — UI Finishing & Polish (Ini bagianmu!)
-- [x] Review seluruh tampilan UI secara menyeluruh (dimulai 29 Sep)
-- [x] Perbaiki konsistensi warna, spacing, font, dan layout antar halaman (design.md)
+- [x] Review seluruh tampilan UI secara menyeluruh
+- [x] Perbaiki konsistensi warna, spacing, font, dan layout antar halaman
 - [ ] Pastikan responsiveness di mobile (375px) dan desktop (1440px)
-- [x] Polish micro-interactions: hover effects, transisi halaman, loading states (sebagian)
-- [ ] Pastikan error states ditampilkan dengan baik (form validation, 404, 403, network error)
+- [x] Polish micro-interactions: hover effects, transisi halaman, loading states
+- [ ] Pastikan error states ditampilkan dengan baik
 - [ ] Review dan rapikan CSS/styling secara keseluruhan
+- [x] Tambah `FacilitySeeder` — 10 data fasilitas dummy (semua tipe) ✅ (1 Okt)
 - [ ] Finalisasi seed data untuk demo presentasi
 - [ ] Persiapan slide / alur demo presentasi
 - [ ] Testing end-to-end final: Register → Verify → Login → Reservasi → Laporan → Admin Export
+
+### PM mengambil alih Fase 4 & 5 (PM, 1 Okt)
+- [x] Implementasi `StoreReservationRequest` (validasi lengkap) ✅
+- [x] Implementasi `ReservationController` penuh (store, myList, show, cancel, queue, approve, reject, forceCancel + conflict detection) ✅
+- [x] Implementasi `StoreReportRequest` ✅
+- [x] Buat `ReportController` baru (store + foto upload, myList, queue, updateStatus) ✅
+- [x] Update `routes/api.php` dengan semua route reservasi & laporan ✅
+- [x] Jalankan `php artisan storage:link` untuk akses foto ✅
+- [x] Buat `src/api/reservations.ts` (API layer) ✅
+- [x] Buat `src/api/reports.ts` (API layer) ✅
+- [x] Buat `NewReservationPage.tsx` (form + fasilitas picker + slot waktu) ✅
+- [x] Buat `MyReservationsPage.tsx` (list + badge status + batalkan) ✅
+- [x] Buat `NewReportPage.tsx` (form + upload foto + preview) ✅
+- [x] Buat `MyReportsPage.tsx` (list + thumbnail foto + badge) ✅
+- [x] Update Sidebar: tambahkan link Ajukan Reservasi & Buat Laporan ✅
+- [x] Ganti `SlotCalendar` dari FullCalendar (crash) ke custom slot grid dengan error boundary ✅
+- [x] Buat `PublicLayout` (Navbar tanpa sidebar untuk halaman publik) ✅
+- [x] Update Navbar: tampilkan Masuk/Daftar saat belum login ✅
 
 ## 📊 Rekap Progress Fase 1–3
 
@@ -87,20 +106,17 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ### 👤 Orang 1 — Backend Reservasi
 **Branch Git:** `feat/backend-reservation`
 
-- [ ] Buat `app/Services/ReservationService.php`
-  - Method `hasConflict($facilityId, $date, $start, $end, $excludeId)` — cek bentrok slot approved
-- [ ] Buat `app/Http/Requests/StoreReservationRequest.php`
-  - Validasi: `facility_id` (exists), `reservation_date` (date, after_or_equal:today), `start_time` & `end_time` (format H:i, kelipatan 30 menit, jam 07:00–20:00), `purpose` (min:10)
-- [ ] Isi `ReservationController` yang sudah ada (saat ini stub kosong):
-  - `store()` → validasi + cek conflict → simpan dengan status `pending`
-  - `myList()` → reservasi milik user yang login, urutkan terbaru
-  - `show($id)` → detail + relasi facility, user
-  - `cancel($id)` → batalkan milik sendiri (hanya jika status pending/approved)
-  - `queue()` → daftar antrian status `pending` (untuk petugas)
-  - `approve($id)` → cek conflict lagi → ubah status ke `approved`, catat `processed_by`
-  - `reject($id)` → ubah status ke `rejected` + `cancel_reason`
-  - `forceCancel($id)` → ubah status `approved` → `cancelled` + alasan
-- [ ] Tambahkan routes reservasi ke `routes/api.php` (sesuai yang ada di `implementation_plan.md`)
+- [x] Buat `app/Http/Requests/StoreReservationRequest.php` ✅ (dikerjakan PM, 1 Okt)
+- [x] Isi `ReservationController` yang sudah ada:
+  - [x] `store()` → validasi + cek conflict → simpan dengan status `pending` ✅
+  - [x] `myList()` → reservasi milik user yang login ✅
+  - [x] `show($id)` → detail + relasi facility, user ✅
+  - [x] `cancel($id)` → batalkan milik sendiri ✅
+  - [x] `queue()` → daftar antrian status `pending` (untuk petugas) ✅
+  - [x] `approve($id)` → cek conflict lagi → ubah status ke `approved` ✅
+  - [x] `reject($id)` → ubah status ke `rejected` + `cancel_reason` ✅
+  - [x] `forceCancel($id)` → ubah status `approved` → `cancelled` + alasan ✅
+- [x] Tambahkan routes reservasi ke `routes/api.php` ✅
 
 **Output:** Semua endpoint reservasi bisa di-hit via Postman dengan response JSON yang benar.
 
@@ -109,19 +125,11 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ### 👤 Orang 2 — Frontend Reservasi
 **Branch Git:** `feat/frontend-reservation`
 
-- [ ] Buat `src/api/reservations.ts`
-  - `createReservation(data)`, `getMyReservations()`, `getReservation(id)`, `cancelReservation(id)`, `getReservationQueue()`, `approveReservation(id)`, `rejectReservation(id, reason)`
-- [ ] Buat `src/pages/user/NewReservationPage.tsx`
-  - Pilih fasilitas → lihat SlotCalendar → klik slot → isi form tujuan → submit
-  - Integrasi dengan `SlotCalendar` dari Orang 3
-- [ ] Buat `src/pages/user/MyReservationsPage.tsx`
-  - Tabel riwayat reservasi sendiri + StatusBadge
-  - Tombol "Batalkan" pada reservasi pending/approved → ConfirmModal
-- [ ] Buat `src/pages/user/DashboardPage.tsx`
-  - Ringkasan: jumlah reservasi aktif, laporan pending
-- [ ] Buat `src/pages/officer/ReservationQueuePage.tsx`
-  - Tabel antrian reservasi pending
-  - Tombol Approve / Reject per baris → ConfirmModal
+- [x] Buat `src/api/reservations.ts` ✅ (dikerjakan PM, 1 Okt)
+- [x] Buat `src/pages/user/NewReservationPage.tsx` ✅
+- [x] Buat `src/pages/user/MyReservationsPage.tsx` ✅
+- [x] Buat `src/pages/user/DashboardPage.tsx` ✅ (sudah ada sebelumnya)
+- [ ] Buat `src/pages/officer/ReservationQueuePage.tsx` — Antrian petugas *(target Fase 6)*
 
 **Output:** User bisa ajukan reservasi, lihat riwayat, batalkan. Petugas bisa approve/reject dari antrian.
 
@@ -145,24 +153,23 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ### 👤 Orang 1 — Backend Laporan
 **Branch Git:** `feat/backend-report`
 
-- [ ] Buat `app/Http/Controllers/ReportController.php`
-  - `store()` → simpan laporan + upload foto ke `storage/app/public/reports/`
-  - `myList()` → laporan milik user login
-  - `queue()` → antrian laporan untuk petugas (status `baru`/`diproses`)
-  - `updateStatus($id)` → ubah status + catatan resolusi + catat `handled_by`
-- [ ] Buat `app/Http/Requests/StoreReportRequest.php`
-  - Validasi: `fac_id` (exists), `rep_cat_id` (exists), `rep_description` (min:10), `rep_photo` (nullable|image|max:2048)
-- [ ] Jalankan `php artisan storage:link` untuk akses foto via URL publik
-- [ ] Tambahkan routes laporan ke `routes/api.php`
+- [x] Buat `app/Http/Controllers/ReportController.php` ✅ (dikerjakan PM, 1 Okt)
+  - [x] `store()` → simpan laporan + upload foto ke `storage/app/public/reports/` ✅
+  - [x] `myList()` → laporan milik user login ✅
+  - [x] `queue()` → antrian laporan untuk petugas (status `baru`/`diproses`) ✅
+  - [x] `updateStatus($id)` → ubah status + catatan resolusi + catat `handled_by` ✅
+- [x] Buat `app/Http/Requests/StoreReportRequest.php` ✅
+- [x] Jalankan `php artisan storage:link` untuk akses foto via URL publik ✅
+- [x] Tambahkan routes laporan ke `routes/api.php` ✅
 
 ### 👤 Orang 2 — Frontend Laporan
 **Branch Git:** `feat/frontend-report`
 
-- [ ] Buat `src/api/reports.ts`
-- [ ] Buat `src/pages/user/NewReportPage.tsx` — form laporan + upload foto + preview
-- [ ] Buat `src/pages/user/MyReportsPage.tsx` — riwayat laporan + StatusBadge
-- [ ] Buat `src/pages/officer/ReportQueuePage.tsx` — antrian laporan, ubah status + catatan resolusi
-- [ ] Buat `src/pages/officer/OfficerDashboardPage.tsx` — ringkasan antrian reservasi & laporan
+- [x] Buat `src/api/reports.ts` ✅ (dikerjakan PM, 1 Okt)
+- [x] Buat `src/pages/user/NewReportPage.tsx` — form laporan + upload foto + preview ✅
+- [x] Buat `src/pages/user/MyReportsPage.tsx` — riwayat laporan + StatusBadge ✅
+- [ ] Buat `src/pages/officer/ReportQueuePage.tsx` — antrian laporan, ubah status *(target Fase 6)*
+- [ ] Buat `src/pages/officer/OfficerDashboardPage.tsx` *(target Fase 6)*
 
 ### 👤 Orang 3 — Komponen Laporan
 - [ ] Buat `src/components/reports/ReportForm.tsx` — form + upload foto + preview

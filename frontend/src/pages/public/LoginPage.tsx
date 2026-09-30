@@ -88,6 +88,19 @@ export const LoginPage = () => {
       {/* Right — form panel */}
       <div className="auth-panel">
         <div className="auth-form-wrap">
+          <Link
+            to="/"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "6px",
+              fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "20px",
+              textDecoration: "none", transition: "color 0.2s",
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color = "var(--primary)")}
+            onMouseLeave={e => (e.currentTarget.style.color = "var(--text-muted)")}
+          >
+            ← Kembali ke Beranda
+          </Link>
+
           <div className="auth-form-header">
             <h2>Selamat Datang 👋</h2>
             <p>Masuk ke akun Anda untuk melanjutkan</p>

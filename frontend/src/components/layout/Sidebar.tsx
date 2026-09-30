@@ -3,7 +3,8 @@ import { useAuth } from "../../hooks/useAuth";
 
 import { 
   Home, Calendar, FileText, ClipboardList, Wrench, 
-  BarChart, Building2, Users, CheckCircle, TrendingUp 
+  BarChart, Building2, Users, CheckCircle, TrendingUp,
+  PlusCircle, FilePlus
 } from "lucide-react";
 
 interface NavItem {
@@ -13,9 +14,11 @@ interface NavItem {
 }
 
 const userMenuItems: NavItem[] = [
-  { to: "/dashboard",    icon: <Home size={20} />, label: "Dashboard" },
-  { to: "/reservations", icon: <Calendar size={20} />, label: "Reservasi Saya" },
-  { to: "/reports",      icon: <FileText size={20} />, label: "Laporan Saya" },
+  { to: "/dashboard",        icon: <Home size={20} />, label: "Dashboard" },
+  { to: "/reservations",     icon: <Calendar size={20} />, label: "Reservasi Saya" },
+  { to: "/reservations/new", icon: <PlusCircle size={20} />, label: "Ajukan Reservasi" },
+  { to: "/reports",          icon: <FileText size={20} />, label: "Laporan Saya" },
+  { to: "/reports/new",      icon: <FilePlus size={20} />, label: "Buat Laporan" },
 ];
 
 const officerMenuItems: NavItem[] = [

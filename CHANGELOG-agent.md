@@ -112,18 +112,94 @@
 
 ---
 
-## Ringkasan Status Per Fase (29 Sep 2026)
+## Ringkasan Status Per Fase (1 Okt 2026)
 
 | Fase | Backend | Frontend | Status Keseluruhan |
-|------|---------|----------|--------------------|
+|------|---------|----------|---------------------|
 | **1. Setup** | ✅ Laravel, DB, Models, CORS | ✅ React+Vite, Axios, folder structure | ✅ **Selesai** |
 | **2. Auth** | ✅ AuthController, Sanctum, Middleware | ✅ LoginPage, RegisterPage, AuthContext, ProtectedRoute | ✅ **Selesai** |
-| **3. Fasilitas** | ✅ FacilityController (CRUD + slots) | ✅ FacilityCard, SlotCalendar, HomePage (merged 29 Sep) | ✅ **Selesai** |
-| **4. Reservasi** | 🔄 ReservationController (stub kosong) | ❌ Belum ada | 🔴 **Harus dimulai sekarang** |
-| **5. Laporan** | ❌ ReportController belum ada | ❌ Belum ada | 🔴 **Belum dikerjakan** |
-| **6. Admin** | ❌ Admin controllers belum ada | ❌ Belum ada | 🔴 **Belum dikerjakan** |
-| **7. Polish** | — | 🟡 UI redesign + branding Uni-FaRe (dimulai) | 🟡 **Sebagian dimulai** |
+| **3. Fasilitas** | ✅ FacilityController (CRUD + slots) | ✅ FacilityCard, SlotCalendar, HomePage | ✅ **Selesai** |
+| **4. Reservasi** | ✅ ReservationController (penuh + conflict detection) | ✅ NewReservationPage, MyReservationsPage | ✅ **Selesai (1 Okt)** |
+| **5. Laporan** | ✅ ReportController (+ foto upload) | ✅ NewReportPage, MyReportsPage | ✅ **Selesai (1 Okt)** |
+| **6. Admin** | ❌ Admin controllers belum ada | ❌ Belum ada | 🔴 **Harus dimulai sekarang** |
+| **7. Polish** | — | 🟡 UI redesign + branding Uni-FaRe + halaman publik | 🟡 **Sebagian selesai** |
 
 ### Blocking Issues
 - ~~**Tabel `personal_access_tokens`** — Sudah dibuat.~~ ✅
 - ~~**Branch `feat/frontend-facility`** — Sudah di-merge ke `main` (29 Sep).~~ ✅
+- ~~**ReservationController masih stub kosong**~~ ✅ Diselesaikan PM (1 Okt)
+- ~~**ReportController belum ada**~~ ✅ Diselesaikan PM (1 Okt)
+
+---
+
+## 2026-09-30
+
+- **[PM] UI Polish — Redesign HomePage, FacilityCard, FacilityFilter**
+  - **Status:** ✅ Selesai
+  - **Detail:**
+    - `HomePage.tsx` — Ganti Bootstrap `container`/`row`/`col` ke CSS Grid + CSS variables. Tambah header ikon, *empty state* rapi, dan *loading spinner* dengan animasi `spin`.
+    - `FacilityCard.tsx` — Hapus Bootstrap sepenuhnya. Tambah hover lift effect, lucide icons (MapPin, Users), badge status dinamis (hijau/kuning/merah), label tipe fasilitas diformat rapi (ruang_kelas → "Ruang Kelas").
+    - `FacilityFilter.tsx` — Hapus Bootstrap. Gunakan CSS Grid `auto-fit`, styled label + input + select, reset button dengan hover state.
+    - `style.css` — Tambah `@keyframes spin` dan `@keyframes fadeIn`.
+
+- **[PM] Perbaikan Bug: Relasi Data Fasilitas**
+  - **Status:** ✅ Selesai
+  - **Detail:** Backend mengirim relasi sebagai `type` dan `status` (nama method Eloquent), bukan `fac_type`/`fac_status`. Perbaikan dilakukan di:
+    - `types/facility.ts` — Ganti field `fac_type`/`fac_status` → `type`/`status`
+    - `FacilityCard.tsx` — Update destructuring & label tipe
+    - `FacilityDetailPage.tsx` — Update semua referensi relasi
+    - `HomePage.tsx` — Fix logika filter tipe
+
+- **[PM] PublicLayout + Navbar Publik**
+  - **Status:** ✅ Selesai
+  - **Detail:**
+    - Buat `PublicLayout.tsx` — wrapper Navbar+Outlet untuk halaman publik (tanpa sidebar).
+    - Update `App.tsx` — bungkus route `/` dan `/facilities/:id` dalam `<PublicLayout />`.
+    - Update `Navbar.tsx` — tampilkan tombol "Masuk" & "Daftar" saat user belum login, sembunyikan tombol "Keluar". Logo brand diarahkan ke `/` (bukan `/dashboard`).
+    - Tambah link "← Kembali ke Beranda" di `LoginPage.tsx` dan `RegisterPage.tsx`.
+
+---
+
+## 2026-10-01
+
+- **[PM] FacilitySeeder — Data Dummy Fasilitas Lengkap**
+  - **Status:** ✅ Selesai
+  - **Detail:**
+    - Buat `database/seeders/FacilitySeeder.php` berisi 10 fasilitas mencakup semua tipe (ruang_kelas, aula, laboratorium, alat, lapangan).
+    - Dijalankan via `php artisan db:seed --class=FacilitySeeder`.
+    - Data mencakup fasilitas dengan status aktif, dalam perbaikan, dan nonaktif untuk testing filter UI.
+
+- **[PM] Perbaikan SlotCalendar — Ganti FullCalendar ke Custom Grid**
+  - **Status:** ✅ Selesai
+  - **Detail:**
+    - FullCalendar v7 (react wrapper) menyebabkan *crash fatal* yang membuat seluruh halaman kosong/putih karena tidak ada error boundary.
+    - `SlotCalendar.tsx` diganti dengan komponen custom `SlotGrid` yang menggunakan tombol-tombol slot berwarna (hijau = tersedia, merah = terisi).
+    - Ditambahkan `CalendarErrorBoundary` (React class component) sebagai fallback — jika ada error, hanya muncul pesan kecil, bukan blank page.
+    - Downgrade `@fullcalendar/react` ke `v6.1.15` via `npm install @fullcalendar/react@6.1.15`.
+
+- **[PM] Fase 4: Implementasi Reservasi (Backend + Frontend)**
+  - **Status:** ✅ Selesai
+  - **Backend:**
+    - `StoreReservationRequest.php` — Validasi lengkap: `facility_id`, `reservation_date` (min: today), `start_time`, `end_time` (H:i, end > start), `purpose` (min 10 char).
+    - `ReservationController.php` — Implementasi penuh semua 8 method: `store` (+ conflict detection dalam `hasConflict()`), `myList`, `show`, `cancel`, `queue`, `approve` (+ cek konflik ulang), `reject`, `forceCancel`.
+    - `routes/api.php` — Tambah 8 route reservasi dengan middleware auth & role yang tepat.
+  - **Frontend:**
+    - `src/api/reservations.ts` — API layer lengkap untuk semua endpoint reservasi.
+    - `NewReservationPage.tsx` — Form dengan fasilitas picker, date picker, time slot dropdown (07:00–20:00, 30 menit), textarea tujuan, validasi client-side, dan success state.
+    - `MyReservationsPage.tsx` — Daftar reservasi dengan badge status berwarna, info fasilitas + lokasi + waktu, tombol "Batalkan" untuk status pending/approved.
+
+- **[PM] Fase 5: Implementasi Laporan (Backend + Frontend)**
+  - **Status:** ✅ Selesai
+  - **Backend:**
+    - `StoreReportRequest.php` — Validasi: `fac_id`, `rep_cat_id`, `rep_description` (min 10), `rep_photo` (nullable|image|max:2048KB).
+    - `ReportController.php` — 4 method: `store` (+ upload foto ke `storage/public/reports/`), `myList`, `queue` (status baru/diproses), `updateStatus`.
+    - `routes/api.php` — Tambah 4 route laporan.
+    - `php artisan storage:link` dijalankan — foto dapat diakses via URL publik `/storage/reports/...`.
+  - **Frontend:**
+    - `src/api/reports.ts` — API layer lengkap.
+    - `NewReportPage.tsx` — Form dengan fasilitas picker, kategori picker (5 kategori), textarea deskripsi, upload foto dengan preview real-time + tombol hapus, dan success state.
+    - `MyReportsPage.tsx` — Daftar laporan dengan thumbnail foto, badge status + kategori berwarna.
+
+- **[PM] Update Sidebar**
+  - **Status:** ✅ Selesai
+  - Tambah 2 link baru di sidebar pengguna: "Ajukan Reservasi" (→ `/reservations/new`) dan "Buat Laporan" (→ `/reports/new`) dengan ikon `PlusCircle` dan `FilePlus` dari lucide-react.
