@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Calendar, ArrowLeft, CheckCircle } from 'lucide-react';
 import { getFacilitiesApi } from '../../api/facilities';
 import { createReservationApi } from '../../api/reservations';
-import ReservationForm, { ReservationPayload, FacilityOption } from '../../components/reservations/ReservationForm';
+import ReservationForm from '../../components/reservations/ReservationForm';
+import type { ReservationPayload, FacilityOption } from '../../types/reservation';
 
 export default function NewReservationPage() {
   const navigate = useNavigate();
