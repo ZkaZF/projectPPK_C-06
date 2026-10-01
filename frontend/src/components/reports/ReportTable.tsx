@@ -1,4 +1,5 @@
 import { FolderKanban, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { formatDate } from '../../utils/date';
 
 export interface Report {
   rep_id: number;
@@ -77,7 +78,7 @@ export default function ReportTable({ reports, loading, error, onCreateNew }: Re
               </div>
               <p style={{ margin: '0 0 4px', fontSize: '0.88rem', color: 'var(--text)', lineHeight: 1.5 }}>{r.rep_description}</p>
               <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                🕐 {new Date(r.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                🕐 {formatDate(r.created_at)}
               </p>
             </div>
           </div>
