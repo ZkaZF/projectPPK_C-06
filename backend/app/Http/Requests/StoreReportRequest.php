@@ -17,7 +17,7 @@ class StoreReportRequest extends FormRequest
             'fac_id'          => ['required', 'integer', 'exists:facilities,fac_id'],
             'rep_cat_id'      => ['required', 'integer', 'exists:report_categories,rep_cat_id'],
             'rep_description' => ['required', 'string', 'min:10'],
-            'rep_photo'       => ['nullable', 'image', 'max:2048'],
+            'rep_photo'       => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }
 
@@ -31,6 +31,7 @@ class StoreReportRequest extends FormRequest
             'rep_description.required' => 'Deskripsi masalah wajib diisi.',
             'rep_description.min'      => 'Deskripsi minimal 10 karakter.',
             'rep_photo.image'          => 'File foto harus berupa gambar.',
+            'rep_photo.mimes'          => 'Foto harus berformat jpg, png, atau webp.',
             'rep_photo.max'            => 'Ukuran foto maksimal 2MB.',
         ];
     }
