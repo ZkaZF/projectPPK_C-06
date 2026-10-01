@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FolderKanban, Plus } from 'lucide-react';
 import { getMyReportsApi } from '../../api/reports';
-import ReportTable, { Report } from '../../components/reports/ReportTable';
+import ReportTable from '../../components/reports/ReportTable';
+import type { Report } from '../../components/reports/ReportTable';
 
 export default function MyReportsPage() {
   const navigate = useNavigate();
