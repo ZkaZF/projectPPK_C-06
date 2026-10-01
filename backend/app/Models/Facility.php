@@ -5,18 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Facility
+ *
+ * Represents a campus facility that can be reserved or reported.
+ * Examples: ruang_kelas (classroom), aula (hall), laboratorium, alat (equipment), lapangan (field).
+ */
 class Facility extends Model
 {
     use HasFactory;
 
-    /**
-     * Primary key kolom tabel facilities.
-     */
+    /** Custom primary key column name (not the default "id"). */
     protected $primaryKey = 'fac_id';
 
-    /**
-     * Kolom yang boleh diisi secara mass-assignment.
-     */
+    /** Columns that may be mass-assigned. */
     protected $fillable = [
         'fac_name',
         'fac_type_id',
@@ -27,29 +29,41 @@ class Facility extends Model
         'fac_image',
     ];
 
-    // ─── Relasi ke tabel lookup ───────────────────────────────────────────────
+    // ─── Lookup table relations ───────────────────────────────────────────────
 
-    /** Jenis fasilitas (ruang_kelas, aula, lab, alat, lapangan) */
+    /**
+     * The type of this facility (e.g. ruang_kelas, aula, laboratorium, alat, lapangan).
+     * FK: fac_type_id → facility_types.fac_type_id
+     */
     public function type()
     {
         return $this->belongsTo(FacilityType::class, 'fac_type_id', 'fac_type_id');
     }
 
-    /** Status fasilitas (aktif, dalam_perbaikan, nonaktif) */
+    /**
+     * The operational status of this facility (e.g. aktif, dalam_perbaikan, nonaktif).
+     * FK: fac_stat_id → facility_statuses.fac_stat_id
+     */
     public function status()
     {
         return $this->belongsTo(FacilityStatus::class, 'fac_stat_id', 'fac_stat_id');
     }
 
-    // ─── Relasi ke tabel utama ────────────────────────────────────────────────
+    // ─── Main table relations ─────────────────────────────────────────────────
 
-    /** Semua reservasi untuk fasilitas ini */
+    /**
+     * All reservations made for this facility.
+     * One facility can have many reservations over time.
+     */
     public function reservations()
     {
         return $this->hasMany(Reservation::class, 'fac_id', 'fac_id');
     }
 
-    /** Semua laporan kerusakan untuk fasilitas ini */
+    /**
+     * All damage/issue reports filed for this facility.
+     * One facility can have many reports over time.
+     */
     public function reports()
     {
         return $this->hasMany(Report::class, 'fac_id', 'fac_id');
