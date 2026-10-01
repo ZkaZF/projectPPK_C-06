@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Ticket, Plus, X, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { Ticket, Plus, X, CheckCircle, Clock, XCircle, AlertCircle } from 'lucide-react';
 import { getMyReservationsApi, cancelReservationApi } from '../../api/reservations';
 
 interface Reservation {
@@ -20,6 +20,19 @@ const STATUS_STYLE: Record<string, { bg: string; text: string; icon: React.React
   rejected:  { bg: '#fee2e2', text: '#991b1b', icon: <XCircle size={12} /> },
   cancelled: { bg: '#f1f5f9', text: '#64748b', icon: <X size={12} /> },
 };
+
+// Format "2026-09-18T00:00:00.000000Z" → "18 September 2026"
+function formatDate(raw: string) {
+  const d = new Date(raw);
+  if (isNaN(d.getTime())) return raw; // fallback jika bukan ISO
+  return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+// Format "08:00:00" atau "08:00:00.000000" → "08:00"
+function formatTime(raw: string) {
+  if (!raw) return raw;
+  return raw.slice(0, 5);
+}
 
 export default function MyReservationsPage() {
   const navigate = useNavigate();
@@ -74,8 +87,9 @@ export default function MyReservationsPage() {
 
       {/* Error */}
       {error && (
-        <div style={{ padding: '12px 16px', borderRadius: 'var(--radius-sm)', background: '#fee2e2', color: '#dc2626', marginBottom: '20px', fontSize: '0.875rem' }}>
-          ⚠️ {error}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 16px', borderRadius: 'var(--radius-sm)', background: '#fee2e2', color: '#dc2626', marginBottom: '20px', fontSize: '0.875rem' }}>
+          <AlertCircle size={16} />
+          {error}
         </div>
       )}
 
@@ -130,7 +144,7 @@ export default function MyReservationsPage() {
                     </span>
                   </div>
                   <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                    📅 {r.res_date} &nbsp;|&nbsp; ⏰ {r.res_start} – {r.res_end}
+                    📅 {formatDate(r.res_date)} &nbsp;|&nbsp; ⏰ {formatTime(r.res_start)} – {formatTime(r.res_end)}
                   </p>
                   {r.facility?.fac_location && (
                     <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'var(--text-muted)' }}>

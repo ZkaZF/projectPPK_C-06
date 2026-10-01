@@ -135,14 +135,14 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 
 ---
 
-### 👤 Orang 3 — Integrasi Fasilitas + Bantu Reservasi UI
-**Branch Git:** Lanjutkan di `feat/frontend-facility` atau buat `feat/frontend-facility-integration`
+### 👤 Orang 3 — Ekstraksi Komponen Reservasi & Fasilitas
+**Branch Git:** Buat branch `feat/frontend-refactor-components` dari `main`
 
-- [ ] **PRIORITAS:** Resolve konflik merge `feat/frontend-facility` → `main` bersama PM
-- [ ] Ganti mock data di `HomePage.jsx` dengan API call real dari backend
-- [ ] Pastikan `SlotCalendar` bisa fetch slot dari backend (`/api/facilities/{id}/slots?date=`)
-- [ ] Buat `src/components/reservations/ReservationForm.tsx` — form dengan field: tanggal, waktu mulai/selesai, tujuan
-- [ ] Buat `src/components/reservations/ReservationTable.tsx` — tabel riwayat dengan kolom: fasilitas, tanggal, waktu, status, aksi
+- [x] **PRIORITAS:** Resolve konflik merge `feat/frontend-facility` → `main` bersama PM ✅ (Diselesaikan PM)
+- [x] Ganti mock data di `HomePage.tsx` dengan API call real dari backend ✅ (Diselesaikan PM)
+- [x] Pastikan `SlotCalendar` bisa fetch slot dari backend ✅ (Diselesaikan PM)
+- [ ] **TUGAS UTAMA:** Ekstrak UI form reservasi dari `src/pages/user/NewReservationPage.tsx` menjadi komponen reusable `src/components/reservations/ReservationForm.tsx`.
+- [ ] **TUGAS UTAMA:** Ekstrak UI list riwayat reservasi dari `src/pages/user/MyReservationsPage.tsx` menjadi komponen reusable `src/components/reservations/ReservationTable.tsx`.
 
 **Output:** Halaman fasilitas menampilkan data real. Komponen reservasi siap dipakai oleh Orang 2.
 
@@ -171,10 +171,10 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 - [ ] Buat `src/pages/officer/ReportQueuePage.tsx` — antrian laporan, ubah status *(target Fase 6)*
 - [ ] Buat `src/pages/officer/OfficerDashboardPage.tsx` *(target Fase 6)*
 
-### 👤 Orang 3 — Komponen Laporan
-- [ ] Buat `src/components/reports/ReportForm.tsx` — form + upload foto + preview
-- [ ] Buat `src/components/reports/ReportTable.tsx` — tabel riwayat dengan filter status
-- [ ] Buat `src/components/reports/ReportQueue.tsx` — tabel antrian petugas
+### 👤 Orang 3 — Ekstraksi Komponen Laporan
+- [ ] **TUGAS UTAMA:** Ekstrak UI form laporan dari `src/pages/user/NewReportPage.tsx` menjadi komponen reusable `src/components/reports/ReportForm.tsx`.
+- [ ] **TUGAS UTAMA:** Ekstrak UI list riwayat laporan dari `src/pages/user/MyReportsPage.tsx` menjadi komponen reusable `src/components/reports/ReportTable.tsx`.
+- [ ] Buat `src/components/reports/ReportQueue.tsx` — tabel antrian laporan untuk petugas.
 
 ---
 

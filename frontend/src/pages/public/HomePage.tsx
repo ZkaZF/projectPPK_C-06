@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import FacilityCard from '../../components/facilities/FacilityCard';
 import FacilityFilter, { EMPTY_FILTERS } from '../../components/facilities/FacilityFilter';
 import type { Facility, FacilityFilterState } from '../../types/facility';
-import { Building2 } from 'lucide-react';
+import { Building2, AlertCircle } from 'lucide-react';
 
 // @ts-ignore
 import { getFacilitiesApi } from '../../api/facilities';
@@ -66,11 +66,13 @@ export default function HomePage() {
       {/* ── Error ── */}
       {error && (
         <div style={{
+          display: 'flex', alignItems: 'center', gap: '8px',
           padding: '14px 18px', borderRadius: 'var(--radius)',
           background: '#fee2e2', color: '#dc2626', border: '1px solid #fca5a5',
           marginBottom: '20px', fontSize: '0.9rem',
         }}>
-          ⚠️ {error}
+          <AlertCircle size={18} />
+          {error}
         </div>
       )}
 

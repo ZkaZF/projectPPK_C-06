@@ -92,6 +92,99 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes spinnerGradient {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes redirectPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(0.97); }
+}
+
+/* ── Login Redirect Overlay ─────────────────────────────────────── */
+.redirect-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  background: var(--surface-dark); /* Launch Bay #051e38 */
+  animation: overlayFadeIn 0.25s ease-out;
+}
+
+.redirect-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(253, 141, 50, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(139, 179, 218, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Gradient arc spinner (adapted from SpellUI Spinner) */
+.redirect-spinner {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+}
+
+.redirect-spinner::before,
+.redirect-spinner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+/* Outer arc — Coral Launch */
+.redirect-spinner::before {
+  border: 3px solid rgba(255, 122, 83, 0.15);
+  border-top-color: #ff7a53;
+  border-right-color: #ffa84a;
+  animation: spinnerGradient 0.8s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+}
+
+/* Inner dot */
+.redirect-spinner::after {
+  inset: 14px;
+  background: linear-gradient(135deg, #ff7a53, #ffa84a);
+  animation: redirectPulse 1.2s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(255, 122, 83, 0.5);
+}
+
+.redirect-overlay-text {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.redirect-overlay-text h3 {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #ffffff;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+
+.redirect-overlay-text p {
+  font-size: 0.875rem;
+  color: var(--secondary); /* Signal Blue #8bb3da */
+  margin: 0;
+  animation: redirectPulse 1.4s ease-in-out infinite;
+}
+
 /* ── Typography ────────────────────────────────────────────────── */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font);

@@ -115,8 +115,8 @@ export default function NewReservationPage() {
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '28px', boxShadow: 'var(--shadow)' }}>
         {error && (
-          <div style={{ padding: '12px 16px', marginBottom: '20px', borderRadius: 'var(--radius-sm)', background: '#fee2e2', color: '#dc2626', border: '1px solid #fca5a5', fontSize: '0.875rem' }}>
-            ⚠️ {error}
+          <div style={{ padding: '12px 16px', marginBottom: '20px', borderRadius: 'var(--radius-sm)', background: '#fee2e2', color: '#dc2626', border: '1px solid #fca5a5', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <AlertCircle size={16} /> {error}
           </div>
         )}
 
@@ -174,12 +174,13 @@ export default function NewReservationPage() {
             type="submit"
             disabled={loading}
             style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
               padding: '12px', borderRadius: 'var(--radius)', border: 'none',
               background: loading ? 'var(--border)' : 'var(--primary)', color: '#fff',
               fontWeight: 700, fontSize: '0.95rem', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.2s',
             }}
           >
-            {loading ? 'Mengajukan...' : '📋 Ajukan Reservasi'}
+            {loading ? 'Mengajukan...' : <><Calendar size={18} /> Ajukan Reservasi</>}
           </button>
         </form>
       </div>
