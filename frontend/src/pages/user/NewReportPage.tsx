@@ -4,6 +4,7 @@ import { FolderKanban, ArrowLeft, CheckCircle } from 'lucide-react';
 import { getFacilitiesApi } from '../../api/facilities';
 import { createReportApi } from '../../api/reports';
 import ReportForm from '../../components/reports/ReportForm';
+import type { ReportPayload } from '../../components/reports/ReportForm'; // atau dari file types jika ada
 
 interface FacilityOption { fac_id: number | string; fac_name: string; }
 
