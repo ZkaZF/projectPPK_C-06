@@ -10,8 +10,7 @@ interface Reservation {
   res_end: string;
   res_purpose: string;
   facility?: { fac_name: string; fac_location?: string };
-  status?: { res_status_name: string };
-  reservationStatus?: { res_status_name: string };
+  reservation_status?: { res_status_name: string };
   created_at: string;
 }
 
@@ -118,7 +117,7 @@ export default function MyReservationsPage() {
       {!loading && reservations.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {reservations.map((r) => {
-	    const statusName = r.status?.res_status_name ?? r.reservationStatus?.res_status_name ?? '';
+	    const statusName = r.reservation_status?.res_status_name ?? '';
             const statusKey = statusName.toLowerCase();
             const badge = STATUS_STYLE[statusKey] ?? STATUS_STYLE.pending;
             const canCancel = statusKey === 'pending' || statusKey === 'approved';
