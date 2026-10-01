@@ -10,6 +10,7 @@ interface Reservation {
   res_end: string;
   res_purpose: string;
   facility?: { fac_name: string; fac_location?: string };
+  status?: { res_status_name: string };
   reservationStatus?: { res_status_name: string };
   created_at: string;
 }
@@ -20,6 +21,18 @@ const STATUS_STYLE: Record<string, { bg: string; text: string; icon: React.React
   rejected:  { bg: '#fee2e2', text: '#991b1b', icon: <XCircle size={12} /> },
   cancelled: { bg: '#f1f5f9', text: '#64748b', icon: <X size={12} /> },
 };
+
+function formatDate(dateStr: string) {
+  try {
+    return new Intl.DateTimeFormat('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }).format(new Date(dateStr));
+  } catch {
+    return dateStr;
+  }
+}
 
 export default function MyReservationsPage() {
   const navigate = useNavigate();
@@ -105,7 +118,8 @@ export default function MyReservationsPage() {
       {!loading && reservations.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {reservations.map((r) => {
-            const statusKey = r.reservationStatus?.res_status_name?.toLowerCase() ?? '';
+	    const statusName = r.status?.res_status_name ?? r.reservationStatus?.res_status_name ?? '';
+            const statusKey = statusName.toLowerCase();
             const badge = STATUS_STYLE[statusKey] ?? STATUS_STYLE.pending;
             const canCancel = statusKey === 'pending' || statusKey === 'approved';
 
@@ -126,11 +140,11 @@ export default function MyReservationsPage() {
                       padding: '3px 10px', borderRadius: '999px', fontSize: '0.75rem', fontWeight: 600,
                       background: badge.bg, color: badge.text,
                     }}>
-                      {badge.icon} {r.reservationStatus?.res_status_name ?? '-'}
+		      {badge.icon} {statusName || '-'}
                     </span>
                   </div>
                   <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                    📅 {r.res_date} &nbsp;|&nbsp; ⏰ {r.res_start} – {r.res_end}
+		    📅 {formatDate(r.res_date)} &nbsp;|&nbsp; ⏰ {r.res_start} – {r.res_end}
                   </p>
                   {r.facility?.fac_location && (
                     <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
