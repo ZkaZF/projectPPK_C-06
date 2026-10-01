@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Ticket, Plus } from 'lucide-react';
 import { getMyReservationsApi, cancelReservationApi } from '../../api/reservations';
-import ReservationTable, { Reservation } from '../../components/reservations/ReservationTable';
+import ReservationTable from '../../components/reservations/ReservationTable';
+import type { Reservation } from '../../components/reservations/ReservationTable';
 
 export default function MyReservationsPage() {
   const navigate = useNavigate();
