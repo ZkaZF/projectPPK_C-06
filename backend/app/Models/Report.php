@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\SupabaseStorage;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Report extends Model
 {
@@ -27,6 +29,17 @@ class Report extends Model
         'handled_by',
         'rep_resolution_note',
     ];
+
+        /**
+     * Atribut tambahan yang ikut muncul di response JSON.
+     */
+    protected $appends = ['rep_photo_url'];
+
+    /** URL publik foto laporan dari Supabase Storage */
+    protected function repPhotoUrl(): Attribute
+    {
+        return Attribute::get(fn () => app(SupabaseStorage::class)->publicUrl($this->rep_photo));
+    }
 
     // ─── Relasi ke tabel utama ────────────────────────────────────────────────
 
