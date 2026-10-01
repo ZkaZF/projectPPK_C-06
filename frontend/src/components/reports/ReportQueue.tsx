@@ -10,7 +10,6 @@ interface QueueReport {
   rep_status?: { rep_status_name: string };
 }
 
-// NOTE: rep_stat_id & catatan di bawah ini ASUMSI — konfirmasi ke backend dulu.
 const STATUS_OPTIONS = [
   { id: 2, name: 'Diproses' },
   { id: 3, name: 'Selesai' },
@@ -27,17 +26,29 @@ export default function ReportQueue() {
 
   const load = () => {
     setLoading(true);
-    getReportQueueApi().then((r: any) => setReports(r.data.data ?? r.data)).catch(() => setError('Gagal memuat antrian laporan.')).finally(() => setLoading(false));
+    getReportQueueApi()
+      .then((r: any) => setReports(r.data.data ?? r.data))
+      .catch(() => setError('Gagal memuat antrian laporan.'))
+      .finally(() => setLoading(false));
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const handleUpdate = async (id: number) => {
     const statId = selectedStatus[id];
-    if (!statId) { alert('Pilih status terlebih dahulu.'); return; }
+    if (!statId) {
+      alert('Pilih status terlebih dahulu.');
+      return;
+    }
     setUpdating(id);
     try {
-      await updateReportStatusApi(id, { rep_stat_id: statId, catatan: note[id] ?? '' });
+      // PERBAIKAN: Atribut diubah dari 'catatan' menjadi 'rep_resolution_note'
+      await updateReportStatusApi(id, {
+        rep_stat_id: statId,
+        rep_resolution_note: note[id] ?? '',
+      });
       load();
     } catch {
       alert('Gagal memperbarui status laporan.');
@@ -80,15 +91,28 @@ export default function ReportQueue() {
             {new Date(r.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <select value={selectedStatus[r.rep_id] ?? ''} onChange={(e) => setSelectedStatus((s) => ({ ...s, [r.rep_id]: Number(e.target.value) }))}
-              style={{ padding: '8px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-h)' }}>
+            <select
+              value={selectedStatus[r.rep_id] ?? ''}
+              onChange={(e) => setSelectedStatus((s) => ({ ...s, [r.rep_id]: Number(e.target.value) }))}
+              style={{ padding: '8px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-h)' }}
+            >
               <option value="">-- Ubah Status --</option>
-              {STATUS_OPTIONS.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+              {STATUS_OPTIONS.map((s) => (
+                <option key={s.id} value={s.id}>{s.name}</option>
+              ))}
             </select>
-            <input type="text" placeholder="Catatan (opsional)" value={note[r.rep_id] ?? ''} onChange={(e) => setNote((n) => ({ ...n, [r.rep_id]: e.target.value }))}
-              style={{ flex: 1, minWidth: '160px', padding: '8px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-h)' }} />
-            <button onClick={() => handleUpdate(r.rep_id)} disabled={updating === r.rep_id}
-              style={{ padding: '8px 16px', borderRadius: 'var(--radius-sm)', border: 'none', background: 'var(--primary)', color: '#fff', fontWeight: 600, cursor: 'pointer' }}>
+            <input
+              type="text"
+              placeholder="Catatan (opsional)"
+              value={note[r.rep_id] ?? ''}
+              onChange={(e) => setNote((n) => ({ ...n, [r.rep_id]: e.target.value }))}
+              style={{ flex: 1, minWidth: '160px', padding: '8px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-h)' }}
+            />
+            <button
+              onClick={() => handleUpdate(r.rep_id)}
+              disabled={updating === r.rep_id}
+              style={{ padding: '8px 16px', borderRadius: 'var(--radius-sm)', border: 'none', background: 'var(--primary)', color: '#fff', fontWeight: 600, cursor: 'pointer' }}
+            >
               {updating === r.rep_id ? 'Menyimpan...' : 'Update'}
             </button>
           </div>

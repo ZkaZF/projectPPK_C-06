@@ -1,4 +1,5 @@
 import { Ticket, CheckCircle, Clock, XCircle, X } from 'lucide-react';
+import { formatDate } from '../../utils/date';
 
 export interface Reservation {
   res_id: number;
@@ -7,17 +8,9 @@ export interface Reservation {
   res_end: string;
   res_purpose: string;
   facility?: { fac_name: string; fac_location?: string };
-  reservation_status?: { res_status_name: string };
+  // PERBAIKAN: Diubah dari object reservation_status ke property flat res_status_name
+  res_status_name?: string;
   created_at: string;
-}
-
-interface ReservationTableProps {
-  reservations: Reservation[];
-  loading: boolean;
-  error: string;
-  cancellingId: number | null;
-  onCancel: (id: number) => void;
-  onCreateNew: () => void;
 }
 
 const STATUS_STYLE: Record<string, { bg: string; text: string; icon: React.ReactNode }> = {
@@ -27,13 +20,21 @@ const STATUS_STYLE: Record<string, { bg: string; text: string; icon: React.React
   cancelled: { bg: '#f1f5f9', text: '#64748b', icon: <X size={12} /> },
 };
 
-function formatDate(dateStr: string) {
-  try {
-    return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(dateStr));
-  } catch { return dateStr; }
-}
-
-export default function ReservationTable({ reservations, loading, error, cancellingId, onCancel, onCreateNew }: ReservationTableProps) {
+export default function ReservationTable({
+  reservations,
+  loading,
+  error,
+  cancellingId,
+  onCancel,
+  onCreateNew,
+}: {
+  reservations: Reservation[];
+  loading: boolean;
+  error: string;
+  cancellingId: number | null;
+  onCancel: (id: number) => void;
+  onCreateNew: () => void;
+}) {
   if (error) {
     return <div style={{ padding: '12px 16px', borderRadius: 'var(--radius-sm)', background: '#fee2e2', color: '#dc2626', marginBottom: '20px', fontSize: '0.875rem' }}>⚠️ {error}</div>;
   }
@@ -59,7 +60,8 @@ export default function ReservationTable({ reservations, loading, error, cancell
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       {reservations.map((r) => {
-        const statusName = r.reservation_status?.res_status_name ?? '';
+        // PERBAIKAN: Akses langsung property res_status_name
+        const statusName = r.res_status_name ?? '';
         const statusKey = statusName.toLowerCase();
         const badge = STATUS_STYLE[statusKey] ?? STATUS_STYLE.pending;
         const canCancel = statusKey === 'pending' || statusKey === 'approved';
