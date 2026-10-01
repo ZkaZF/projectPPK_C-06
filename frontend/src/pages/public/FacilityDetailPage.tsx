@@ -185,40 +185,16 @@ export default function FacilityDetailPage() {
           background: 'var(--surface)', border: '1px solid var(--border)',
           borderRadius: 'var(--radius-lg)', padding: '24px', boxShadow: 'var(--shadow)',
         }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-            <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: 0, color: 'var(--text-h)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Calendar size={18} style={{ color: 'var(--primary)' }} />
-              Jadwal Ketersediaan
-            </h2>
-            <input
-              type="date"
-              value={date}
-              min={todayStr()}
-              onChange={(e) => { setDate(e.target.value); setSelectedSlot(null); }}
-              style={{
-                padding: '8px 12px', borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)', background: 'var(--surface-2)',
-                color: 'var(--text-h)', fontSize: '0.875rem', cursor: 'pointer',
-              }}
-            />
-          </div>
-
-          {/* Legenda */}
-          <div style={{ display: 'flex', gap: '16px', marginBottom: '16px', fontSize: '0.8rem' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: 'var(--success)', display: 'inline-block' }} />
-              Tersedia
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: 'var(--danger)', display: 'inline-block' }} />
-              Terisi
-            </span>
-          </div>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 18px', color: 'var(--text-h)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Calendar size={18} style={{ color: 'var(--primary)' }} />
+            Jadwal Ketersediaan
+          </h2>
 
           {id && (
             <SlotCalendar
               facilityId={id}
               date={date}
+              onDateChange={(d) => { setDate(d); setSelectedSlot(null); }}
               onSlotSelect={(start, end) => setSelectedSlot({ start, end })}
             />
           )}

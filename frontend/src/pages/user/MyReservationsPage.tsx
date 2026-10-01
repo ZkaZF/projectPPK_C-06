@@ -10,7 +10,7 @@ interface Reservation {
   res_end: string;
   res_purpose: string;
   facility?: { fac_name: string; fac_location?: string };
-  reservationStatus?: { res_status_name: string };
+  reservation_status?: { res_status_name: string };
   created_at: string;
 }
 
@@ -119,8 +119,10 @@ export default function MyReservationsPage() {
       {!loading && reservations.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {reservations.map((r) => {
-            const statusKey = r.reservationStatus?.res_status_name?.toLowerCase() ?? '';
+            const rawStatus = r.reservation_status?.res_status_name || '';
+            const statusKey = rawStatus.toLowerCase();
             const badge = STATUS_STYLE[statusKey] ?? STATUS_STYLE.pending;
+            const statusDisplay = rawStatus ? rawStatus.charAt(0).toUpperCase() + rawStatus.slice(1) : 'Menunggu';
             const canCancel = statusKey === 'pending' || statusKey === 'approved';
 
             return (
@@ -140,7 +142,7 @@ export default function MyReservationsPage() {
                       padding: '3px 10px', borderRadius: '999px', fontSize: '0.75rem', fontWeight: 600,
                       background: badge.bg, color: badge.text,
                     }}>
-                      {badge.icon} {r.reservationStatus?.res_status_name ?? '-'}
+                      {badge.icon} {statusDisplay}
                     </span>
                   </div>
                   <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
