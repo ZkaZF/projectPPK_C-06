@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { UniversityLogo } from "../common/UniversityLogo";
+import { LogOut } from "lucide-react";
 
 export const Navbar = () => {
   const { user, logout } = useAuth();
@@ -49,21 +50,54 @@ export const Navbar = () => {
               {initials}
             </div>
             <button
-              className="btn btn-danger"
+              className="btn"
               onClick={handleLogout}
-              style={{ padding: "8px 16px", fontSize: "0.875rem" }}
+              style={{ 
+                padding: "8px 16px", 
+                fontSize: "0.875rem",
+                background: "transparent",
+                color: "var(--text-white)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+              }}
             >
-              Keluar
+              <LogOut size={16} /> Keluar
             </button>
           </>
         ) : (
           <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-            <Link to="/login" style={{ color: "var(--text-white)", fontSize: "0.9rem", fontWeight: 500, textDecoration: "none" }}>
+            <Link to="/login" className="btn" style={{ 
+              color: "var(--text-white)", 
+              fontSize: "0.9rem", 
+              fontWeight: 500, 
+              background: "transparent",
+              border: "1px solid rgba(255,255,255,0.2)",
+              padding: "8px 18px",
+              transition: "all 0.2s"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+            }}>
               Masuk
             </Link>
-            <Link to="/register" style={{
-              background: "var(--primary)", color: "#fff", padding: "8px 16px",
-              borderRadius: "var(--radius-sm)", fontSize: "0.9rem", fontWeight: 600, textDecoration: "none"
+            <Link to="/register" className="btn btn-primary" style={{
+              padding: "8px 18px",
+              fontSize: "0.9rem", 
             }}>
               Daftar
             </Link>

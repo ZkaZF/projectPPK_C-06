@@ -63,8 +63,9 @@ export default function MyReportsPage() {
       </div>
 
       {error && (
-        <div style={{ padding: '12px 16px', borderRadius: 'var(--radius-sm)', background: '#fee2e2', color: '#dc2626', marginBottom: '20px', fontSize: '0.875rem' }}>
-          ⚠️ {error}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 16px', borderRadius: 'var(--radius-sm)', background: '#fee2e2', color: '#dc2626', marginBottom: '20px', fontSize: '0.875rem' }}>
+          <AlertCircle size={16} />
+          {error}
         </div>
       )}
 

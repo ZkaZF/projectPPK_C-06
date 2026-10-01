@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { UniversityLogo } from "../../components/common/UniversityLogo";
 import { CursorGrid } from "../../components/common/CursorGrid";
-import { Mail, Lock, Calendar, FileText, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Calendar, FileText, Eye, EyeOff, AlertCircle } from "lucide-react";
 
 export const LoginPage = () => {
   const { login } = useAuth();
@@ -11,6 +11,7 @@ export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [redirecting, setRedirecting] = useState<{ label: string; path: string } | null>(null);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -22,13 +23,18 @@ export const LoginPage = () => {
     try {
       const loggedInUser = await login(email, password);
 
+      let path = "/dashboard";
+      let label = "Pengguna";
       if (loggedInUser.role.role_name === "admin") {
-        window.location.href = "/admin";
+        path = "/admin"; label = "Administrator";
       } else if (loggedInUser.role.role_name === "petugas") {
-        window.location.href = "/officer";
-      } else {
-        window.location.href = "/dashboard";
+        path = "/officer"; label = "Petugas Fasilitas";
       }
+
+      // Show redirect overlay before navigation
+      setLoading(false);
+      setRedirecting({ label, path });
+      setTimeout(() => { window.location.href = path; }, 1400);
     } catch (err) {
       console.error(err);
       const status = (err as { response?: { status?: number } }).response?.status;
@@ -44,6 +50,18 @@ export const LoginPage = () => {
   };
 
   return (
+    <>
+      {/* ── Redirect Overlay ── */}
+      {redirecting && (
+        <div className="redirect-overlay" role="status" aria-live="polite">
+          <div className="redirect-spinner" />
+          <div className="redirect-overlay-text">
+            <h3>Login Berhasil!</h3>
+            <p>Mengarahkan ke dashboard {redirecting.label}…</p>
+          </div>
+        </div>
+      )}
+
     <div className="auth-page">
       {/* Left — branding panel */}
       <div className="auth-bg">
@@ -102,13 +120,13 @@ export const LoginPage = () => {
           </Link>
 
           <div className="auth-form-header">
-            <h2>Selamat Datang 👋</h2>
+            <h2>Selamat Datang</h2>
             <p>Masuk ke akun Anda untuk melanjutkan</p>
           </div>
 
           {error && (
             <div className="alert alert-error" role="alert">
-              <span>⚠️</span>
+              <AlertCircle size={18} />
               <span>{error}</span>
             </div>
           )}
@@ -185,5 +203,6 @@ export const LoginPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
