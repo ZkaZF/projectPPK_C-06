@@ -203,3 +203,23 @@
 - **[PM] Update Sidebar**
   - **Status:** ✅ Selesai
   - Tambah 2 link baru di sidebar pengguna: "Ajukan Reservasi" (→ `/reservations/new`) dan "Buat Laporan" (→ `/reports/new`) dengan ikon `PlusCircle` dan `FilePlus` dari lucide-react.
+
+---
+
+## 2026-10-02
+
+- **[PM] Perbaikan UI Loading Spinner**
+  - **Status:** ✅ Selesai
+  - **Detail:** Mengganti teks `<div>Loading...</div>` biasa di komponen `ProtectedRoute.tsx` menggunakan komponen `LoadingSpinner` yang telah di-styling ulang. `LoadingSpinner` menggunakan kelas `redirect-overlay` untuk memberikan pengalaman transisi yang mulus setelah animasi login.
+
+- **[PM] Integrasi FileUploadCard + Tailwind CSS**
+  - **Status:** ✅ Selesai
+  - **Detail:**
+    - Menyelesaikan bug _blank page_ di `NewReportPage.tsx` yang disebabkan oleh missing import ikon dari `lucide-react`.
+    - Melakukan instalasi **Tailwind CSS v3** (`tailwindcss@3`, `postcss`, `autoprefixer`) agar tidak berkonflik dengan struktur yang sudah ada, serta mengkonfigurasi `tailwind.config.js` dan `postcss.config.js`.
+    - Mengintegrasikan UI komponen modern `FileUploadCard` (berbasis `framer-motion` dan Radix UI) untuk proses upload foto bukti di form pembuatan laporan.
+    - Menghapus `<input type="file" />` bawaan HTML dan menggantinya dengan area _drag-and-drop_ interaktif.
+
+- **[PM] Reorganisasi Sidebar UX**
+  - **Status:** ✅ Selesai
+  - **Detail:** Mengubah urutan penyajian menu di `Sidebar.tsx`. Jika pengguna login sebagai Admin, susunan prioritas menu berubah menjadi: 1. Administrasi, 2. Petugas, dan 3. Akses Pengguna Publik (pengganti nama "Menu Utama"). Tujuannya untuk mencegah kebingungan akibat adanya fitur duplikat seperti dua dashboard untuk roles yang berbeda.

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FolderKanban, Building2, AlignLeft, Camera, CheckCircle, ArrowLeft } from 'lucide-react';
+import { FolderKanban, Building2, AlignLeft, Camera, CheckCircle, ArrowLeft, AlertCircle, Send } from 'lucide-react';
 import { getFacilitiesApi } from '../../api/facilities';
 import { createReportApi } from '../../api/reports';
+import { FileUploadCard, type UploadedFile } from '../../components/ui/file-upload-card';
 
 interface FacilityOption { fac_id: number | string; fac_name: string; }
 
@@ -21,7 +22,7 @@ export default function NewReportPage() {
   const [categoryId, setCategoryId] = useState('');
   const [description, setDescription] = useState('');
   const [photo, setPhoto]           = useState<File | null>(null);
-  const [preview, setPreview]       = useState<string | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [loading, setLoading]       = useState(false);
   const [success, setSuccess]       = useState(false);
   const [error, setError]           = useState('');
@@ -32,11 +33,23 @@ export default function NewReportPage() {
       .catch(() => {});
   }, []);
 
-  const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
-    setPhoto(file);
-    if (file) setPreview(URL.createObjectURL(file));
-    else setPreview(null);
+  const handleFilesChange = (newFiles: File[]) => {
+    if (newFiles.length > 0) {
+      const file = newFiles[0];
+      const newUploadedFile: UploadedFile = {
+        id: `${file.name}-${Date.now()}`,
+        file,
+        progress: 100,
+        status: "completed",
+      };
+      setUploadedFiles([newUploadedFile]);
+      setPhoto(file);
+    }
+  };
+
+  const handleFileRemove = (id: string) => {
+    setUploadedFiles([]);
+    setPhoto(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -88,7 +101,7 @@ export default function NewReportPage() {
             style={{ padding: '10px 24px', borderRadius: 'var(--radius)', background: 'var(--primary)', color: '#fff', border: 'none', fontWeight: 600, cursor: 'pointer' }}>
             Lihat Laporan Saya
           </button>
-          <button onClick={() => { setSuccess(false); setDescription(''); setPhoto(null); setPreview(null); }}
+          <button onClick={() => { setSuccess(false); setDescription(''); setPhoto(null); setUploadedFiles([]); }}
             style={{ padding: '10px 24px', borderRadius: 'var(--radius)', background: 'var(--surface)', color: 'var(--text-h)', border: '1px solid var(--border)', fontWeight: 500, cursor: 'pointer' }}>
             Buat Laporan Lagi
           </button>
@@ -157,18 +170,12 @@ export default function NewReportPage() {
 
           {/* Foto */}
           <div>
-            <label style={labelStyle}><Camera size={13} style={{ display: 'inline', marginRight: 6 }} />Foto Bukti (Opsional)</label>
-            <input type="file" accept="image/*" onChange={handlePhoto}
-              style={{ ...inputStyle, padding: '8px', cursor: 'pointer' }} />
-            {preview && (
-              <div style={{ marginTop: '12px', position: 'relative', display: 'inline-block' }}>
-                <img src={preview} alt="preview" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', objectFit: 'cover' }} />
-                <button type="button" onClick={() => { setPhoto(null); setPreview(null); }}
-                  style={{ position: 'absolute', top: '6px', right: '6px', background: '#dc2626', border: 'none', borderRadius: '50%', width: 24, height: 24, cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  ✕
-                </button>
-              </div>
-            )}
+            <FileUploadCard
+              files={uploadedFiles}
+              onFilesChange={handleFilesChange}
+              onFileRemove={handleFileRemove}
+              className="mt-2 w-full max-w-full"
+            />
           </div>
 
           <button type="submit" disabled={loading}

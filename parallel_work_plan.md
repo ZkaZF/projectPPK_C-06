@@ -1,6 +1,6 @@
-# Pembagian Kerja Paralel — Update 29 September 2026
+# Pembagian Kerja Paralel — Update 2 Oktober 2026
 
-> **Deadline Proyek: 11 Oktober 2026** (tersisa ±12 hari)
+> **Deadline Proyek: 11 Oktober 2026** (tersisa ±9 hari)
 > Dokumen ini sudah diperbarui dengan progress terkini. Bagian yang sudah selesai ditandai ✅.
 
 ---
@@ -36,10 +36,13 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 - [x] Review seluruh tampilan UI secara menyeluruh
 - [x] Perbaiki konsistensi warna, spacing, font, dan layout antar halaman
 - [ ] Pastikan responsiveness di mobile (375px) dan desktop (1440px)
-- [x] Polish micro-interactions: hover effects, transisi halaman, loading states
+- [x] Polish micro-interactions: hover effects, transisi halaman, loading states ✅ (2 Okt - Fix loading spinner setelah login)
 - [ ] Pastikan error states ditampilkan dengan baik
 - [ ] Review dan rapikan CSS/styling secara keseluruhan
 - [x] Tambah `FacilitySeeder` — 10 data fasilitas dummy (semua tipe) ✅ (1 Okt)
+- [x] Perbaikan Sidebar UX untuk Admin/Petugas (Reorder menu & ubah label) ✅ (2 Okt)
+- [x] Integrasi UI `FileUploadCard` dengan setup Tailwind CSS v3 untuk form laporan ✅ (2 Okt)
+- [x] Fix blank page issue (missing imports) di `NewReportPage` ✅ (2 Okt)
 - [ ] Finalisasi seed data untuk demo presentasi
 - [ ] Persiapan slide / alur demo presentasi
 - [ ] Testing end-to-end final: Register → Verify → Login → Reservasi → Laporan → Admin Export
