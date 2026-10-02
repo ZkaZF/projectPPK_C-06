@@ -132,7 +132,7 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 - [x] Buat `src/pages/user/NewReservationPage.tsx` ✅
 - [x] Buat `src/pages/user/MyReservationsPage.tsx` ✅
 - [x] Buat `src/pages/user/DashboardPage.tsx` ✅ (sudah ada sebelumnya)
-- [ ] Buat `src/pages/officer/ReservationQueuePage.tsx` — Antrian petugas *(target Fase 6)*
+- [x] Buat `src/pages/officer/ReservationQueuePage.tsx` — Antrian petugas ✅ (2 Okt - PM)
 
 **Output:** User bisa ajukan reservasi, lihat riwayat, batalkan. Petugas bisa approve/reject dari antrian.
 
@@ -171,12 +171,12 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 - [x] Buat `src/api/reports.ts` ✅ (dikerjakan PM, 1 Okt)
 - [x] Buat `src/pages/user/NewReportPage.tsx` — form laporan + upload foto + preview ✅
 - [x] Buat `src/pages/user/MyReportsPage.tsx` — riwayat laporan + StatusBadge ✅
-- [ ] Buat `src/pages/officer/ReportQueuePage.tsx` — antrian laporan, ubah status *(target Fase 6)*
+- [x] Buat `src/pages/officer/ReportQueuePage.tsx` — antrian laporan, ubah status ✅ (2 Okt - PM)
 - [ ] Buat `src/pages/officer/OfficerDashboardPage.tsx` *(target Fase 6)*
 
 ### 👤 Orang 3 — Ekstraksi Komponen Laporan
-- [ ] **TUGAS UTAMA:** Ekstrak UI form laporan dari `src/pages/user/NewReportPage.tsx` menjadi komponen reusable `src/components/reports/ReportForm.tsx`.
-- [ ] **TUGAS UTAMA:** Ekstrak UI list riwayat laporan dari `src/pages/user/MyReportsPage.tsx` menjadi komponen reusable `src/components/reports/ReportTable.tsx`.
+- [x] **TUGAS UTAMA:** Ekstrak UI form laporan dari `src/pages/user/NewReportPage.tsx` menjadi komponen reusable `src/components/reports/ReportForm.tsx` ✅ (2 Okt - PM)
+- [x] **TUGAS UTAMA:** Ekstrak UI list riwayat laporan dari `src/pages/user/MyReportsPage.tsx` menjadi komponen reusable `src/components/reports/ReportTable.tsx` ✅ (2 Okt - PM)
 - [ ] Buat `src/components/reports/ReportQueue.tsx` — tabel antrian laporan untuk petugas.
 
 ---
@@ -198,12 +198,12 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ### 👤 Orang 2 — Frontend Admin
 **Branch Git:** `feat/frontend-admin`
 
-- [ ] Buat `src/api/admin.ts`
-- [ ] Buat `src/pages/admin/AdminDashboardPage.tsx` — statistik keseluruhan
+- [x] Buat `src/api/admin.ts` ✅ (2 Okt - PM)
+- [x] Buat `src/pages/admin/AdminDashboardPage.tsx` — statistik keseluruhan ✅ (2 Okt - PM)
 - [ ] Buat `src/pages/admin/ManageFacilitiesPage.tsx` — CRUD fasilitas (integrasi FacilityForm)
-- [ ] Buat `src/pages/admin/ManageUsersPage.tsx` — buat akun petugas/pengguna
-- [ ] Buat `src/pages/admin/VerifyUsersPage.tsx` — verifikasi akun pending
-- [ ] Buat `src/pages/admin/RecapPage.tsx` — tabel rekap + tombol export CSV/Excel/PDF
+- [x] Buat `src/pages/admin/ManageUsersPage.tsx` — buat akun petugas/pengguna ✅ (2 Okt - PM)
+- [x] Buat `src/pages/admin/VerifyUsersPage.tsx` — verifikasi akun pending ✅ (2 Okt - PM)
+- [x] Buat `src/pages/admin/RecapPage.tsx` — tabel rekap + tombol export CSV/Excel ✅ (2 Okt - PM)/PDF
 
 ---
 
