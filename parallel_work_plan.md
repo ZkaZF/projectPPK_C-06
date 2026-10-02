@@ -210,7 +210,7 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ## 📋 Fase 7: Polish (Target: 6–10 Okt)
 
 **Semua anggota:**
-- [ ] Bug fixing
+- [x] Bug fixing (Fix Seeder duplikat, Fix render foto laporan, Fix payload update status) ✅ (2 Okt - PM)
 - [ ] UI Polish & responsiveness (mobile 375px ↔ desktop 1440px)
 - [ ] Seed data final untuk demo presentasi
 - [ ] Testing end-to-end: Register → Verify → Login → Reservasi → Laporan → Admin Export

@@ -5,6 +5,7 @@ export interface Report {
   rep_id: number;
   rep_description: string;
   rep_photo?: string;
+  rep_photo_url?: string;
   created_at: string;
   facility?: { fac_name: string };
   category?: { rep_cat_name: string };
@@ -120,8 +121,8 @@ export default function ReportTable({
                 flexWrap: 'wrap',
               }}>
                 {/* Thumbnail */}
-                {r.rep_photo && (
-                  <img src={r.rep_photo} alt="foto laporan"
+                {r.rep_photo_url && (
+                  <img src={r.rep_photo_url} alt="foto laporan"
                     style={{ width: 72, height: 72, borderRadius: 'var(--radius-sm)', objectFit: 'cover', flexShrink: 0, border: '1px solid var(--border)' }}
                     onError={e => { e.currentTarget.style.display = 'none'; }}
                   />

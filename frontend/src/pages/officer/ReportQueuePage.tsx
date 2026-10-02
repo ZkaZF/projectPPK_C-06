@@ -3,12 +3,19 @@ import { getReportQueueApi, updateReportStatusApi } from '../../api/reports';
 import ReportTable, { type Report } from '../../components/reports/ReportTable';
 import { X, CheckCircle, Clock } from 'lucide-react';
 
+// Status ID sesuai seeder database: 1=baru, 2=diproses, 3=selesai, 4=ditolak
+const STATUS_OPTIONS = [
+  { id: 2, label: 'Sedang Diproses' },
+  { id: 3, label: 'Selesai / Terselesaikan' },
+  { id: 4, label: 'Ditolak' },
+];
+
 export default function ReportQueuePage() {
   const [reports, setReports]   = useState<Report[]>([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState('');
   const [selected, setSelected] = useState<Report | null>(null);
-  const [newStatus, setNewStatus] = useState('');
+  const [newStatusId, setNewStatusId] = useState<number | ''>('');
   const [note, setNote]         = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [actionError, setActionError] = useState('');
@@ -24,13 +31,13 @@ export default function ReportQueuePage() {
   useEffect(() => { load(); }, []);
 
   const handleUpdate = async () => {
-    if (!selected || !newStatus) return;
+    if (!selected || newStatusId === '') return;
     setSubmitting(true);
     setActionError('');
     try {
-      await updateReportStatusApi(selected.rep_id, { status: newStatus, note });
+      await updateReportStatusApi(selected.rep_id, { rep_stat_id: newStatusId, rep_resolution_note: note });
       setSelected(null);
-      setNewStatus('');
+      setNewStatusId('');
       setNote('');
       load();
     } catch (err: any) {
@@ -62,7 +69,7 @@ export default function ReportQueuePage() {
         loading={loading}
         error={error}
         showCreateButton={false}
-        onUpdateStatus={(r) => { setSelected(r); setNewStatus(''); setNote(''); setActionError(''); }}
+        onUpdateStatus={(r) => { setSelected(r); setNewStatusId(''); setNote(''); setActionError(''); }}
         emptyTitle="Tidak ada laporan masuk"
         emptyDesc="Semua laporan sudah ditangani atau belum ada laporan baru."
       />
@@ -85,9 +92,25 @@ export default function ReportQueuePage() {
             </div>
 
             {/* Report Preview */}
-            <div style={{ background: 'var(--surface-2)', borderRadius: 'var(--radius)', padding: '16px', marginBottom: '20px', fontSize: '0.875rem', color: 'var(--text)', lineHeight: 1.6 }}>
+            <div style={{ background: 'var(--surface-2)', borderRadius: 'var(--radius)', padding: '16px', marginBottom: selected.rep_photo_url ? '12px' : '20px', fontSize: '0.875rem', color: 'var(--text)', lineHeight: 1.6 }}>
               {selected.rep_description}
             </div>
+
+            {/* Foto Bukti */}
+            {selected.rep_photo_url && (
+              <div style={{ marginBottom: '20px' }}>
+                <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>Foto Bukti</p>
+                <a href={selected.rep_photo_url} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={selected.rep_photo_url}
+                    alt="foto bukti laporan"
+                    style={{ width: '100%', maxHeight: '220px', objectFit: 'cover', borderRadius: 'var(--radius)', border: '1px solid var(--border)', cursor: 'zoom-in', display: 'block' }}
+                    onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                  />
+                </a>
+                <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '4px' }}>Klik foto untuk melihat ukuran penuh</p>
+              </div>
+            )}
 
             {actionError && (
               <div style={{ padding: '10px 14px', marginBottom: '16px', borderRadius: 'var(--radius-sm)', background: '#fee2e2', color: '#dc2626', fontSize: '0.875rem' }}>
@@ -98,11 +121,11 @@ export default function ReportQueuePage() {
             {/* Status Select */}
             <div style={{ marginBottom: '16px' }}>
               <label style={labelStyle}>Ubah Status</label>
-              <select style={inputStyle} value={newStatus} onChange={e => setNewStatus(e.target.value)}>
+              <select style={inputStyle} value={newStatusId} onChange={e => setNewStatusId(e.target.value === '' ? '' : Number(e.target.value))}>
                 <option value="">-- Pilih Status --</option>
-                <option value="diproses">Sedang Diproses</option>
-                <option value="selesai">Selesai / Terselesaikan</option>
-                <option value="ditolak">Ditolak</option>
+                {STATUS_OPTIONS.map(opt => (
+                  <option key={opt.id} value={opt.id}>{opt.label}</option>
+                ))}
               </select>
             </div>
 
@@ -123,8 +146,8 @@ export default function ReportQueuePage() {
                 style={{ padding: '10px 20px', borderRadius: 'var(--radius)', background: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--border)', fontWeight: 600, cursor: 'pointer' }}>
                 Batal
               </button>
-              <button onClick={handleUpdate} disabled={!newStatus || submitting}
-                style={{ padding: '10px 20px', borderRadius: 'var(--radius)', background: !newStatus ? 'var(--border)' : 'var(--primary)', color: !newStatus ? 'var(--text-muted)' : '#fff', border: 'none', fontWeight: 600, cursor: !newStatus ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button onClick={handleUpdate} disabled={newStatusId === '' || submitting}
+                style={{ padding: '10px 20px', borderRadius: 'var(--radius)', background: newStatusId === '' ? 'var(--border)' : 'var(--primary)', color: newStatusId === '' ? 'var(--text-muted)' : '#fff', border: 'none', fontWeight: 600, cursor: newStatusId === '' ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 {submitting ? <><Clock size={16} /> Menyimpan...</> : <><CheckCircle size={16} /> Simpan Status</>}
               </button>
             </div>
