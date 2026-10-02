@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFacilityRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * FacilityController
@@ -85,7 +89,7 @@ class FacilityController extends Controller
                 'fac_location'    => $row->fac_location,
                 'fac_capacity'    => $row->fac_capacity,
                 'fac_description' => $row->fac_description,
-                'fac_image'       => $row->fac_image,
+                'fac_image'       => $this->imageUrl($row->fac_image),
                 'created_at'      => $row->created_at,
                 'updated_at'      => $row->updated_at,
                 'type' => [
@@ -145,7 +149,7 @@ class FacilityController extends Controller
                 'fac_location'    => $row->fac_location,
                 'fac_capacity'    => $row->fac_capacity,
                 'fac_description' => $row->fac_description,
-                'fac_image'       => $row->fac_image,
+                'fac_image'       => $this->imageUrl($row->fac_image),
                 'created_at'      => $row->created_at,
                 'updated_at'      => $row->updated_at,
                 'type' => [
@@ -250,6 +254,11 @@ class FacilityController extends Controller
      */
     public function store(StoreFacilityRequest $request): JsonResponse
     {
+        $image = $request->input('fac_image');
+        if ($request->hasFile('fac_image')) {
+            $image = $this->uploadFacilityImage($request->file('fac_image'));
+        }
+
         // Insert the new facility record using a prepared statement.
         // All values are bound positionally to prevent SQL injection.
         DB::insert(
@@ -262,7 +271,7 @@ class FacilityController extends Controller
                 $request->fac_capacity,
                 $request->fac_description,
                 $request->fac_stat_id,
-                $request->fac_image,
+                $image,
             ]
         );
 
@@ -272,6 +281,9 @@ class FacilityController extends Controller
             'SELECT fac_id, fac_name, fac_type_id, fac_location, fac_capacity, fac_description, fac_stat_id, fac_image
              FROM facilities ORDER BY fac_id DESC LIMIT 1'
         );
+        if (!empty($facility)) {
+            $facility[0]->fac_image = $this->imageUrl($facility[0]->fac_image);
+        }
 
         return response()->json([
             'message' => 'Facility created successfully.',
@@ -293,9 +305,20 @@ class FacilityController extends Controller
     public function update(StoreFacilityRequest $request, $id): JsonResponse
     {
         // Guard clause: verify the facility exists before attempting an update.
-        $existing = DB::select('SELECT fac_id FROM facilities WHERE fac_id = ?', [$id]);
+        $existing = DB::select('SELECT fac_id, fac_image FROM facilities WHERE fac_id = ?', [$id]);
         if (empty($existing)) {
             return response()->json(['message' => 'Facility not found.'], 404);
+        }
+
+        $image = $existing[0]->fac_image;
+        if ($request->hasFile('fac_image')) {
+            $newImage = $this->uploadFacilityImage($request->file('fac_image'));
+            if ($image && !filter_var($image, FILTER_VALIDATE_URL)) {
+                Storage::disk('public')->delete($image);
+            }
+            $image = $newImage;
+        } elseif ($request->has('fac_image')) {
+            $image = $request->input('fac_image');
         }
 
         // Update all editable fields for the given facility ID.
@@ -311,7 +334,7 @@ class FacilityController extends Controller
                 $request->fac_capacity,
                 $request->fac_description,
                 $request->fac_stat_id,
-                $request->fac_image,
+                $image,
                 $id, // The WHERE clause parameter — must be last in the binding array.
             ]
         );
@@ -357,5 +380,44 @@ class FacilityController extends Controller
         return response()->json([
             'message' => 'Facility status updated successfully.',
         ], 200);
+    }
+
+    private function imageUrl(?string $image): ?string
+    {
+        if (!$image || filter_var($image, FILTER_VALIDATE_URL)) {
+            return $image;
+        }
+
+        return Storage::disk('public')->url($image);
+    }
+
+    private function uploadFacilityImage(UploadedFile $image): string
+    {
+        $baseUrl = rtrim((string) config('services.supabase.url'), '/');
+        $serviceKey = (string) config('services.supabase.key');
+        $bucket = (string) config('services.supabase.bucket');
+
+        if ($baseUrl === '' || $serviceKey === '' || $bucket === '') {
+            abort(503, 'Supabase Storage belum dikonfigurasi di backend.');
+        }
+
+        $objectPath = 'facilities/'.Str::uuid().'.'.($image->guessExtension() ?: 'jpg');
+        $mimeType = $image->getMimeType() ?: 'application/octet-stream';
+        $bucketPath = rawurlencode($bucket).'/'.implode('/', array_map('rawurlencode', explode('/', $objectPath)));
+
+        $response = Http::timeout(30)
+            ->withHeaders([
+                'Authorization' => 'Bearer '.$serviceKey,
+                'apikey' => $serviceKey,
+                'Cache-Control' => 'max-age=3600',
+            ])
+            ->withBody($image->get(), $mimeType)
+            ->post($baseUrl.'/storage/v1/object/'.$bucketPath);
+
+        if ($response->failed()) {
+            abort(502, 'Gagal mengunggah gambar ke Supabase Storage. Periksa konfigurasi project dan bucket.');
+        }
+
+        return $baseUrl.'/storage/v1/object/public/'.$bucketPath;
     }
 }

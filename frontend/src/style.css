@@ -938,3 +938,165 @@ a:hover { color: var(--primary); }
 .password-toggle-btn:active svg {
   transform: rotate(15deg) scale(0.9);
 }
+
+
+/* ══════════════════════════════════════════════════════════════ */
+/* ── Admin Page: Split Layout ──────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════ */
+
+.admin-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.admin-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-page-title {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--text-h);
+}
+
+.admin-page-subtitle {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+}
+
+/* ── Split grid: form kiri (380px) + tabel kanan ── */
+.admin-split {
+  display: grid;
+  grid-template-columns: 700px 1fr;
+  gap: 24px;
+  align-items: start;
+} 
+
+/* ── Kolom kiri: Form sticky ── */
+.admin-split-left {
+  position: sticky;
+  top: 88px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-split-left-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-split-left-head h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-h);
+}
+
+.admin-split-cancel {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  line-height: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.admin-split-cancel:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+}
+
+/* ── Kolom kanan: Daftar scroll ── */
+.admin-split-right {
+  min-width: 0;
+}
+
+.admin-split-right-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.admin-split-right-head h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-h);
+}
+
+.admin-count {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: var(--primary-bg);
+  color: var(--primary-dark);
+}
+
+/* ── Wrapper tabel dengan scroll sendiri ── */
+.admin-table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: auto;
+  max-height: calc(100vh - 220px);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-table-wrap thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+/* ── Row aktif (yang sedang di-edit) ── */
+.admin-table-wrap tbody tr.row-active {
+  background: var(--primary-bg);
+}
+
+.admin-table-wrap tbody tr.row-active td {
+  border-color: var(--primary-light);
+}
+
+/* ── Responsive: di layar kecil, tumpuk ── */
+@media (max-width: 992px) {
+  .admin-split {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-split-left {
+    position: static;
+    max-height: none;
+  }
+
+  .admin-table-wrap {
+    max-height: 500px;
+  }
+}

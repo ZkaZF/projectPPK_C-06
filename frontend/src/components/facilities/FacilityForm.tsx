@@ -6,7 +6,7 @@ import { mockFacilityTypes } from '../../__mocks__/facilities';
 
 interface FacilityFormProps {
   initialData?: Partial<Facility>;
-  onSubmit: (formData: FormState) => void;
+  onSubmit: (formData: FormData) => void;
   submitting?: boolean;
 }
 
@@ -16,6 +16,7 @@ interface FormState {
   fac_location: string;
   fac_capacity: string;
   fac_description: string;
+  fac_stat_id: string;
 }
 
 interface FormErrors {
@@ -27,13 +28,16 @@ interface FormErrors {
 export default function FacilityForm({ initialData = {}, onSubmit, submitting }: FacilityFormProps) {
   const [form, setForm] = useState<FormState>({
     fac_name: initialData.fac_name || '',
-    fac_type_id: String(initialData.fac_type?.fac_type_id || ''),
+    fac_type_id: String(initialData.type?.fac_type_id || ''),
     fac_location: initialData.fac_location || '',
     fac_capacity: String(initialData.fac_capacity || ''),
     fac_description: initialData.fac_description || '',
+    fac_stat_id: String(initialData.status?.fac_stat_id || initialData.status?.fac_status_id || 1),
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState(initialData.fac_image || '');
 
   const handleChange = (field: keyof FormState) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -52,7 +56,18 @@ export default function FacilityForm({ initialData = {}, onSubmit, submitting }:
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validate()) onSubmit(form);
+    if (!validate()) return;
+
+    const formData = new FormData();
+    Object.entries(form).forEach(([key, value]) => formData.append(key, value));
+    if (image) formData.append('fac_image', image);
+    onSubmit(formData);
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImage = e.target.files?.[0] ?? null;
+    setImage(selectedImage);
+    setImagePreview(selectedImage ? URL.createObjectURL(selectedImage) : initialData.fac_image || '');
   };
 
   return (
@@ -94,6 +109,45 @@ export default function FacilityForm({ initialData = {}, onSubmit, submitting }:
           onChange={handleChange('fac_location')}
         />
         {errors.fac_location && <div className="invalid-feedback">{errors.fac_location}</div>}
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Kapasitas</label>
+        <input
+          type="number"
+          min="1"
+          className="form-control"
+          value={form.fac_capacity}
+          onChange={handleChange('fac_capacity')}
+        />
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Deskripsi</label>
+        <textarea
+          className="form-control"
+          rows={3}
+          value={form.fac_description}
+          onChange={handleChange('fac_description')}
+        />
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label" htmlFor="facility-image">Gambar Fasilitas</label>
+        <input
+          id="facility-image"
+          type="file"
+          className="form-control"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+        {imagePreview && (
+          <img
+            src={imagePreview}
+            alt="Preview gambar fasilitas"
+            style={{ width: '100%', maxHeight: 220, objectFit: 'cover', marginTop: 12, borderRadius: 6 }}
+          />
+        )}
       </div>
 
       <button type="submit" className="btn btn-primary" disabled={submitting}>

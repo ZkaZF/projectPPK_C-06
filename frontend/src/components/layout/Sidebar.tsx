@@ -34,6 +34,10 @@ const adminMenuItems: NavItem[] = [
   { to: "/admin/recap",      icon: <TrendingUp size={20} />, label: "Rekap Data" },
 ];
 
+const generalMenuItems: NavItem[] = [
+  { to: "/general", icon: <Home size={20} />, label: "Dashboard Umum" },
+];
+
 const SidebarItem = ({ to, icon, label }: NavItem) => (
   <NavLink
     to={to}
@@ -48,9 +52,20 @@ const SidebarItem = ({ to, icon, label }: NavItem) => (
 export const Sidebar = () => {
   const { user } = useAuth();
   const role = user?.role.role_name;
+  const roleGeneralMenuItems = generalMenuItems.map((item) => ({
+    ...item,
+    to: role === "admin" ? "/admin/general" : item.to,
+  }));
 
   return (
     <aside className="sidebar">
+      <div className="sidebar-section">
+        <div className="sidebar-section-label">Umum</div>
+        {roleGeneralMenuItems.map((item) => (
+          <SidebarItem key={item.to} {...item} />
+        ))}
+      </div>
+
       {/* Pengguna menu */}
       <div className="sidebar-section">
         <div className="sidebar-section-label">Menu Utama</div>

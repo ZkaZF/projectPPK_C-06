@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { LayoutDashboard, Ticket, FolderKanban, Users, ShieldCheck, Database, Building2 } from "lucide-react";
+import { LayoutDashboard, Ticket, FolderKanban, Users, ShieldCheck, Database } from "lucide-react";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute";
 import { AppLayout } from "./components/layout/AppLayout";
@@ -14,6 +14,7 @@ import NewReservationPage from "./pages/user/NewReservationPage";
 import MyReservationsPage from "./pages/user/MyReservationsPage";
 import NewReportPage from "./pages/user/NewReportPage";
 import MyReportsPage from "./pages/user/MyReportsPage";
+import FacilitiesPage from "./pages/admin/FacilitiesPage";
 
 // ── Placeholder pages (ganti nanti dengan halaman asli) ──────────────────────
 const DummyPage = ({ title, icon: Icon, desc }: { title: string, icon: any, desc: string }) => (
@@ -64,7 +65,7 @@ const OfficerReportPage  = () => <DummyPage title="Antrian Laporan" icon={Folder
 
 // Admin
 const AdminDashPage      = () => <DummyPage title="Dashboard Admin" icon={LayoutDashboard} desc="Kendali pusat seluruh aktivitas sistem kampus." />;
-const AdminFacilPage     = () => <DummyPage title="Kelola Fasilitas" icon={Building2} desc="Tambah, edit, dan atur status fasilitas kampus." />;
+const AdminFacilPage     = FacilitiesPage;
 const AdminUsersPage     = () => <DummyPage title="Kelola User" icon={Users} desc="Manajemen akun mahasiswa, dosen, dan petugas." />;
 const AdminVerifyPage    = () => <DummyPage title="Verifikasi Akun" icon={ShieldCheck} desc="Persetujuan pendaftaran akun baru pengguna." />;
 const AdminRecapPage     = () => <DummyPage title="Rekap Laporan" icon={Database} desc="Eksport data reservasi dan aktivitas sistem." />;
@@ -87,8 +88,8 @@ function App() {
           {/* Semua role terautentikasi */}
           <Route element={<ProtectedRoute roles={["pengguna", "petugas", "admin"]} />}>
             <Route element={<AppLayout />}>
+              <Route path="/general" element={<HomePage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
-
 
               <Route path="/reservations" element={<ReservationsPage />} />
               <Route path="/reservations/new" element={<NewReservationPageRoute />} />
@@ -109,6 +110,7 @@ function App() {
           {/* Admin only */}
           <Route element={<ProtectedRoute roles={["admin"]} />}>
             <Route element={<AppLayout />}>
+              <Route path="/admin/general" element={<HomePage />} />
               <Route path="/admin" element={<AdminDashPage />} />
               <Route path="/admin/facilities" element={<AdminFacilPage />} />
               <Route path="/admin/users" element={<AdminUsersPage />} />
