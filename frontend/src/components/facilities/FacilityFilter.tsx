@@ -90,15 +90,13 @@ export default function FacilityFilter({ filters, onFilterChange, onReset, resul
             <input type="checkbox" className="w-3.5 h-3.5 rounded text-univ-blue focus:ring-univ-blue border-institution-300" />
             <span>Tersedia Hari Ini</span>
           </label>
-          {hasFilters && (
-            <button 
-              onClick={onReset}
-              className="inline-flex items-center text-xs font-medium text-institution-500 hover:text-institution-900 underline underline-offset-4 decoration-institution-300" 
-              type="button"
-            >
-              Reset
-            </button>
-          )}
+          <button 
+            onClick={onReset}
+            className="inline-flex items-center text-xs font-medium text-institution-500 hover:text-institution-900 underline underline-offset-4 decoration-institution-300" 
+            type="button"
+          >
+            Reset
+          </button>
         </div>
       </div>
 

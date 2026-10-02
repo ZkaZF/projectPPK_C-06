@@ -48,15 +48,15 @@ export default function FacilityCard({ facility }: FacilityCardProps) {
   };
 
   // Determine badge styling based on status
-  const isAvailable = statusRaw === 'aktif';
+  const isAvailable = facility.fac_stat_id === 1;
   const badgeClasses = isAvailable 
     ? "bg-white/95 text-emerald-800 border-emerald-200" 
-    : statusRaw.includes('perbaikan')
+    : facility.fac_stat_id === 2
       ? "bg-amber-50 text-amber-900 border-amber-300"
       : "bg-red-50 text-red-900 border-red-300";
       
-  const dotClass = isAvailable ? "bg-emerald-600" : statusRaw.includes('perbaikan') ? "bg-amber-500" : "bg-red-600";
-  const displayStatus = isAvailable ? "Tersedia Hari Ini" : statusLabel;
+  const dotClass = isAvailable ? "bg-emerald-600" : facility.fac_stat_id === 2 ? "bg-amber-500" : "bg-red-600";
+  const displayStatus = isAvailable ? "Tersedia Hari Ini" : (statusLabel || "Pemeliharaan");
 
   return (
     <article className={`bg-white rounded-lg border border-institution-200 overflow-hidden hover:border-institution-400 transition-all duration-150 flex flex-col group ${!isAvailable ? 'opacity-95' : ''}`}>

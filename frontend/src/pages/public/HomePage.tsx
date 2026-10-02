@@ -11,6 +11,8 @@ export default function HomePage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<FacilityFilterState>(EMPTY_FILTERS);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     setLoading(true);
@@ -32,6 +34,17 @@ export default function HomePage() {
       return true;
     });
   }, [facilities, filters]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
+
+  const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+  const paginatedFacilities = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-6 pt-7 pb-16 flex-1 animate-fade-in">
@@ -79,16 +92,28 @@ export default function HomePage() {
 
       {/* Quick Location Segment Tabs */}
       <div className="flex items-center gap-1 overflow-x-auto pb-2 mb-4 text-xs font-medium border-b border-institution-200">
-        <button className="px-3 py-2 text-institution-900 font-semibold border-b-2 border-institution-900 whitespace-nowrap">
+        <button 
+          onClick={() => setFilters(prev => ({...prev, location: ''}))} 
+          className={`px-3 py-2 whitespace-nowrap transition ${!filters.location ? 'text-institution-900 font-semibold border-b-2 border-institution-900' : 'text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300'}`}
+        >
           Semua Fasilitas <span className="ml-1.5 py-0.5 px-1.5 rounded text-[11px] bg-institution-100 text-institution-700 font-mono">{facilities.length}</span>
         </button>
-        <button className="px-3 py-2 text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300 transition whitespace-nowrap">
+        <button 
+          onClick={() => setFilters(prev => ({...prev, location: 'Rektorat'}))} 
+          className={`px-3 py-2 whitespace-nowrap transition ${filters.location === 'Rektorat' ? 'text-institution-900 font-semibold border-b-2 border-institution-900' : 'text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300'}`}
+        >
           Gedung Rektorat
         </button>
-        <button className="px-3 py-2 text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300 transition whitespace-nowrap">
+        <button 
+          onClick={() => setFilters(prev => ({...prev, location: 'Sains & Teknik'}))} 
+          className={`px-3 py-2 whitespace-nowrap transition ${filters.location === 'Sains & Teknik' ? 'text-institution-900 font-semibold border-b-2 border-institution-900' : 'text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300'}`}
+        >
           Fakultas Sains & Teknik
         </button>
-        <button className="px-3 py-2 text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300 transition whitespace-nowrap">
+        <button 
+          onClick={() => setFilters(prev => ({...prev, location: 'Kedokteran'}))} 
+          className={`px-3 py-2 whitespace-nowrap transition ${filters.location === 'Kedokteran' ? 'text-institution-900 font-semibold border-b-2 border-institution-900' : 'text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300'}`}
+        >
           Fakultas Kedokteran
         </button>
       </div>
@@ -132,11 +157,51 @@ export default function HomePage() {
 
       {/* Facility Grid */}
       {!loading && filtered.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" data-purpose="facility-card-grid">
-          {filtered.map((f) => (
-            <FacilityCard key={f.fac_id} facility={f} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" data-purpose="facility-card-grid">
+            {paginatedFacilities.map((f) => (
+              <FacilityCard key={f.fac_id} facility={f} />
+            ))}
+          </div>
+          
+          {/* Pagination & Audit Information */}
+          <div className="mt-8 pt-4 border-t border-institution-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-institution-500">
+            <div>
+              Menampilkan halaman <span className="font-semibold text-institution-800">{currentPage}</span> dari <span className="font-semibold text-institution-800">{totalPages}</span>
+            </div>
+            <div className="inline-flex items-center gap-1">
+              <button 
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-2.5 py-1.5 rounded border border-institution-200 bg-white text-institution-600 hover:bg-institution-50 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-medium transition"
+              >
+                Sebelumnya
+              </button>
+              
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-3 py-1.5 rounded font-medium text-xs transition ${
+                    currentPage === page
+                      ? 'bg-univ-blue text-white shadow-sm'
+                      : 'bg-white border border-institution-200 text-institution-600 hover:bg-institution-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              
+              <button 
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-2.5 py-1.5 rounded border border-institution-200 bg-white text-institution-600 hover:bg-institution-50 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-medium transition"
+              >
+                Berikutnya
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
