@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import FacilityCard from '../../components/facilities/FacilityCard';
 import FacilityFilter, { EMPTY_FILTERS } from '../../components/facilities/FacilityFilter';
 import type { Facility, FacilityFilterState } from '../../types/facility';
-import { Building2, AlertCircle } from 'lucide-react';
 
 // @ts-ignore
 import { getFacilitiesApi } from '../../api/facilities';
@@ -35,86 +34,110 @@ export default function HomePage() {
   }, [facilities, filters]);
 
   return (
-    <div style={{ padding: '32px', maxWidth: '1200px', margin: '0 auto' }}>
-
-      {/* ── Header ── */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '28px' }}>
-        <div style={{
-          width: '48px', height: '48px', borderRadius: '10px',
-          background: 'var(--primary-bg)', color: 'var(--primary-dark)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-        }}>
-          <Building2 size={24} />
-        </div>
+    <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-6 pt-7 pb-16 flex-1 animate-fade-in">
+      
+      {/* Header Section: Clean Editorial Hierarchy */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between pb-6 mb-6 border-b border-institution-200 gap-4">
         <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 700, margin: 0, color: 'var(--text-h)' }}>
-            Fasilitas Kampus
+          <div className="flex items-center gap-2 text-xs font-semibold text-institution-500 uppercase tracking-wider mb-1">
+            <span>Katalog Aset Kampus</span>
+            <span className="text-institution-300">/</span>
+            <span className="text-institution-700">Reservasi & Peminjaman</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-institution-900">
+            Katalog & Reservasi Fasilitas
           </h1>
-          <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            Temukan dan pesan fasilitas kampus yang Anda butuhkan
+          <p className="text-sm text-institution-600 mt-1 max-w-2xl">
+            Peminjaman ruang kuliah bersama, auditorium, laboratorium riset, dan inventaris akademik dengan verifikasi jadwal langsung terhubung ke SI-Akademik.
           </p>
+        </div>
+        
+        {/* Action & View Controls */}
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="inline-flex p-1 bg-institution-100 rounded-md border border-institution-200">
+            <button type="button" className="p-1.5 rounded bg-white text-institution-900 shadow-sm text-xs font-medium flex items-center gap-1.5" title="Tampilan Grid">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+              </svg>
+              <span className="hidden sm:inline">Grid</span>
+            </button>
+            <button type="button" className="p-1.5 rounded text-institution-500 hover:text-institution-900 text-xs font-medium flex items-center gap-1.5 transition" title="Tampilan Tabel">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+              </svg>
+              <span className="hidden sm:inline">Tabel</span>
+            </button>
+          </div>
+          <button type="button" className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-institution-200 bg-white hover:bg-institution-50 text-institution-700 text-xs font-semibold rounded-md transition shadow-sm">
+            <svg className="w-3.5 h-3.5 text-institution-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            SOP & Regulasi
+          </button>
         </div>
       </div>
 
-      {/* ── Filter ── */}
+      {/* Quick Location Segment Tabs */}
+      <div className="flex items-center gap-1 overflow-x-auto pb-2 mb-4 text-xs font-medium border-b border-institution-200">
+        <button className="px-3 py-2 text-institution-900 font-semibold border-b-2 border-institution-900 whitespace-nowrap">
+          Semua Fasilitas <span className="ml-1.5 py-0.5 px-1.5 rounded text-[11px] bg-institution-100 text-institution-700 font-mono">{facilities.length}</span>
+        </button>
+        <button className="px-3 py-2 text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300 transition whitespace-nowrap">
+          Gedung Rektorat
+        </button>
+        <button className="px-3 py-2 text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300 transition whitespace-nowrap">
+          Fakultas Sains & Teknik
+        </button>
+        <button className="px-3 py-2 text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300 transition whitespace-nowrap">
+          Fakultas Kedokteran
+        </button>
+      </div>
+
+      {/* Filter Component */}
       <FacilityFilter
         filters={filters}
         onFilterChange={setFilters}
         onReset={() => setFilters(EMPTY_FILTERS)}
+        resultsCount={filtered.length}
+        totalCount={facilities.length}
       />
 
-      {/* ── Error ── */}
+      {/* Error state */}
       {error && (
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '8px',
-          padding: '14px 18px', borderRadius: 'var(--radius)',
-          background: '#fee2e2', color: '#dc2626', border: '1px solid #fca5a5',
-          marginBottom: '20px', fontSize: '0.9rem',
-        }}>
-          <AlertCircle size={18} />
+        <div className="flex items-center gap-2 p-3.5 mb-5 rounded-md bg-red-50 text-red-700 border border-red-200 text-sm font-medium">
+          <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
           {error}
         </div>
       )}
 
-      {/* ── Loading spinner ── */}
+      {/* Loading state */}
       {loading && (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: '50%',
-            border: '3px solid var(--border)', borderTopColor: 'var(--primary)',
-            animation: 'spin 0.8s linear infinite',
-          }} />
+        <div className="flex justify-center py-20">
+          <div className="w-10 h-10 rounded-full border-4 border-institution-200 border-t-institution-900 animate-spin" />
         </div>
       )}
 
-      {/* ── Empty state ── */}
+      {/* Empty state */}
       {!loading && filtered.length === 0 && (
-        <div style={{
-          textAlign: 'center', padding: '80px 20px',
-          background: 'var(--surface)', borderRadius: 'var(--radius-lg)',
-          border: '1px dashed var(--border)',
-        }}>
-          <Building2 size={48} style={{ opacity: 0.12, marginBottom: '16px', color: 'var(--text-h)' }} />
-          <p style={{ fontWeight: 600, color: 'var(--text-h)', margin: 0 }}>Tidak ada fasilitas ditemukan</p>
-          <p style={{ color: 'var(--text-muted)', marginTop: '8px', fontSize: '0.9rem' }}>
-            Coba ubah filter pencarian Anda
-          </p>
+        <div className="text-center py-20 px-4 bg-white rounded-lg border border-dashed border-institution-300">
+          <svg className="w-12 h-12 mx-auto text-institution-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+          </svg>
+          <p className="font-semibold text-institution-900 m-0">Tidak ada fasilitas yang cocok</p>
+          <p className="text-institution-500 text-sm mt-1">Coba ubah kata kunci atau hapus filter untuk melihat hasil.</p>
         </div>
       )}
 
-      {/* ── Grid kartu fasilitas ── */}
+      {/* Facility Grid */}
       {!loading && filtered.length > 0 && (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: '20px',
-        }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" data-purpose="facility-card-grid">
           {filtered.map((f) => (
             <FacilityCard key={f.fac_id} facility={f} />
           ))}
         </div>
       )}
-
     </div>
   );
 }

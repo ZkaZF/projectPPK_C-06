@@ -1,151 +1,136 @@
 import React from 'react';
-import type { FacilityFilterState, FacilityType } from '../../types/facility';
-import { SlidersHorizontal, RotateCcw } from 'lucide-react';
+import type { FacilityFilterState } from '../../types/facility';
 
-// @ts-ignore
-import { mockFacilityTypes } from '../../__mocks__/facilities';
-
-const EMPTY_FILTERS: FacilityFilterState = { type: '', location: '', capacity: '' };
+export const EMPTY_FILTERS: FacilityFilterState = {
+  type: '',
+  location: '',
+  capacity: '',
+};
 
 interface FacilityFilterProps {
   filters: FacilityFilterState;
-  onFilterChange: (filters: FacilityFilterState) => void;
-  onReset?: () => void;
+  onFilterChange: (newFilters: FacilityFilterState) => void;
+  onReset: () => void;
+  resultsCount?: number;
+  totalCount?: number;
 }
 
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '9px 12px',
-  borderRadius: 'var(--radius-sm)',
-  border: '1px solid var(--border)',
-  background: 'var(--surface-2)',
-  color: 'var(--text-h)',
-  fontSize: '0.875rem',
-  outline: 'none',
-  transition: 'border-color 0.15s',
-};
-
-const labelStyle: React.CSSProperties = {
-  display: 'block',
-  marginBottom: '6px',
-  fontSize: '0.78rem',
-  fontWeight: 600,
-  color: 'var(--text-muted)',
-  textTransform: 'uppercase',
-  letterSpacing: '0.06em',
-};
-
-export default function FacilityFilter({ filters, onFilterChange, onReset }: FacilityFilterProps) {
-  const handleChange = (field: keyof FacilityFilterState) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    onFilterChange({ ...filters, [field]: e.target.value });
+export default function FacilityFilter({ filters, onFilterChange, onReset, resultsCount = 0, totalCount = 0 }: FacilityFilterProps) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    onFilterChange({ ...filters, [e.target.name]: e.target.value });
   };
 
+  const hasFilters = filters.type || filters.location || filters.capacity;
+
   return (
-    <div style={{
-      background: 'var(--surface)',
-      border: '1px solid var(--border)',
-      borderRadius: 'var(--radius-lg)',
-      padding: '20px 24px',
-      marginBottom: '24px',
-      boxShadow: 'var(--shadow-sm)',
-    }}>
-      {/* Header filter */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-        <SlidersHorizontal size={16} style={{ color: 'var(--primary)' }} />
-        <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-h)' }}>
-          Filter Fasilitas
-        </span>
+    <div className="bg-white rounded-lg border border-institution-200 p-3.5 mb-7 shadow-xs">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+        {/* Search */}
+        <div className="md:col-span-4 relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-institution-400">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+          <input 
+            name="location"
+            value={filters.location}
+            onChange={handleChange}
+            className="w-full text-xs font-medium text-institution-900 placeholder:text-institution-400 bg-institution-50 border border-institution-200 rounded-md pl-9 pr-14 py-2 focus:bg-white focus:ring-1 focus:ring-institution-900 focus:border-institution-900 transition-colors outline-none" 
+            placeholder="Cari nama ruangan, gedung..." 
+            type="text"
+          />
+          <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+            <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono text-institution-400 bg-white border border-institution-200 rounded shadow-sm">⌘K</kbd>
+          </div>
+        </div>
+
+        {/* Filter: Tipe Fasilitas */}
+        <div className="md:col-span-3">
+          <div className="relative">
+            <select 
+              name="type"
+              value={filters.type}
+              onChange={handleChange}
+              className="w-full text-xs font-medium text-institution-800 bg-white border border-institution-200 rounded-md px-3 py-2 pr-8 focus:ring-1 focus:ring-institution-900 focus:border-institution-900 appearance-none outline-none"
+            >
+              <option value="">Tipe: Semua Jenis Ruang</option>
+              <option value="ruang_kelas">Ruang Kelas Smart</option>
+              <option value="aula">Auditorium & Aula</option>
+              <option value="laboratorium">Laboratorium Komputer/Riset</option>
+              <option value="alat">Peralatan Khusus</option>
+              <option value="lapangan">Olahraga & Terbuka</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-institution-400">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Filter: Kapasitas */}
+        <div className="md:col-span-2">
+          <div className="relative">
+            <input 
+              name="capacity"
+              type="number"
+              min="0"
+              placeholder="Min Kapasitas"
+              value={filters.capacity}
+              onChange={handleChange}
+              className="w-full text-xs font-medium text-institution-800 bg-white border border-institution-200 rounded-md px-3 py-2 focus:ring-1 focus:ring-institution-900 focus:border-institution-900 appearance-none outline-none"
+            />
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="md:col-span-3 flex items-center justify-between md:justify-end gap-3">
+          <label className="flex items-center gap-2 cursor-pointer select-none text-xs font-medium text-institution-700">
+            <input type="checkbox" className="w-3.5 h-3.5 rounded text-univ-blue focus:ring-univ-blue border-institution-300" />
+            <span>Tersedia Hari Ini</span>
+          </label>
+          {hasFilters && (
+            <button 
+              onClick={onReset}
+              className="inline-flex items-center text-xs font-medium text-institution-500 hover:text-institution-900 underline underline-offset-4 decoration-institution-300" 
+              type="button"
+            >
+              Reset
+            </button>
+          )}
+        </div>
       </div>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-        gap: '16px',
-        alignItems: 'end',
-      }}>
-        {/* Tipe */}
-        <div>
-          <label style={labelStyle}>Tipe Fasilitas</label>
-          <select
-            style={inputStyle}
-            value={filters.type}
-            onChange={handleChange('type')}
-          >
-            <option value="">Semua Tipe</option>
-            {mockFacilityTypes.map((t: FacilityType) => {
-              const label = {
-                ruang_kelas: 'Ruang Kelas',
-                aula: 'Aula',
-                laboratorium: 'Laboratorium',
-                alat: 'Alat',
-                lapangan: 'Lapangan'
-              }[t.fac_type_name] || t.fac_type_name;
-              
-              return (
-                <option key={t.fac_type_id} value={t.fac_type_name}>
-                  {label}
-                </option>
-              );
-            })}
-          </select>
+      {/* Result Counter & Active Filter Tags */}
+      <div className="mt-3 pt-3 border-t border-institution-100 flex flex-wrap items-center justify-between gap-2 text-xs text-institution-500">
+        <div className="flex items-center gap-2">
+          <span className="font-medium text-institution-700">Menampilkan {resultsCount} dari {totalCount} fasilitas terdaftar</span>
+          <span className="text-institution-300">•</span>
+          <span className="text-institution-400">Sinkronisasi terakhir: {new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})} WIB</span>
         </div>
-
-        {/* Lokasi */}
-        <div>
-          <label style={labelStyle}>Lokasi</label>
-          <input
-            type="text"
-            style={inputStyle}
-            placeholder="Cari lokasi..."
-            value={filters.location}
-            onChange={handleChange('location')}
-          />
-        </div>
-
-        {/* Kapasitas */}
-        <div>
-          <label style={labelStyle}>Kapasitas Minimal</label>
-          <input
-            type="number"
-            min="0"
-            style={inputStyle}
-            placeholder="cth. 20"
-            value={filters.capacity}
-            onChange={handleChange('capacity')}
-          />
-        </div>
-
-        {/* Reset */}
-        <div>
-          <button
-            type="button"
-            onClick={() => { onFilterChange(EMPTY_FILTERS); onReset?.(); }}
-            style={{
-              width: '100%', padding: '9px 12px',
-              borderRadius: 'var(--radius-sm)',
-              border: '1px solid var(--border)',
-              background: 'var(--surface-2)', color: 'var(--text-muted)',
-              fontSize: '0.875rem', fontWeight: 500, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget).style.background = 'var(--border)';
-              (e.currentTarget).style.color = 'var(--text-h)';
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget).style.background = 'var(--surface-2)';
-              (e.currentTarget).style.color = 'var(--text-muted)';
-            }}
-          >
-            <RotateCcw size={14} /> Reset Filter
-          </button>
-        </div>
+        
+        {hasFilters && (
+          <div className="flex items-center gap-1.5 text-[11px]">
+            <span className="text-institution-400">Filter aktif:</span>
+            {filters.type && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-institution-100 text-institution-700 border border-institution-200">
+                Tipe: {filters.type}
+              </span>
+            )}
+            {filters.location && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-institution-100 text-institution-700 border border-institution-200">
+                Lokasi: {filters.location}
+              </span>
+            )}
+            {filters.capacity && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-institution-100 text-institution-700 border border-institution-200">
+                Min. {filters.capacity} kursi
+              </span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 }
-
-export { EMPTY_FILTERS };

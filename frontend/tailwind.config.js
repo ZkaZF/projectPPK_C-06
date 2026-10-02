@@ -6,10 +6,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "var(--background)",
+        border: "var(--border)",
+        input: "var(--border)",
+        ring: "var(--primary)",
+        background: "var(--bg)",
         foreground: "var(--text-h)",
         primary: {
           DEFAULT: "var(--primary)",
@@ -20,8 +20,8 @@ export default {
           foreground: "var(--text-h)",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "var(--danger)",
+          foreground: "#ffffff",
         },
         muted: {
           DEFAULT: "var(--surface)",
@@ -31,6 +31,24 @@ export default {
           DEFAULT: "var(--surface-2)",
           foreground: "var(--text-h)",
         },
+        institution: {
+          50: 'var(--bg)',               
+          100: 'var(--surface-2)',       
+          200: 'var(--border)',          
+          300: 'var(--border-strong)',   
+          400: 'var(--text)',            
+          500: 'var(--text)',            
+          600: 'var(--text-h)',          
+          700: 'var(--text-h)',          
+          800: 'var(--surface-dark)',    
+          900: 'var(--surface-dark)',    
+        },
+        univ: {
+          blue: 'var(--primary)',        
+          blueHover: 'var(--primary-dark)', 
+          blueLight: 'var(--primary-bg)',   
+          blueBorder: 'var(--primary-glow)',
+        }
       },
       borderRadius: {
         lg: "var(--radius-lg)",
