@@ -11,14 +11,41 @@ export default function FacilityCard({ facility }: FacilityCardProps) {
   const statusRaw  = status?.fac_status_name?.toLowerCase() ?? '';
   const statusLabel = status?.fac_status_name ?? '-';
   
-  const typeName = type?.fac_type_name ?? '';
+  const typeName = type?.fac_type_name?.toLowerCase() ?? '';
   const typeLabel = {
-    ruang_kelas: 'Ruang Kelas',
+    ruang_kelas: 'Ruang Kelas Smart',
     aula: 'Aula & Konvensi',
     laboratorium: 'Laboratorium',
-    alat: 'Alat',
+    alat: 'Studio Multimedia',
     lapangan: 'Fasilitas Olahraga'
-  }[typeName] || (typeName || '-');
+  }[typeName] || (type?.fac_type_name || '-');
+
+  // Prefix based on type
+  const prefix = {
+    ruang_kelas: 'GKB',
+    aula: 'GED',
+    laboratorium: 'LAB',
+    alat: 'STU',
+    lapangan: 'LAP'
+  }[typeName] || 'FAS';
+
+  // Specific dummy tags based on type (to match design reference exactly)
+  const getDummyTags = () => {
+    switch(typeName) {
+      case 'ruang_kelas':
+        return ['Interactive Touchboard 85"', 'Auto-Tracking Camera', 'Eduroam High-Density'];
+      case 'aula':
+        return ['AV System 4K', 'Mic Wireless (6)', 'AC Sentral', 'Podium Digital'];
+      case 'laboratorium':
+        return ['Ubuntu CUDA Cluster', 'Dual 4K Display', 'LAN 10Gbps'];
+      case 'alat':
+        return ['Shure SM7B (4 Unit)', 'Rødecaster Pro II', 'Ruang Kedap Suara'];
+      case 'lapangan':
+        return ['Lampu Sorot Malam', 'Lantai Vinil Sintetis', 'Scoreboard Digital'];
+      default:
+        return ['Standard Spec', 'AC Sentral', 'WiFi Access'];
+    }
+  };
 
   // Determine badge styling based on status
   const isAvailable = statusRaw === 'aktif';
@@ -32,7 +59,7 @@ export default function FacilityCard({ facility }: FacilityCardProps) {
   const displayStatus = isAvailable ? "Tersedia Hari Ini" : statusLabel;
 
   return (
-    <article className="bg-white rounded-lg border border-institution-200 overflow-hidden hover:border-institution-400 transition-all duration-150 flex flex-col group">
+    <article className={`bg-white rounded-lg border border-institution-200 overflow-hidden hover:border-institution-400 transition-all duration-150 flex flex-col group ${!isAvailable ? 'opacity-95' : ''}`}>
       {/* Thumbnail 16:10 */}
       <div className="relative aspect-[16/10] w-full bg-institution-100 overflow-hidden border-b border-institution-100 flex items-center justify-center">
         {fac_image ? (
@@ -47,8 +74,8 @@ export default function FacilityCard({ facility }: FacilityCardProps) {
         
         {/* Top Metas: Room Code & Status Badge */}
         <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
-          <span className="font-mono text-[10px] font-semibold tracking-wide bg-institution-900/90 text-white px-2 py-0.5 rounded border border-white/10 backdrop-blur-sm">
-            {fac_id.toString().padStart(3, '0')}
+          <span className="font-mono text-[10px] font-semibold tracking-wide bg-institution-900/90 text-white px-2 py-0.5 rounded border border-white/10 backdrop-blur-sm shadow-sm">
+            {prefix}-{fac_id.toString().padStart(3, '0')}
           </span>
         </div>
         
@@ -95,12 +122,16 @@ export default function FacilityCard({ facility }: FacilityCardProps) {
 
           {/* Dummy Facilities Tags (to match design) */}
           <div className="flex flex-wrap gap-1.5 mb-4">
-            <span className="px-2 py-0.5 rounded text-[11px] bg-institution-50 text-institution-600 border border-institution-200 font-medium">Standard Spec</span>
+            {getDummyTags().map((tag, i) => (
+              <span key={i} className="px-2 py-0.5 rounded text-[11px] bg-institution-50 text-institution-600 border border-institution-200 font-medium">
+                {tag}
+              </span>
+            ))}
           </div>
         </div>
 
         {/* Bottom Action Buttons */}
-        <div className="pt-3 border-t border-institution-100 flex items-center justify-between gap-2">
+        <div className="pt-3 border-t border-institution-100 flex items-center justify-between gap-2 mt-auto">
           {!isAvailable ? (
             <span className="text-xs text-amber-700 font-medium flex items-center gap-1">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,14 +144,21 @@ export default function FacilityCard({ facility }: FacilityCardProps) {
               Cek Kalender
             </Link>
           )}
+          
           <Link 
             to={`/facilities/${fac_id}`}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-institution-900 hover:bg-institution-800 px-3 py-1.5 rounded transition"
+            className={
+              isAvailable
+                ? "inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-institution-900 hover:bg-institution-800 px-3 py-1.5 rounded transition"
+                : "inline-flex items-center gap-1.5 text-xs font-semibold text-institution-700 bg-institution-100 hover:bg-institution-200 px-3 py-1.5 rounded transition"
+            }
           >
-            <span>{isAvailable ? 'Ajukan Reservasi' : 'Lihat Detail'}</span>
-            <svg className="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-            </svg>
+            <span>{isAvailable ? 'Ajukan Reservasi' : 'Log Perbaikan'}</span>
+            {isAvailable && (
+              <svg className="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            )}
           </Link>
         </div>
       </div>
