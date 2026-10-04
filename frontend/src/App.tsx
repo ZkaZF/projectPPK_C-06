@@ -10,6 +10,7 @@ import { RegisterPage } from "./pages/public/RegisterPage";
 import { ForbiddenPage } from "./pages/public/ForbiddenPage";
 import HomePage from "./pages/public/HomePage";
 import FacilityDetailPage from "./pages/public/FacilityDetailPage";
+import SopPage from "./pages/public/SopPage";
 
 // User pages
 import DashboardPage from "./pages/user/DashboardPage";
@@ -63,6 +64,7 @@ function App() {
           <Route element={<PublicLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/facilities/:id" element={<FacilityDetailPage />} />
+            <Route path="/sop" element={<SopPage />} />
           </Route>
 
           <Route path="/login" element={<LoginPage />} />

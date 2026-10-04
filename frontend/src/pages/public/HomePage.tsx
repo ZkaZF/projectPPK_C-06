@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import FacilityCard from '../../components/facilities/FacilityCard';
 import FacilityFilter, { EMPTY_FILTERS } from '../../components/facilities/FacilityFilter';
 import type { Facility, FacilityFilterState } from '../../types/facility';
@@ -12,6 +13,7 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<FacilityFilterState>(EMPTY_FILTERS);
   const [currentPage, setCurrentPage] = useState(1);
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const itemsPerPage = 6;
 
   useEffect(() => {
@@ -68,25 +70,35 @@ export default function HomePage() {
         {/* Action & View Controls */}
         <div className="flex items-center gap-2 shrink-0">
           <div className="inline-flex p-1 bg-institution-100 rounded-md border border-institution-200">
-            <button type="button" className="p-1.5 rounded bg-white text-institution-900 shadow-sm text-xs font-medium flex items-center gap-1.5" title="Tampilan Grid">
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className={`p-1.5 rounded text-xs font-medium flex items-center gap-1.5 transition ${viewMode === 'grid' ? 'bg-white text-institution-900 shadow-sm' : 'text-institution-500 hover:text-institution-900'}`}
+              title="Tampilan Grid"
+            >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
               </svg>
               <span className="hidden sm:inline">Grid</span>
             </button>
-            <button type="button" className="p-1.5 rounded text-institution-500 hover:text-institution-900 text-xs font-medium flex items-center gap-1.5 transition" title="Tampilan Tabel">
+            <button
+              type="button"
+              onClick={() => setViewMode('table')}
+              className={`p-1.5 rounded text-xs font-medium flex items-center gap-1.5 transition ${viewMode === 'table' ? 'bg-white text-institution-900 shadow-sm' : 'text-institution-500 hover:text-institution-900'}`}
+              title="Tampilan Tabel"
+            >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
               </svg>
               <span className="hidden sm:inline">Tabel</span>
             </button>
           </div>
-          <button type="button" className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-institution-200 bg-white hover:bg-institution-50 text-institution-700 text-xs font-semibold rounded-md transition shadow-sm">
+          <Link to="/sop" className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-institution-200 bg-white hover:bg-institution-50 text-institution-700 text-xs font-semibold rounded-md transition shadow-sm">
             <svg className="w-3.5 h-3.5 text-institution-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
             SOP & Regulasi
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -155,19 +167,82 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Facility Grid */}
+      {/* Facility Grid / Table */}
       {!loading && filtered.length > 0 && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" data-purpose="facility-card-grid">
-            {paginatedFacilities.map((f) => (
-              <FacilityCard key={f.fac_id} facility={f} />
-            ))}
-          </div>
-          
-          {/* Pagination & Audit Information */}
-          <div className="mt-8 pt-4 border-t border-institution-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-institution-500">
+          {viewMode === 'grid' ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" data-purpose="facility-card-grid">
+              {paginatedFacilities.map((f) => (
+                <FacilityCard key={f.fac_id} facility={f} />
+              ))}
+            </div>
+          ) : (
+            /* ── Table View ─────────────────────────────────────────── */
+            <div className="bg-white rounded-lg border border-institution-200 overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-institution-50 border-b border-institution-200">
+                    <tr>
+                      <th className="py-2.5 px-4 text-[11px] font-mono uppercase tracking-wider text-institution-500 w-24">Kode</th>
+                      <th className="py-2.5 px-4 text-[11px] font-mono uppercase tracking-wider text-institution-500">Nama Fasilitas</th>
+                      <th className="py-2.5 px-4 text-[11px] font-mono uppercase tracking-wider text-institution-500">Tipe</th>
+                      <th className="py-2.5 px-4 text-[11px] font-mono uppercase tracking-wider text-institution-500">Lokasi</th>
+                      <th className="py-2.5 px-4 text-[11px] font-mono uppercase tracking-wider text-institution-500 w-24 text-center">Kapasitas</th>
+                      <th className="py-2.5 px-4 text-[11px] font-mono uppercase tracking-wider text-institution-500 w-28">Status</th>
+                      <th className="py-2.5 px-4 text-[11px] font-mono uppercase tracking-wider text-institution-500 w-28">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-institution-100">
+                    {paginatedFacilities.map((f, i) => {
+                      const isAvail = (f as any).fac_stat_id === 1;
+                      return (
+                        <tr key={f.fac_id} className={`hover:bg-institution-50 transition ${i % 2 === 1 ? 'bg-institution-50/30' : 'bg-white'}`}>
+                          <td className="py-3 px-4 font-mono text-[11px] font-semibold text-institution-500">
+                            FAC-{String(f.fac_id).padStart(3, '0')}
+                          </td>
+                          <td className="py-3 px-4">
+                            <div className="font-semibold text-institution-900">{f.fac_name}</div>
+                            {f.fac_description && (
+                              <div className="text-[10px] text-institution-400 mt-0.5 line-clamp-1">{f.fac_description}</div>
+                            )}
+                          </td>
+                          <td className="py-3 px-4">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-institution-100 text-institution-700 whitespace-nowrap">
+                              {f.type?.fac_type_name || '-'}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-institution-600">{f.fac_location || '-'}</td>
+                          <td className="py-3 px-4 text-center font-mono text-institution-800 font-medium">
+                            {f.fac_capacity != null ? `${f.fac_capacity}` : '-'}
+                          </td>
+                          <td className="py-3 px-4">
+                            <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium ${isAvail ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${isAvail ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                              {isAvail ? 'Tersedia' : 'Pemeliharaan'}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4">
+                            <Link
+                              to={isAvail ? '/login' : `/facilities/${f.fac_id}`}
+                              className={`text-xs font-semibold transition ${isAvail ? 'text-institution-900 hover:underline' : 'text-institution-400'}`}
+                            >
+                              {isAvail ? 'Reservasi →' : 'Detail'}
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Pagination */}
+          <div className="mt-6 pt-4 border-t border-institution-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-institution-500">
             <div>
               Menampilkan halaman <span className="font-semibold text-institution-800">{currentPage}</span> dari <span className="font-semibold text-institution-800">{totalPages}</span>
+              <span className="ml-2 text-institution-400">({filtered.length} fasilitas)</span>
             </div>
             <div className="inline-flex items-center gap-1">
               <button 
@@ -177,7 +252,6 @@ export default function HomePage() {
               >
                 Sebelumnya
               </button>
-              
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                 <button
                   key={page}
@@ -191,7 +265,6 @@ export default function HomePage() {
                   {page}
                 </button>
               ))}
-              
               <button 
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
