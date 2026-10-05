@@ -14,7 +14,7 @@ export default function HomePage() {
   const [filters, setFilters] = useState<FacilityFilterState>(EMPTY_FILTERS);
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
-  const itemsPerPage = 6;
+  const itemsPerPage = 9; // 9 items = 3 rows × 3 cols di grid
 
   useEffect(() => {
     setLoading(true);
@@ -194,7 +194,7 @@ export default function HomePage() {
                   </thead>
                   <tbody className="divide-y divide-institution-100">
                     {paginatedFacilities.map((f, i) => {
-                      const isAvail = (f as any).fac_stat_id === 1;
+                      const isAvail = f.status?.fac_status_name?.toLowerCase() === 'aktif';
                       return (
                         <tr key={f.fac_id} className={`hover:bg-institution-50 transition ${i % 2 === 1 ? 'bg-institution-50/30' : 'bg-white'}`}>
                           <td className="py-3 px-4 font-mono text-[11px] font-semibold text-institution-500">
@@ -223,10 +223,10 @@ export default function HomePage() {
                           </td>
                           <td className="py-3 px-4">
                             <Link
-                              to={isAvail ? '/login' : `/facilities/${f.fac_id}`}
-                              className={`text-xs font-semibold transition ${isAvail ? 'text-institution-900 hover:underline' : 'text-institution-400'}`}
+                              to={`/facilities/${f.fac_id}`}
+                              className="text-xs font-semibold text-institution-900 hover:underline transition"
                             >
-                              {isAvail ? 'Reservasi →' : 'Detail'}
+                              Lihat Detail →
                             </Link>
                           </td>
                         </tr>
