@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFacilityRequest;
+use App\Services\SupabaseStorageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * FacilityController
@@ -22,6 +24,9 @@ use Illuminate\Support\Facades\Hash;
  */
 class FacilityController extends Controller
 {
+    public function __construct(
+        private readonly SupabaseStorageService $storage
+    ) {}
     /**
      * List all facilities with optional query-string filters.
      *
@@ -250,6 +255,20 @@ class FacilityController extends Controller
      */
     public function store(StoreFacilityRequest $request): JsonResponse
     {
+        // Resolve the image value: upload to Supabase if a file was sent,
+        // otherwise fall back to the raw URL/string passed in the request.
+        $imageValue = null;
+        if ($request->hasFile('fac_image')) {
+            try {
+                $imageValue = $this->storage->upload($request->file('fac_image'));
+            } catch (\RuntimeException $e) {
+                Log::error('Facility image upload failed on store', ['error' => $e->getMessage()]);
+                return response()->json(['message' => 'Image upload failed. Please try again.'], 500);
+            }
+        } else {
+            $imageValue = $request->fac_image; // plain URL string (optional)
+        }
+
         // Insert the new facility record using a prepared statement.
         // All values are bound positionally to prevent SQL injection.
         DB::insert(
@@ -262,7 +281,7 @@ class FacilityController extends Controller
                 $request->fac_capacity,
                 $request->fac_description,
                 $request->fac_stat_id,
-                $request->fac_image,
+                $imageValue,
             ]
         );
 
@@ -293,9 +312,37 @@ class FacilityController extends Controller
     public function update(StoreFacilityRequest $request, $id): JsonResponse
     {
         // Guard clause: verify the facility exists before attempting an update.
-        $existing = DB::select('SELECT fac_id FROM facilities WHERE fac_id = ?', [$id]);
+        $existing = DB::select('SELECT fac_id, fac_image FROM facilities WHERE fac_id = ?', [$id]);
         if (empty($existing)) {
             return response()->json(['message' => 'Facility not found.'], 404);
+        }
+
+        $oldImage   = $existing[0]->fac_image ?? null;
+        $imageValue = $oldImage; // Default: keep the current image unchanged.
+
+        // When a new file is uploaded, delete the old one first then upload the replacement.
+        if ($request->hasFile('fac_image')) {
+            // Delete old image from the appropriate storage backend.
+            if ($oldImage) {
+                if ($this->storage->isSupabaseUrl($oldImage)) {
+                    // Old image lives in Supabase Storage — remove via API.
+                    $this->storage->delete($oldImage);
+                } else {
+                    // Old image is a legacy local file — remove from the public disk.
+                    $localPath = ltrim(parse_url($oldImage, PHP_URL_PATH), '/');
+                    if (Storage::disk('public')->exists($localPath)) {
+                        Storage::disk('public')->delete($localPath);
+                    }
+                }
+            }
+
+            // Upload the new image to Supabase and store the public URL.
+            try {
+                $imageValue = $this->storage->upload($request->file('fac_image'));
+            } catch (\RuntimeException $e) {
+                Log::error('Facility image upload failed on update', ['fac_id' => $id, 'error' => $e->getMessage()]);
+                return response()->json(['message' => 'Image upload failed. Please try again.'], 500);
+            }
         }
 
         // Update all editable fields for the given facility ID.
@@ -311,7 +358,7 @@ class FacilityController extends Controller
                 $request->fac_capacity,
                 $request->fac_description,
                 $request->fac_stat_id,
-                $request->fac_image,
+                $imageValue,
                 $id, // The WHERE clause parameter — must be last in the binding array.
             ]
         );
