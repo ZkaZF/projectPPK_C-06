@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { LayoutDashboard, Building2, User, ShieldCheck, Ticket, FolderKanban } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { getFacilitiesApi } from "../../api/facilities";
+import { getMyReservationsApi } from "../../api/reservations";
+import { getMyReportsApi } from "../../api/reports";
 
 // ── Tipe data ───────────────────────────────────────────────
 interface FacilitySummary {
@@ -79,18 +81,21 @@ export default function DashboardPage() {
   const [facilityError, setFacilityError] = useState<string | null>(null);
 
   // Ambil summary fasilitas dari GET /api/facilities
+  const [activeReservations, setActiveReservations] = useState<number | "-">("-");
+  const [totalReports, setTotalReports] = useState<number | "-">("-");
+
   useEffect(() => {
     const fetchFacilitySummary = async () => {
+      setLoadingFacility(true);
       try {
         const res = await getFacilitiesApi();
-        // Response: { data: Facility[] } atau nested { data: { data: Facility[] } }
-        const facilities: any[] = res.data?.data ?? res.data ?? [];
+        const facilities: any[] = res.data.data ?? res.data;
 
         const active = facilities.filter(
-          (f) => f.status?.fac_status_name?.toLowerCase() === "aktif"
+          (f) => f.fac_stat_id === 1 || f.status?.fac_status_name?.toLowerCase() === "aktif"
         ).length;
         const maintenance = facilities.filter((f) =>
-          f.status?.fac_status_name?.toLowerCase().includes("perbaikan")
+          f.fac_stat_id === 2 || f.status?.fac_status_name?.toLowerCase().includes("perbaikan")
         ).length;
 
         setFacilitySummary({ total: facilities.length, active, maintenance });
@@ -101,7 +106,25 @@ export default function DashboardPage() {
       }
     };
 
+    const fetchUserStats = async () => {
+      try {
+        const resResv = await getMyReservationsApi();
+        const reservations = resResv.data.data ?? resResv.data ?? [];
+        setActiveReservations(reservations.filter((r: any) => 
+          r.status?.res_status_name?.toLowerCase() === 'pending' || 
+          r.status?.res_status_name?.toLowerCase() === 'approved'
+        ).length);
+
+        const resRep = await getMyReportsApi();
+        const reports = resRep.data.data ?? resRep.data ?? [];
+        setTotalReports(reports.length);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     fetchFacilitySummary();
+    fetchUserStats();
   }, []);
 
   const roleName = user?.role?.role_name ?? "-";
@@ -223,8 +246,8 @@ export default function DashboardPage() {
         <StatCard icon={Building2} label="Total Fasilitas"   value={loadingFacility ? "..." : facilitySummary.total}       color="#6366f1" />
         <StatCard icon={Building2} label="Fasilitas Aktif"   value={loadingFacility ? "..." : facilitySummary.active}      color="#10b981" />
         <StatCard icon={Building2} label="Dalam Perbaikan"   value={loadingFacility ? "..." : facilitySummary.maintenance} color="#f59e0b" />
-        <StatCard icon={Ticket}    label="Reservasi Aktif"   value="—"                                                      color="#3b82f6" />
-        <StatCard icon={FolderKanban} label="Laporan Saya"   value="—"                                                      color="#ec4899" />
+        <StatCard icon={Ticket}    label="Reservasi Aktif"   value={activeReservations}                                      color="#3b82f6" />
+        <StatCard icon={FolderKanban} label="Laporan Saya"   value={totalReports}                                                      color="#ec4899" />
       </div>
 
       {/* ── Placeholder aktivitas terbaru ── */}

@@ -38,18 +38,19 @@ const generalMenuItems: NavItem[] = [
   { to: "/general", icon: <Home size={20} />, label: "Dashboard Umum" },
 ];
 
-const SidebarItem = ({ to, icon, label }: NavItem) => (
+const SidebarItem = ({ to, icon, label, onClose }: NavItem & { onClose?: () => void }) => (
   <NavLink
     to={to}
     end
     className={({ isActive }) => `sidebar-link${isActive ? " active" : ""}`}
+    onClick={onClose}
   >
     <span className="sidebar-link-icon">{icon}</span>
     <span>{label}</span>
   </NavLink>
 );
 
-export const Sidebar = () => {
+export const Sidebar = ({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) => {
   const { user } = useAuth();
   const role = user?.role.role_name;
   const roleGeneralMenuItems = generalMenuItems.map((item) => ({
@@ -58,11 +59,11 @@ export const Sidebar = () => {
   }));
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar${isOpen ? " sidebar-open" : ""}`}>
       <div className="sidebar-section">
         <div className="sidebar-section-label">Umum</div>
         {roleGeneralMenuItems.map((item) => (
-          <SidebarItem key={item.to} {...item} />
+          <SidebarItem key={item.to} onClose={onClose} {...item} />
         ))}
       </div>
 
@@ -71,7 +72,7 @@ export const Sidebar = () => {
         <div className="sidebar-section">
           <div className="sidebar-section-label">Administrasi</div>
           {adminMenuItems.map((item) => (
-            <SidebarItem key={item.to} {...item} />
+            <SidebarItem key={item.to} onClose={onClose} {...item} />
           ))}
         </div>
       )}
@@ -81,7 +82,7 @@ export const Sidebar = () => {
         <div className="sidebar-section">
           <div className="sidebar-section-label">Petugas</div>
           {officerMenuItems.map((item) => (
-            <SidebarItem key={item.to} {...item} />
+            <SidebarItem key={item.to} onClose={onClose} {...item} />
           ))}
         </div>
       )}
@@ -92,7 +93,7 @@ export const Sidebar = () => {
           {(role === "admin" || role === "petugas") ? "Akses Pengguna Publik" : "Menu Utama"}
         </div>
         {userMenuItems.map((item) => (
-          <SidebarItem key={item.to} {...item} />
+          <SidebarItem key={item.to} onClose={onClose} {...item} />
         ))}
       </div>
     </aside>

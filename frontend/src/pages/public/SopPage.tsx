@@ -73,11 +73,16 @@ export default function SopPage() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-            <button type="button" className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-md bg-institution-900 text-white shadow-sm hover:bg-institution-800 transition">
-              <svg className="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button 
+              type="button" 
+              disabled
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-md bg-institution-100 text-institution-400 cursor-not-allowed transition"
+              title="Salinan SK sedang disiapkan"
+            >
+              <svg className="w-4 h-4 text-institution-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              Salinan SK Rektor (PDF)
+              Salinan SK Rektor (Segera)
             </button>
           </div>
         </div>
@@ -91,7 +96,7 @@ export default function SopPage() {
             { label: 'Target Sivitas', value: 'Dosen, Mahasiswa, Tendik, Mitra' },
           ].map(({ label, value, mono }) => (
             <div key={label} className="flex flex-col">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-institution-400">{label}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-institution-400">{label}</span>
               <span className={`text-xs font-medium text-institution-800 mt-0.5 ${mono ? 'font-mono' : ''}`}>{value}</span>
             </div>
           ))}
@@ -122,8 +127,8 @@ export default function SopPage() {
 
           <div className="bg-white rounded-lg shadow-sm border border-institution-200 p-4">
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-institution-100">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-institution-400">Daftar Isi</span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-institution-100 text-institution-600">5 Bab / 21 Pasal</span>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-institution-400">Daftar Isi</span>
+              <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-institution-100 text-institution-600">5 Bab / 21 Pasal</span>
             </div>
             <nav className="space-y-1 text-xs">
               {SECTIONS.map((s, i) => (

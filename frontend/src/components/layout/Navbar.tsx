@@ -1,9 +1,14 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { UniversityLogo } from "../common/UniversityLogo";
-import { LogOut } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 
-export const Navbar = () => {
+interface NavbarProps {
+  onToggleSidebar?: () => void;
+  sidebarOpen?: boolean;
+}
+
+export const Navbar = ({ onToggleSidebar, sidebarOpen }: NavbarProps) => {
   const { user, logout } = useAuth();
 
   const handleLogout = async () => {
@@ -28,6 +33,31 @@ export const Navbar = () => {
 
   return (
     <nav className="navbar">
+      {/* Hamburger — mobile only */}
+      {onToggleSidebar && (
+        <button
+          className="navbar-hamburger"
+          onClick={onToggleSidebar}
+          aria-label={sidebarOpen ? "Tutup menu" : "Buka menu"}
+          style={{
+            display: "none",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 36,
+            height: 36,
+            borderRadius: 8,
+            border: "1px solid rgba(255,255,255,0.2)",
+            background: "transparent",
+            color: "var(--text-white)",
+            cursor: "pointer",
+            marginRight: 8,
+            flexShrink: 0,
+          }}
+        >
+          {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
+      )}
+
       {/* Brand */}
       <Link to="/" className="navbar-brand">
         <UniversityLogo className="navbar-brand-icon" />

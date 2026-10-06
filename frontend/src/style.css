@@ -813,6 +813,18 @@ a:hover { color: var(--primary); }
   gap: 4px;
   overflow-y: auto;
   z-index: 50;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  top: var(--navbar-h);
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 49;
+  backdrop-filter: blur(2px);
+  animation: overlayFadeIn 0.2s ease;
 }
 
 .sidebar-section {
@@ -956,8 +968,17 @@ a:hover { color: var(--primary); }
   .auth-bg { display: none; }
   .auth-panel { padding: 32px 24px; }
   .sidebar { transform: translateX(-100%); }
+  .sidebar.sidebar-open { transform: translateX(0); }
+  .sidebar-overlay.sidebar-open { display: block; }
   .main-content { margin-left: 0; padding: 20px; }
   .navbar-brand { width: auto; }
+  .navbar-hamburger { display: flex !important; }
+}
+
+@media (min-width: 769px) {
+  .sidebar { transform: translateX(0) !important; }
+  .sidebar-overlay { display: none !important; }
+  .navbar-hamburger { display: none !important; }
 }
 
 /* Fade-in saat halaman dibuka */
@@ -970,6 +991,25 @@ a:hover { color: var(--primary); }
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Global Focus Ring (S3.6) ─────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) {
+  outline: none;
 }
 
 .auth-form-wrap > * {

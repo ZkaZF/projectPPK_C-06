@@ -40,8 +40,8 @@ export default {
           500: 'var(--text)',            
           600: 'var(--text-h)',          
           700: 'var(--text-h)',          
-          800: 'var(--surface-dark)',    
-          900: 'var(--surface-dark)',    
+          800: 'var(--secondary-dark)',  /* Updated to navy */
+          900: 'var(--surface-dark)',    /* Keep dark navy */
         },
         univ: {
           blue: 'var(--primary)',        
