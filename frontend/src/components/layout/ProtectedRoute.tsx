@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { LoadingSpinner } from "../common/LoadingSpinner";
 
 type ProtectedRouteProps = {
   roles?: string[];
@@ -9,7 +10,7 @@ export const ProtectedRoute = ({ roles }: ProtectedRouteProps) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   if (!user) {
