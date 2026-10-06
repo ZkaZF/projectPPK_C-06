@@ -17,6 +17,7 @@ import NewReservationPage from "./pages/user/NewReservationPage";
 import MyReservationsPage from "./pages/user/MyReservationsPage";
 import NewReportPage from "./pages/user/NewReportPage";
 import MyReportsPage from "./pages/user/MyReportsPage";
+import FacilitiesPage from "./pages/admin/FacilitiesPage";
 
 // Officer pages
 import ReservationQueuePage from "./pages/officer/ReservationQueuePage";
@@ -51,7 +52,7 @@ const DummyPage = ({ title, icon: Icon, desc }: { title: string; icon: any; desc
   </div>
 );
 
-const AdminFacilPage = () => <DummyPage title="Kelola Fasilitas" icon={Building2} desc="Tambah, edit, dan atur status fasilitas kampus." />;
+const AdminFacilPage = FacilitiesPage;
 const OfficerDashboardPage = () => <DummyPage title="Dashboard Petugas" icon={LayoutDashboard} desc="Ringkasan tugas dan antrian penanganan fasilitas." />;
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
           {/* All authenticated users */}
           <Route element={<ProtectedRoute roles={["pengguna", "petugas", "admin"]} />}>
             <Route element={<AppLayout />}>
+              <Route path="/general" element={<HomePage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/reservations" element={<MyReservationsPage />} />
               <Route path="/reservations/new" element={<NewReservationPage />} />
@@ -92,6 +94,7 @@ function App() {
           {/* Admin only */}
           <Route element={<ProtectedRoute roles={["admin"]} />}>
             <Route element={<AppLayout />}>
+              <Route path="/admin/general" element={<HomePage />} />
               <Route path="/admin" element={<AdminDashboardPage />} />
               <Route path="/admin/facilities" element={<AdminFacilPage />} />
               <Route path="/admin/users" element={<ManageUsersPage />} />

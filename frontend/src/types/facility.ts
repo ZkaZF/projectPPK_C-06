@@ -4,6 +4,7 @@ export interface FacilityType {
 }
 
 export interface FacilityStatus {
+  fac_stat_id?: number | string;
   fac_status_id?: number | string;
   fac_status_name: string;
 }

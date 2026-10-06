@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * StoreFacilityRequest
@@ -50,7 +51,11 @@ class StoreFacilityRequest extends FormRequest
             'fac_capacity'    => 'nullable|integer|min:1',
             'fac_description' => 'nullable|string',
             'fac_stat_id'     => 'required|integer|exists:facility_statuses,fac_stat_id',
-            'fac_image'       => 'nullable|string|max:255',
+            'fac_image'       => Rule::when(
+                $this->hasFile('fac_image'),
+                ['image', 'max:5120'],
+                ['nullable', 'string', 'max:255']
+            ),
         ];
     }
 }
