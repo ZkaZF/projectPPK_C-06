@@ -9,6 +9,11 @@ class FacilitySeeder extends Seeder
 {
     public function run(): void
     {
+        // Bersihkan data lama agar tidak duplikat saat seeder dijalankan ulang
+        DB::statement('SET session_replication_role = replica;'); // disable FK constraint sementara (PostgreSQL)
+        DB::table('facilities')->truncate();
+        DB::statement('SET session_replication_role = DEFAULT;');
+
         $facilities = [
             // 1. Ruang Kelas (fac_type_id = 1)
             [

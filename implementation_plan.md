@@ -7,7 +7,7 @@ Aplikasi web untuk mengelola penggunaan fasilitas kampus (ruang kelas, aula, lab
 **Tech Stack Final:**
 | Layer | Teknologi |
 |-------|-----------|
-| Frontend | React 18 (Vite) + React Router v6 + Bootstrap 5 + Axios |
+| Frontend | React 18 (Vite) + React Router v6 + Vanilla CSS + Tailwind CSS v3 + Axios |
 | Backend | Laravel 11 (REST API mode) |
 | Auth | Laravel Sanctum (token-based) |
 | Database | PostgreSQL 16 |

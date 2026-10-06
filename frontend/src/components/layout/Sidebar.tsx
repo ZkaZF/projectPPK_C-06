@@ -66,13 +66,15 @@ export const Sidebar = () => {
         ))}
       </div>
 
-      {/* Pengguna menu */}
-      <div className="sidebar-section">
-        <div className="sidebar-section-label">Menu Utama</div>
-        {userMenuItems.map((item) => (
-          <SidebarItem key={item.to} {...item} />
-        ))}
-      </div>
+      {/* Admin only */}
+      {role === "admin" && (
+        <div className="sidebar-section">
+          <div className="sidebar-section-label">Administrasi</div>
+          {adminMenuItems.map((item) => (
+            <SidebarItem key={item.to} {...item} />
+          ))}
+        </div>
+      )}
 
       {/* Petugas / Admin menu */}
       {(role === "petugas" || role === "admin") && (
@@ -84,15 +86,15 @@ export const Sidebar = () => {
         </div>
       )}
 
-      {/* Admin only */}
-      {role === "admin" && (
-        <div className="sidebar-section">
-          <div className="sidebar-section-label">Administrasi</div>
-          {adminMenuItems.map((item) => (
-            <SidebarItem key={item.to} {...item} />
-          ))}
+      {/* Pengguna menu */}
+      <div className="sidebar-section">
+        <div className="sidebar-section-label">
+          {(role === "admin" || role === "petugas") ? "Akses Pengguna Publik" : "Menu Utama"}
         </div>
-      )}
+        {userMenuItems.map((item) => (
+          <SidebarItem key={item.to} {...item} />
+        ))}
+      </div>
     </aside>
   );
 };

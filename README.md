@@ -8,7 +8,7 @@ Aplikasi web **Uni-FaRe** untuk mengelola penggunaan fasilitas kampus (ruang kel
 
 | Layer | Teknologi |
 |-------|-----------|
-| **Frontend** | React 18 (Vite) + TypeScript + React Router v6 + Vanilla CSS + Axios + Lucide React |
+| **Frontend** | React 18 (Vite) + TypeScript + React Router v6 + Vanilla CSS + Tailwind CSS v3 + Axios + Lucide React |
 | **Backend** | Laravel (REST API mode) |
 | **Auth** | Laravel Sanctum (token-based) |
 | **Database** | PostgreSQL 16 |

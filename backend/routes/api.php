@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum', 'role:petugas,admin'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post  ('/reservations',            [ReservationController::class, 'store']);
     Route::get   ('/reservations/my',         [ReservationController::class, 'myList']);
-    Route::get   ('/reservations/{id}',       [ReservationController::class, 'show']);
+    Route::get   ('/reservations/{id}',       [ReservationController::class, 'show'])->whereNumber('id');
     Route::patch ('/reservations/{id}/cancel',[ReservationController::class, 'cancel']);
 });
 
@@ -54,8 +54,9 @@ Route::middleware(['auth:sanctum', 'role:petugas,admin'])->group(function () {
 // ─── Report Routes ───────────────────────────────────────────────────────────
 // Semua user terautentikasi
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('/reports',       [ReportController::class, 'store']);
-    Route::get ('/reports/my',    [ReportController::class, 'myList']);
+    Route::get ('/report-categories', [ReportController::class, 'categories']);
+    Route::post('/reports',           [ReportController::class, 'store']);
+    Route::get ('/reports/my',        [ReportController::class, 'myList']);
 });
 
 // Petugas or Admin

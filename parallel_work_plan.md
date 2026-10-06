@@ -1,6 +1,6 @@
-# Pembagian Kerja Paralel — Update 29 September 2026
+# Pembagian Kerja Paralel — Update 2 Oktober 2026
 
-> **Deadline Proyek: 11 Oktober 2026** (tersisa ±12 hari)
+> **Deadline Proyek: 11 Oktober 2026** (tersisa ±9 hari)
 > Dokumen ini sudah diperbarui dengan progress terkini. Bagian yang sudah selesai ditandai ✅.
 
 ---
@@ -36,10 +36,13 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 - [x] Review seluruh tampilan UI secara menyeluruh
 - [x] Perbaiki konsistensi warna, spacing, font, dan layout antar halaman
 - [ ] Pastikan responsiveness di mobile (375px) dan desktop (1440px)
-- [x] Polish micro-interactions: hover effects, transisi halaman, loading states
+- [x] Polish micro-interactions: hover effects, transisi halaman, loading states ✅ (2 Okt - Fix loading spinner setelah login)
 - [ ] Pastikan error states ditampilkan dengan baik
 - [ ] Review dan rapikan CSS/styling secara keseluruhan
 - [x] Tambah `FacilitySeeder` — 10 data fasilitas dummy (semua tipe) ✅ (1 Okt)
+- [x] Perbaikan Sidebar UX untuk Admin/Petugas (Reorder menu & ubah label) ✅ (2 Okt)
+- [x] Integrasi UI `FileUploadCard` dengan setup Tailwind CSS v3 untuk form laporan ✅ (2 Okt)
+- [x] Fix blank page issue (missing imports) di `NewReportPage` ✅ (2 Okt)
 - [ ] Finalisasi seed data untuk demo presentasi
 - [ ] Persiapan slide / alur demo presentasi
 - [ ] Testing end-to-end final: Register → Verify → Login → Reservasi → Laporan → Admin Export
@@ -129,20 +132,20 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 - [x] Buat `src/pages/user/NewReservationPage.tsx` ✅
 - [x] Buat `src/pages/user/MyReservationsPage.tsx` ✅
 - [x] Buat `src/pages/user/DashboardPage.tsx` ✅ (sudah ada sebelumnya)
-- [ ] Buat `src/pages/officer/ReservationQueuePage.tsx` — Antrian petugas *(target Fase 6)*
+- [x] Buat `src/pages/officer/ReservationQueuePage.tsx` — Antrian petugas ✅ (2 Okt - PM)
 
 **Output:** User bisa ajukan reservasi, lihat riwayat, batalkan. Petugas bisa approve/reject dari antrian.
 
 ---
 
-### 👤 Orang 3 — Integrasi Fasilitas + Bantu Reservasi UI
-**Branch Git:** Lanjutkan di `feat/frontend-facility` atau buat `feat/frontend-facility-integration`
+### 👤 Orang 3 — Ekstraksi Komponen Reservasi & Fasilitas
+**Branch Git:** Buat branch `feat/frontend-refactor-components` dari `main`
 
-- [ ] **PRIORITAS:** Resolve konflik merge `feat/frontend-facility` → `main` bersama PM
-- [ ] Ganti mock data di `HomePage.jsx` dengan API call real dari backend
-- [ ] Pastikan `SlotCalendar` bisa fetch slot dari backend (`/api/facilities/{id}/slots?date=`)
-- [ ] Buat `src/components/reservations/ReservationForm.tsx` — form dengan field: tanggal, waktu mulai/selesai, tujuan
-- [ ] Buat `src/components/reservations/ReservationTable.tsx` — tabel riwayat dengan kolom: fasilitas, tanggal, waktu, status, aksi
+- [x] **PRIORITAS:** Resolve konflik merge `feat/frontend-facility` → `main` bersama PM ✅ (Diselesaikan PM)
+- [x] Ganti mock data di `HomePage.tsx` dengan API call real dari backend ✅ (Diselesaikan PM)
+- [x] Pastikan `SlotCalendar` bisa fetch slot dari backend ✅ (Diselesaikan PM)
+- [ ] **TUGAS UTAMA:** Ekstrak UI form reservasi dari `src/pages/user/NewReservationPage.tsx` menjadi komponen reusable `src/components/reservations/ReservationForm.tsx`.
+- [ ] **TUGAS UTAMA:** Ekstrak UI list riwayat reservasi dari `src/pages/user/MyReservationsPage.tsx` menjadi komponen reusable `src/components/reservations/ReservationTable.tsx`.
 
 **Output:** Halaman fasilitas menampilkan data real. Komponen reservasi siap dipakai oleh Orang 2.
 
@@ -168,13 +171,13 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 - [x] Buat `src/api/reports.ts` ✅ (dikerjakan PM, 1 Okt)
 - [x] Buat `src/pages/user/NewReportPage.tsx` — form laporan + upload foto + preview ✅
 - [x] Buat `src/pages/user/MyReportsPage.tsx` — riwayat laporan + StatusBadge ✅
-- [ ] Buat `src/pages/officer/ReportQueuePage.tsx` — antrian laporan, ubah status *(target Fase 6)*
+- [x] Buat `src/pages/officer/ReportQueuePage.tsx` — antrian laporan, ubah status ✅ (2 Okt - PM)
 - [ ] Buat `src/pages/officer/OfficerDashboardPage.tsx` *(target Fase 6)*
 
-### 👤 Orang 3 — Komponen Laporan
-- [ ] Buat `src/components/reports/ReportForm.tsx` — form + upload foto + preview
-- [ ] Buat `src/components/reports/ReportTable.tsx` — tabel riwayat dengan filter status
-- [ ] Buat `src/components/reports/ReportQueue.tsx` — tabel antrian petugas
+### 👤 Orang 3 — Ekstraksi Komponen Laporan
+- [x] **TUGAS UTAMA:** Ekstrak UI form laporan dari `src/pages/user/NewReportPage.tsx` menjadi komponen reusable `src/components/reports/ReportForm.tsx` ✅ (2 Okt - PM)
+- [x] **TUGAS UTAMA:** Ekstrak UI list riwayat laporan dari `src/pages/user/MyReportsPage.tsx` menjadi komponen reusable `src/components/reports/ReportTable.tsx` ✅ (2 Okt - PM)
+- [ ] Buat `src/components/reports/ReportQueue.tsx` — tabel antrian laporan untuk petugas.
 
 ---
 
@@ -195,19 +198,19 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ### 👤 Orang 2 — Frontend Admin
 **Branch Git:** `feat/frontend-admin`
 
-- [ ] Buat `src/api/admin.ts`
-- [ ] Buat `src/pages/admin/AdminDashboardPage.tsx` — statistik keseluruhan
+- [x] Buat `src/api/admin.ts` ✅ (2 Okt - PM)
+- [x] Buat `src/pages/admin/AdminDashboardPage.tsx` — statistik keseluruhan ✅ (2 Okt - PM)
 - [ ] Buat `src/pages/admin/ManageFacilitiesPage.tsx` — CRUD fasilitas (integrasi FacilityForm)
-- [ ] Buat `src/pages/admin/ManageUsersPage.tsx` — buat akun petugas/pengguna
-- [ ] Buat `src/pages/admin/VerifyUsersPage.tsx` — verifikasi akun pending
-- [ ] Buat `src/pages/admin/RecapPage.tsx` — tabel rekap + tombol export CSV/Excel/PDF
+- [x] Buat `src/pages/admin/ManageUsersPage.tsx` — buat akun petugas/pengguna ✅ (2 Okt - PM)
+- [x] Buat `src/pages/admin/VerifyUsersPage.tsx` — verifikasi akun pending ✅ (2 Okt - PM)
+- [x] Buat `src/pages/admin/RecapPage.tsx` — tabel rekap + tombol export CSV/Excel ✅ (2 Okt - PM)/PDF
 
 ---
 
 ## 📋 Fase 7: Polish (Target: 6–10 Okt)
 
 **Semua anggota:**
-- [ ] Bug fixing
+- [x] Bug fixing (Fix Seeder duplikat, Fix render foto laporan, Fix payload update status) ✅ (2 Okt - PM)
 - [ ] UI Polish & responsiveness (mobile 375px ↔ desktop 1440px)
 - [ ] Seed data final untuk demo presentasi
 - [ ] Testing end-to-end: Register → Verify → Login → Reservasi → Laporan → Admin Export
