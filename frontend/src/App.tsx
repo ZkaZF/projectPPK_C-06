@@ -31,7 +31,7 @@ import VerifyUsersPage from "./pages/admin/VerifyUsersPage";
 import RecapPage from "./pages/admin/RecapPage";
 
 // Placeholder (for pages not yet implemented)
-import { Building2, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 const DummyPage = ({ title, icon: Icon, desc }: { title: string; icon: any; desc: string }) => (
   <div style={{ padding: "32px", maxWidth: "1140px", margin: "0 auto" }}>
     <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "32px" }}>
@@ -114,3 +114,4 @@ function App() {
 }
 
 export default App;
+

@@ -79,7 +79,7 @@ export default function AdminDashboardPage() {
         <div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: 800, margin: 0, color: 'var(--text-h)' }}>Dashboard Admin</h1>
           <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            Selamat datang, <strong style={{ color: 'var(--primary-dark)' }}>{(user as any)?.user_name ?? user?.user_email ?? 'Admin'}</strong> — kendali pusat sistem Uni-FaRe
+            Selamat datang, <strong style={{ color: 'var(--primary-dark)' }}>{(user as any)?.user_name ?? (user as any)?.user_email ?? 'Admin'}</strong> — kendali pusat sistem Uni-FaRe
           </p>
         </div>
       </div>
@@ -111,3 +111,5 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
+

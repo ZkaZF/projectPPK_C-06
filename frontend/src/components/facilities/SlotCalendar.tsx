@@ -390,3 +390,4 @@ export default function SlotCalendar(props: SlotCalendarProps) {
     </CalendarErrorBoundary>
   );
 }
+

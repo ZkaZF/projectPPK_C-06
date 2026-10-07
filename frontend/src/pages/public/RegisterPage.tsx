@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { registerApi } from "../../api/auth";
 import { UniversityLogo } from "../../components/common/UniversityLogo";
 import { CursorGrid } from "../../components/common/CursorGrid";
-import { Lock, Shield, BarChart2, Bell, User, Mail, GraduationCap, Key, Eye, EyeOff, AlertCircle, CheckCircle, PartyPopper } from "lucide-react";
+import { Lock, User, Mail, GraduationCap, Key, Eye, EyeOff, AlertCircle, CheckCircle, PartyPopper } from "lucide-react";
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
@@ -167,7 +167,7 @@ export const RegisterPage = () => {
           </Link>
 
           <div className="auth-form-header">
-            <h2>Buat Akun Baru ✨</h2>
+            <h2>Buat Akun Baru</h2>
             <p>Isi data diri Anda untuk mendaftar</p>
           </div>
 

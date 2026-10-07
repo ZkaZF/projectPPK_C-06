@@ -144,9 +144,9 @@ export default function ReportTable({
                   <p style={{ margin: '0 0 4px', fontSize: '0.88rem', color: 'var(--text)', lineHeight: 1.5 }}>
                     {r.rep_description}
                   </p>
-                  <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                    🕐 {new Date(r.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
-                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', margin: 0, fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                    <Clock size={13} style={{ opacity: 0.8 }} /> {new Date(r.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  </div>
                 </div>
 
                 {/* Officer Action */}
