@@ -11,6 +11,7 @@ export interface FacilityStatus {
 
 export interface Facility {
   fac_id: number | string;
+  fac_stat_id?: number | string;
   fac_name: string;
   type?: FacilityType;
   status?: FacilityStatus;
@@ -18,6 +19,13 @@ export interface Facility {
   fac_capacity?: number | null;
   fac_description?: string;
   fac_image?: string;
+}
+
+export interface FacilityFilterState {
+  type: string;
+  location: string;
+  capacity: string;
+  availableOnly: boolean;
 }
 
 export interface FacilityFilterState {

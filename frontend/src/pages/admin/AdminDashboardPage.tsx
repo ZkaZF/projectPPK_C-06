@@ -8,11 +8,11 @@ interface StatCardProps {
   icon: React.ElementType;
   label: string;
   value: string | number;
-  color: string;
+  
   onClick?: () => void;
 }
 
-const StatCard = ({ icon: Icon, label, value, color, onClick }: StatCardProps) => (
+const StatCard = ({ icon: Icon, label, value, onClick }: StatCardProps) => (
   <div
     onClick={onClick}
     style={{
@@ -25,7 +25,7 @@ const StatCard = ({ icon: Icon, label, value, color, onClick }: StatCardProps) =
     onMouseEnter={e => { if (onClick) { (e.currentTarget as HTMLElement).style.boxShadow = 'var(--shadow)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; } }}
     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'var(--shadow-sm)'; (e.currentTarget as HTMLElement).style.transform = 'none'; }}
   >
-    <div style={{ width: 48, height: 48, borderRadius: '12px', background: color + '20', color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+    <div style={{ width: 48, height: 48, borderRadius: '12px', background: 'var(--primary-bg)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
       <Icon size={22} />
     </div>
     <div>
@@ -35,7 +35,7 @@ const StatCard = ({ icon: Icon, label, value, color, onClick }: StatCardProps) =
   </div>
 );
 
-const QuickLink = ({ icon: Icon, label, desc, to, color }: { icon: React.ElementType; label: string; desc: string; to: string; color: string }) => {
+const QuickLink = ({ icon: Icon, label, desc, to }: { icon: React.ElementType; label: string; desc: string; to: string; }) => {
   const navigate = useNavigate();
   return (
     <div onClick={() => navigate(to)}
@@ -43,7 +43,7 @@ const QuickLink = ({ icon: Icon, label, desc, to, color }: { icon: React.Element
       onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'var(--shadow)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'var(--shadow-sm)'; (e.currentTarget as HTMLElement).style.transform = 'none'; }}
     >
-      <div style={{ width: 40, height: 40, borderRadius: '10px', background: color + '20', color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+      <div style={{ width: 40, height: 40, borderRadius: '10px', background: 'var(--primary-bg)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
         <Icon size={20} />
       </div>
       <div>
@@ -79,7 +79,7 @@ export default function AdminDashboardPage() {
         <div>
           <h1 style={{ fontSize: '1.8rem', fontWeight: 800, margin: 0, color: 'var(--text-h)' }}>Dashboard Admin</h1>
           <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            Selamat datang, <strong style={{ color: 'var(--primary-dark)' }}>{(user as any)?.user_name ?? user?.user_email ?? 'Admin'}</strong> — kendali pusat sistem Uni-FaRe
+            Selamat datang, <strong style={{ color: 'var(--primary-dark)' }}>{(user as any)?.user_name ?? (user as any)?.user_email ?? 'Admin'}</strong> — kendali pusat sistem Uni-FaRe
           </p>
         </div>
       </div>
@@ -92,22 +92,26 @@ export default function AdminDashboardPage() {
 
       {/* Stat Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '36px' }}>
-        <StatCard icon={Building2}    label="Total Fasilitas"  value={facilityCount} color="#ff7a53" onClick={() => navigate('/admin/facilities')} />
-        <StatCard icon={Users}        label="Kelola Pengguna"  value="→"             color="#8b5cf6" onClick={() => navigate('/admin/users')} />
-        <StatCard icon={ShieldCheck}  label="Verifikasi Akun"  value="→"             color="#f59e0b" onClick={() => navigate('/admin/verify')} />
-        <StatCard icon={TrendingUp}   label="Rekap & Export"   value="→"             color="#10b981" onClick={() => navigate('/admin/recap')} />
+        <StatCard icon={Building2}    label="Total Fasilitas"  value={facilityCount} onClick={() => navigate('/admin/facilities')} />
+        <StatCard icon={Users}        label="Kelola Pengguna"  value="→"             onClick={() => navigate('/admin/users')} />
+        <StatCard icon={ShieldCheck}  label="Verifikasi Akun"  value="→"             onClick={() => navigate('/admin/verify')} />
+        <StatCard icon={TrendingUp}   label="Rekap & Export"   value="→"             onClick={() => navigate('/admin/recap')} />
       </div>
 
       {/* Quick Actions */}
       <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-h)', marginBottom: '16px' }}>Akses Cepat</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
-        <QuickLink icon={Building2}   label="Kelola Fasilitas"   desc="Tambah, edit, dan atur status fasilitas"     to="/admin/facilities" color="#ff7a53" />
-        <QuickLink icon={Users}       label="Manajemen Pengguna"  desc="Daftar semua akun dan pembuatan akun baru"   to="/admin/users"      color="#8b5cf6" />
-        <QuickLink icon={ShieldCheck} label="Verifikasi Akun"     desc="Setujui atau tolak pendaftaran akun baru"    to="/admin/verify"     color="#f59e0b" />
-        <QuickLink icon={Ticket}      label="Antrian Reservasi"   desc="Review pengajuan peminjaman fasilitas"       to="/officer/reservations" color="#3b82f6" />
-        <QuickLink icon={FolderKanban} label="Antrian Laporan"    desc="Tindak lanjuti laporan kerusakan masuk"      to="/officer/reports"  color="#06b6d4" />
-        <QuickLink icon={TrendingUp}  label="Rekap & Export"      desc="Data rekapitulasi dan export CSV/Excel"      to="/admin/recap"      color="#10b981" />
+        <QuickLink icon={Building2}   label="Kelola Fasilitas"   desc="Tambah, edit, dan atur status fasilitas"     to="/admin/facilities" />
+        <QuickLink icon={Users}       label="Manajemen Pengguna"  desc="Daftar semua akun dan pembuatan akun baru"   to="/admin/users"      />
+        <QuickLink icon={ShieldCheck} label="Verifikasi Akun"     desc="Setujui atau tolak pendaftaran akun baru"    to="/admin/verify"     />
+        <QuickLink icon={Ticket}      label="Antrian Reservasi"   desc="Review pengajuan peminjaman fasilitas"       to="/officer/reservations" />
+        <QuickLink icon={FolderKanban} label="Antrian Laporan"    desc="Tindak lanjuti laporan kerusakan masuk"      to="/officer/reports"  />
+        <QuickLink icon={TrendingUp}  label="Rekap & Export"      desc="Data rekapitulasi dan export CSV/Excel"      to="/admin/recap"      />
       </div>
     </div>
   );
 }
+
+
+
+

@@ -5,6 +5,7 @@ export const EMPTY_FILTERS: FacilityFilterState = {
   type: '',
   location: '',
   capacity: '',
+  availableOnly: false,
 };
 
 interface FacilityFilterProps {
@@ -20,7 +21,7 @@ export default function FacilityFilter({ filters, onFilterChange, onReset, resul
     onFilterChange({ ...filters, [e.target.name]: e.target.value });
   };
 
-  const hasFilters = filters.type || filters.location || filters.capacity;
+  const hasFilters = filters.type || filters.location || filters.capacity || filters.availableOnly;
 
   return (
     <div className="bg-white rounded-lg border border-institution-200 p-3.5 mb-7 shadow-xs">
@@ -87,7 +88,13 @@ export default function FacilityFilter({ filters, onFilterChange, onReset, resul
         {/* Actions */}
         <div className="md:col-span-3 flex items-center justify-between md:justify-end gap-3">
           <label className="flex items-center gap-2 cursor-pointer select-none text-xs font-medium text-institution-700">
-            <input type="checkbox" className="w-3.5 h-3.5 rounded text-univ-blue focus:ring-univ-blue border-institution-300" />
+            <input 
+              type="checkbox" 
+              name="availableOnly"
+              checked={filters.availableOnly}
+              onChange={(e) => onFilterChange({ ...filters, availableOnly: e.target.checked })}
+              className="w-3.5 h-3.5 rounded text-univ-blue focus:ring-univ-blue border-institution-300" 
+            />
             <span>Tersedia Hari Ini</span>
           </label>
           <button 

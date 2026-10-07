@@ -1,5 +1,5 @@
 import * as React from "react";
-import { UploadCloud, X, File as FileIcon, CheckCircle2, Trash2 } from "lucide-react";
+import { UploadCloud, X, CheckCircle2, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { cn } from "../../lib/utils"; // Adjusted to relative path
@@ -15,7 +15,7 @@ export interface UploadedFile {
 }
 
 // Define the props for the component
-interface FileUploadCardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface FileUploadCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onDrag" | "onDragStart" | "onDragEnd" | "onAnimationStart" | "onDragEnter" | "onDragLeave" | "onDragOver" | "onDrop"> {
   files: UploadedFile[];
   onFilesChange: (files: File[]) => void;
   onFileRemove: (id: string) => void;

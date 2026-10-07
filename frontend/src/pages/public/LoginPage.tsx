@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { UniversityLogo } from "../../components/common/UniversityLogo";
 import { CursorGrid } from "../../components/common/CursorGrid";
-import { Mail, Lock, Calendar, FileText, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
 
 export const LoginPage = () => {
   const { login } = useAuth();

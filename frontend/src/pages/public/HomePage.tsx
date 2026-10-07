@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FacilityCard from '../../components/facilities/FacilityCard';
+import FacilityCardSkeleton from '../../components/facilities/FacilityCardSkeleton';
 import FacilityFilter, { EMPTY_FILTERS } from '../../components/facilities/FacilityFilter';
 import type { Facility, FacilityFilterState } from '../../types/facility';
+import { Pagination } from '../../components/common/Pagination';
+import { isAvailable } from '../../utils/facility';
 
 // @ts-ignore
 import { getFacilitiesApi } from '../../api/facilities';
@@ -15,6 +18,19 @@ export default function HomePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const itemsPerPage = 9; // 9 items = 3 rows × 3 cols di grid
+
+  // Ekstrak list lokasi unik dari data
+  const uniqueLocations = useMemo(() => {
+    const locs = new Set<string>();
+    facilities.forEach(f => {
+      if (f.fac_location) {
+        // Ambil kata pertama/gedung utama sebagai kategori jika terlalu panjang
+        const mainLoc = f.fac_location.split(',')[0].trim();
+        locs.add(mainLoc);
+      }
+    });
+    return Array.from(locs).slice(0, 4); // Ambil max 4 tab
+  }, [facilities]);
 
   useEffect(() => {
     setLoading(true);
@@ -33,6 +49,7 @@ export default function HomePage() {
       if (filters.type && f.type?.fac_type_name !== filters.type) return false;
       if (filters.location && !f.fac_location?.toLowerCase().includes(filters.location.toLowerCase())) return false;
       if (filters.capacity && (f.fac_capacity ?? 0) < Number(filters.capacity)) return false;
+      if (filters.availableOnly && !isAvailable(f)) return false;
       return true;
     });
   }, [facilities, filters]);
@@ -106,28 +123,19 @@ export default function HomePage() {
       <div className="flex items-center gap-1 overflow-x-auto pb-2 mb-4 text-xs font-medium border-b border-institution-200">
         <button 
           onClick={() => setFilters(prev => ({...prev, location: ''}))} 
-          className={`px-3 py-2 whitespace-nowrap transition ${!filters.location ? 'text-institution-900 font-semibold border-b-2 border-institution-900' : 'text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300'}`}
+          className={`px-3 py-2 whitespace-nowrap transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-institution-900 rounded-sm ${!filters.location ? 'text-institution-900 font-semibold border-b-2 border-institution-900' : 'text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300'}`}
         >
           Semua Fasilitas <span className="ml-1.5 py-0.5 px-1.5 rounded text-[11px] bg-institution-100 text-institution-700 font-mono">{facilities.length}</span>
         </button>
-        <button 
-          onClick={() => setFilters(prev => ({...prev, location: 'Rektorat'}))} 
-          className={`px-3 py-2 whitespace-nowrap transition ${filters.location === 'Rektorat' ? 'text-institution-900 font-semibold border-b-2 border-institution-900' : 'text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300'}`}
-        >
-          Gedung Rektorat
-        </button>
-        <button 
-          onClick={() => setFilters(prev => ({...prev, location: 'Sains & Teknik'}))} 
-          className={`px-3 py-2 whitespace-nowrap transition ${filters.location === 'Sains & Teknik' ? 'text-institution-900 font-semibold border-b-2 border-institution-900' : 'text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300'}`}
-        >
-          Fakultas Sains & Teknik
-        </button>
-        <button 
-          onClick={() => setFilters(prev => ({...prev, location: 'Kedokteran'}))} 
-          className={`px-3 py-2 whitespace-nowrap transition ${filters.location === 'Kedokteran' ? 'text-institution-900 font-semibold border-b-2 border-institution-900' : 'text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300'}`}
-        >
-          Fakultas Kedokteran
-        </button>
+        {uniqueLocations.map(loc => (
+          <button 
+            key={loc}
+            onClick={() => setFilters(prev => ({...prev, location: loc}))} 
+            className={`px-3 py-2 whitespace-nowrap transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-institution-900 rounded-sm ${filters.location === loc ? 'text-institution-900 font-semibold border-b-2 border-institution-900' : 'text-institution-500 hover:text-institution-900 border-b-2 border-transparent hover:border-institution-300'}`}
+          >
+            {loc}
+          </button>
+        ))}
       </div>
 
       {/* Filter Component */}
@@ -150,7 +158,14 @@ export default function HomePage() {
       )}
 
       {/* Loading state */}
-      {loading && (
+      {loading && viewMode === 'grid' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <FacilityCardSkeleton key={i} />
+          ))}
+        </div>
+      )}
+      {loading && viewMode === 'table' && (
         <div className="flex justify-center py-20">
           <div className="w-10 h-10 rounded-full border-4 border-institution-200 border-t-institution-900 animate-spin" />
         </div>
@@ -239,41 +254,12 @@ export default function HomePage() {
           )}
 
           {/* Pagination */}
-          <div className="mt-6 pt-4 border-t border-institution-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-institution-500">
-            <div>
-              Menampilkan halaman <span className="font-semibold text-institution-800">{currentPage}</span> dari <span className="font-semibold text-institution-800">{totalPages}</span>
-              <span className="ml-2 text-institution-400">({filtered.length} fasilitas)</span>
-            </div>
-            <div className="inline-flex items-center gap-1">
-              <button 
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="px-2.5 py-1.5 rounded border border-institution-200 bg-white text-institution-600 hover:bg-institution-50 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-medium transition"
-              >
-                Sebelumnya
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1.5 rounded font-medium text-xs transition ${
-                    currentPage === page
-                      ? 'bg-univ-blue text-white shadow-sm'
-                      : 'bg-white border border-institution-200 text-institution-600 hover:bg-institution-50'
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
-              <button 
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className="px-2.5 py-1.5 rounded border border-institution-200 bg-white text-institution-600 hover:bg-institution-50 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-medium transition"
-              >
-                Berikutnya
-              </button>
-            </div>
-          </div>
+          <Pagination 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={filtered.length}
+          />
         </>
       )}
     </div>

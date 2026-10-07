@@ -3,40 +3,40 @@
 
 /* ── Design Tokens ────────────────────────────────────────────── */
 :root {
-  /* Colors - Bunny.net Theme */
-  --primary:        #ff7a53; /* Coral Launch */
-  --primary-dark:   #fd8d32; /* Signal Orange */
-  --primary-light:  #ffa84a;
-  --primary-glow:   rgba(255, 122, 83, 0.35);
-  --primary-bg:     rgba(255, 122, 83, 0.1);
+  /* Colors - Modern Teal & Slate */
+  --primary:        #0d9488;
+  --primary-dark:   #0f766e;
+  --primary-light:  #14b8a6;
+  --primary-glow:   rgba(13, 148, 136, 0.35);
+  --primary-bg:     rgba(13, 148, 136, 0.08);
 
-  --secondary:      #8bb3da; /* Signal Blue */
-  --secondary-dark: #183d6d; /* Edge Navy */
+  --secondary:      #64748b;
+  --secondary-dark: #334155;
 
   --success:        #10b981;
   --warning:        #f59e0b;
   --danger:         #ef4444;
 
   /* Surface */
-  --bg:             #e1f2ff; /* Cloud Canvas */
-  --surface:        #ffffff; /* White Surface */
-  --surface-2:      #eff8ff; /* Ice Surface */
-  --surface-3:      #d3e2f1; /* Mist Divider */
-  --surface-dark:   #051e38; /* Launch Bay */
-  --border:         #d3e2f1; /* Mist Divider */
-  --border-strong:  #8bb3da; /* Signal Blue */
+  --bg:             #f8fafc;
+  --surface:        #ffffff;
+  --surface-2:      #f1f5f9;
+  --surface-3:      #e2e8f0;
+  --surface-dark:   #0f172a;
+  --border:         #e2e8f0;
+  --border-strong:  #94a3b8;
 
   /* Text */
-  --text:           #666666; /* Graphite */
-  --text-muted:     #8bb3da; /* Signal Blue */
-  --text-h:         #183d6d; /* Edge Navy */
+  --text:           #475569;
+  --text-muted:     #94a3b8;
+  --text-h:         #1e293b;
   --text-white:     #ffffff;
 
   /* Effects */
-  --shadow-sm:      0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
-  --shadow:         0 4px 11px rgb(212, 211, 221);
-  --shadow-lg:      0 6px 40px rgba(0, 0, 0, 0.04);
-  --shadow-glow:    0 0 40px rgba(255, 122, 83, 0.25);
+  --shadow-sm:      0 1px 3px rgba(15,23,42,0.06);
+  --shadow:         0 4px 12px rgba(15,23,42,0.08);
+  --shadow-lg:      0 8px 40px rgba(15,23,42,0.10);
+  --shadow-glow:    0 0 40px rgba(13, 148, 136, 0.2);
 
   /* Layout */
   --sidebar-w:      260px;
@@ -126,8 +126,8 @@ body {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(253, 141, 50, 0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(139, 179, 218, 0.1) 0%, transparent 60%);
+    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(13, 148, 136, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(100, 116, 139, 0.12) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -149,18 +149,18 @@ body {
 
 /* Outer arc — Coral Launch */
 .redirect-spinner::before {
-  border: 3px solid rgba(255, 122, 83, 0.15);
-  border-top-color: #ff7a53;
-  border-right-color: #ffa84a;
+  border: 3px solid rgba(13, 148, 136, 0.15);
+  border-top-color: #0d9488;
+  border-right-color: #14b8a6;
   animation: spinnerGradient 0.8s cubic-bezier(0.6, 0, 0.4, 1) infinite;
 }
 
 /* Inner dot */
 .redirect-spinner::after {
   inset: 14px;
-  background: linear-gradient(135deg, #ff7a53, #ffa84a);
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
   animation: redirectPulse 1.2s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(255, 122, 83, 0.5);
+  box-shadow: 0 0 20px rgba(13, 148, 136, 0.5);
 }
 
 .redirect-overlay-text {
@@ -237,8 +237,8 @@ a:hover { color: var(--primary); }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(253, 141, 50, 0.15) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(139, 179, 218, 0.15) 0%, transparent 60%);
+    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(13, 148, 136, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(100, 116, 139, 0.12) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -276,7 +276,7 @@ a:hover { color: var(--primary); }
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 8px 18px rgba(214, 168, 79, 0.2));
+  filter: drop-shadow(0 8px 18px rgba(13, 148, 136, 0.2));
 }
 
 .university-logo {
@@ -408,7 +408,7 @@ a:hover { color: var(--primary); }
 .auth-desc {
   font-size: 1rem;
   line-height: 1.7;
-  color: #e8dcc8;        /* ivory warm */
+  color: #94a3b8;        /* slate-400 */
   opacity: 0.9;
 }
 .auth-features {
@@ -424,8 +424,8 @@ a:hover { color: var(--primary); }
   align-items: center;
   gap: 14px;
   padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(214, 168, 79, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(13, 148, 136, 0.15);
   border-radius: var(--radius);
   backdrop-filter: blur(8px);
   transition: var(--transition);
@@ -444,12 +444,12 @@ a:hover { color: var(--primary); }
 .auth-feature-label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #e8dcc8;       /* ivory warm */
+  color: #cbd5e1;       /* slate-300 */
   transition: var(--transition);
 }
 
 .auth-feature:hover .auth-feature-label {
-  color: #f5cf72;       /* amber saat hover */
+  color: var(--primary-light);
 }
 
 .auth-panel {
@@ -536,7 +536,7 @@ a:hover { color: var(--primary); }
 .form-input:focus {
   border-color: var(--primary);
   background: var(--surface-3);
-  box-shadow: 0 0 0 3px rgba(214, 168, 79, 0.18);
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
 }
 
 .form-input:focus + .form-input-icon,
@@ -586,11 +586,11 @@ a:hover { color: var(--primary); }
 .btn-primary {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   color: #ffffff;
-  box-shadow: 0 4px 15px rgba(255, 122, 83, 0.35);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.28);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 6px 25px rgba(255, 122, 83, 0.45);
+  box-shadow: 0 6px 20px rgba(13, 148, 136, 0.38);
   transform: translateY(-1px);
 }
 
@@ -733,7 +733,7 @@ a:hover { color: var(--primary); }
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 16px rgba(214, 168, 79, 0.35);
+  box-shadow: 0 0 16px rgba(13, 148, 136, 0.35);
   flex-shrink: 0;
 }
 
@@ -813,6 +813,18 @@ a:hover { color: var(--primary); }
   gap: 4px;
   overflow-y: auto;
   z-index: 50;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  top: var(--navbar-h);
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 49;
+  backdrop-filter: blur(2px);
+  animation: overlayFadeIn 0.2s ease;
 }
 
 .sidebar-section {
@@ -854,7 +866,7 @@ a:hover { color: var(--primary); }
 .sidebar-link.active {
   background: var(--primary-bg);
   color: var(--primary-light);
-  border-color: rgba(214, 168, 79, 0.22);
+  border-color: rgba(13, 148, 136, 0.18);
 }
 
 .sidebar-link.active::before {
@@ -902,7 +914,7 @@ a:hover { color: var(--primary); }
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(214, 168, 79, 0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(13, 148, 136, 0.12) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -947,7 +959,7 @@ a:hover { color: var(--primary); }
 .badge-primary {
   background: var(--primary-bg);
   color: var(--primary-light);
-  border: 1px solid rgba(99,102,241,0.2);
+  border: 1px solid rgba(13, 148, 136, 0.2);
 }
 
 /* ── Responsive ────────────────────────────────────────────────── */
@@ -956,8 +968,17 @@ a:hover { color: var(--primary); }
   .auth-bg { display: none; }
   .auth-panel { padding: 32px 24px; }
   .sidebar { transform: translateX(-100%); }
+  .sidebar.sidebar-open { transform: translateX(0); }
+  .sidebar-overlay.sidebar-open { display: block; }
   .main-content { margin-left: 0; padding: 20px; }
   .navbar-brand { width: auto; }
+  .navbar-hamburger { display: flex !important; }
+}
+
+@media (min-width: 769px) {
+  .sidebar { transform: translateX(0) !important; }
+  .sidebar-overlay { display: none !important; }
+  .navbar-hamburger { display: none !important; }
 }
 
 /* Fade-in saat halaman dibuka */
@@ -970,6 +991,25 @@ a:hover { color: var(--primary); }
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Global Focus Ring (S3.6) ─────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) {
+  outline: none;
 }
 
 .auth-form-wrap > * {
