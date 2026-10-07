@@ -76,7 +76,7 @@ export default function OfficerDashboardPage() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
             <div style={{
               width: "48px", height: "48px", borderRadius: "12px",
-              background: "rgba(59, 130, 246, 0.1)", color: "#3b82f6",
+              background: "var(--primary-bg)", color: "var(--primary)",
               display: "flex", alignItems: "center", justifyContent: "center"
             }}>
               <ClipboardList size={24} />
@@ -111,7 +111,7 @@ export default function OfficerDashboardPage() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
             <div style={{
               width: "48px", height: "48px", borderRadius: "12px",
-              background: "rgba(245, 158, 11, 0.1)", color: "#f59e0b",
+              background: "var(--primary-bg)", color: "var(--primary)",
               display: "flex", alignItems: "center", justifyContent: "center"
             }}>
               <Wrench size={24} />

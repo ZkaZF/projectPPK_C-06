@@ -17,12 +17,12 @@ const StatCard = ({
   icon: Icon,
   label,
   value,
-  color,
+  
 }: {
   icon: any;
   label: string;
   value: string | number;
-  color: string;
+  
 }) => (
   <div
     style={{
@@ -48,8 +48,8 @@ const StatCard = ({
         width: "48px",
         height: "48px",
         borderRadius: "12px",
-        background: color + "20",
-        color: color,
+        background: "var(--primary-bg)",
+        color: "var(--primary)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -229,7 +229,7 @@ export default function DashboardPage() {
 
       {facilityError && (
         <div style={{
-          padding: "12px 16px", background: "#fee2e220", color: "#dc2626",
+          padding: "12px 16px", background: "rgba(239, 68, 68, 0.1)", color: "var(--danger)",
           borderRadius: "8px", marginBottom: "16px", fontSize: "0.9rem",
           border: "1px solid #fee2e2",
         }}>
@@ -243,11 +243,11 @@ export default function DashboardPage() {
         gap: "16px",
         marginBottom: "32px",
       }}>
-        <StatCard icon={Building2} label="Total Fasilitas"   value={loadingFacility ? "..." : facilitySummary.total}       color="#6366f1" />
-        <StatCard icon={Building2} label="Fasilitas Aktif"   value={loadingFacility ? "..." : facilitySummary.active}      color="#10b981" />
-        <StatCard icon={Building2} label="Dalam Perbaikan"   value={loadingFacility ? "..." : facilitySummary.maintenance} color="#f59e0b" />
-        <StatCard icon={Ticket}    label="Reservasi Aktif"   value={activeReservations}                                      color="#3b82f6" />
-        <StatCard icon={FolderKanban} label="Laporan Saya"   value={totalReports}                                                      color="#ec4899" />
+        <StatCard icon={Building2} label="Total Fasilitas"   value={loadingFacility ? "..." : facilitySummary.total}        />
+        <StatCard icon={Building2} label="Fasilitas Aktif"   value={loadingFacility ? "..." : facilitySummary.active}       />
+        <StatCard icon={Building2} label="Dalam Perbaikan"   value={loadingFacility ? "..." : facilitySummary.maintenance}  />
+        <StatCard icon={Ticket}    label="Reservasi Aktif"   value={activeReservations}                                       />
+        <StatCard icon={FolderKanban} label="Laporan Saya"   value={totalReports}                                                       />
       </div>
 
       {/* ── Placeholder aktivitas terbaru ── */}
