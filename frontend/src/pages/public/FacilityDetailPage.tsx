@@ -80,7 +80,7 @@ export default function FacilityDetailPage() {
   const dotClass = available ? "bg-emerald-600" : facility.fac_stat_id === 2 ? "bg-amber-500" : "bg-red-600";
 
   return (
-    <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-6 pt-7 pb-16 flex-1 animate-fade-in">
+    <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-6 pb-16 flex-1 animate-fade-in" style={{ paddingTop: "calc(var(--navbar-h) + 28px)" }}>
       
       {/* ── Breadcrumb & Back ── */}
       <nav className="flex items-center gap-2 text-xs font-mono text-institution-500 mb-6" aria-label="Breadcrumb">

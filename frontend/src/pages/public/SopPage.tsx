@@ -43,7 +43,7 @@ export default function SopPage() {
   }, []);
 
   return (
-    <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-6 pt-7 pb-16 flex-1">
+    <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-6 pb-16 flex-1" style={{ paddingTop: "calc(var(--navbar-h) + 28px)" }}>
       {/* Document Header */}
       <div className="mb-8">
         <nav className="flex items-center gap-2 text-xs font-mono text-institution-500 mb-3" aria-label="Breadcrumb">

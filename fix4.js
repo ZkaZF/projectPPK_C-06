@@ -1,0 +1,1 @@
+const fs = require('fs'); let c = fs.readFileSync('frontend/src/pages/user/DashboardPage.tsx', 'utf8'); c = c.replace(/background: "#fee2e220", color: "#dc2626"/g, 'background: "var(--danger)20", color: "var(--danger)"'); fs.writeFileSync('frontend/src/pages/user/DashboardPage.tsx', c);

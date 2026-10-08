@@ -1,13 +1,15 @@
 import { Outlet } from "react-router-dom";
 import { Navbar } from "./Navbar";
+import { PublicFooter } from "./PublicFooter";
 
 export const PublicLayout = () => {
   return (
-    <div className="app-shell" style={{ display: "block" }}>
+    <div className="app-shell" style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Navbar />
-      <main style={{ minHeight: "calc(100vh - var(--navbar-h))", paddingTop: "var(--navbar-h)", background: "var(--bg)" }}>
+      <main style={{ flex: 1, background: "var(--bg)" }}>
         <Outlet />
       </main>
+      <PublicFooter />
     </div>
   );
 };
