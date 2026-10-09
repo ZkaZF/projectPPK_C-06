@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Report;
 use App\Models\ReportCategory;
 use App\Models\ReportStatus;
-use App\Services\SupabaseStorage;
+use App\Services\SupabaseStorageService;
 use App\Http\Requests\StoreReportRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Client\ConnectionException;
 
 /**
  * ReportController
@@ -65,7 +66,7 @@ class ReportController extends Controller
      * @param  \App\Services\SupabaseStorage          $storage  Photo upload service (auto-injected by Laravel's IoC container)
      * @return \Illuminate\Http\JsonResponse          201 with report data, or 502 if upload fails
      */
-    public function store(StoreReportRequest $request, SupabaseStorage $storage)
+    public function store(StoreReportRequest $request, SupabaseStorageService $storage)
     {
         $validated = $request->validated();
         $user      = Auth::user();
@@ -76,6 +77,10 @@ class ReportController extends Controller
         if ($request->hasFile('rep_photo')) {
             try {
                 $photoPath = $storage->upload($request->file('rep_photo'), 'reports');
+            } catch (ConnectionException $e) {
+                return response()->json([
+                    'message' => 'Foto belum dapat diunggah karena koneksi terputus.',
+                ], 502);
             } catch (\Throwable $e) {
                 // Log the error to Laravel's log system, then return 502 to the client.
                 report($e);

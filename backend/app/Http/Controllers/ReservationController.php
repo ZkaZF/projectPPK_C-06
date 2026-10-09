@@ -89,6 +89,20 @@ class ReservationController extends Controller
         $validated = $request->validated();
         $user      = Auth::user();
 
+        // Cek Jam Operasional
+        $start_time = substr($validated['start_time'], 0, 5);
+        $end_time = substr($validated['end_time'], 0, 5);
+        if ($start_time < '07:00' || $end_time > '20:00') {
+            return response()->json(['message' => 'Reservasi hanya dapat dilakukan pada jam operasional (07:00 - 20:00).'], 422);
+        }
+
+        // Cek Waktu Lampau (Hari ini)
+        if ($validated['reservation_date'] === \Carbon\Carbon::today()->format('Y-m-d')) {
+            if ($start_time < \Carbon\Carbon::now()->format('H:i')) {
+                return response()->json(['message' => 'Waktu reservasi yang dipilih sudah terlewat.'], 422);
+            }
+        }
+
         // Reject immediately if the requested slot overlaps with an approved booking.
         if ($this->hasConflict(
             $validated['facility_id'],
