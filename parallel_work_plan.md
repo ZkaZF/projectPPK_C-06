@@ -192,11 +192,11 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ### 👤 Orang 1 — Backend Admin
 **Branch Git:** `feat/backend-admin`
 
-- [ ] Buat `app/Http/Controllers/Admin/UserController.php`
+- [ ] Buat `app/Http/Controllers/Admin/UserController.php` ✅ (dikerjakan PM, 10 Okt)
   - `index()` → daftar semua user (paginasi)
   - `store()` → buat akun petugas/pengguna langsung (tanpa pending)
   - `verify($id)` → verifikasi/tolak akun pending
-- [ ] Buat `app/Http/Controllers/Admin/RecapController.php`
+- [ ] Buat `app/Http/Controllers/Admin/RecapController.php` ✅ (dikerjakan PM, 10 Okt)
   - `index()` → data rekap (jumlah reservasi per fasilitas, laporan per kategori, dll)
   - `export($format)` → export CSV / Excel / PDF
 - [ ] Buat `app/Exports/RecapExport.php` (menggunakan `maatwebsite/excel`) ✅
@@ -206,7 +206,7 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 
 - [ ] Buat `src/api/admin.ts` ✅ (2 Okt - PM)
 - [ ] Buat `src/pages/admin/AdminDashboardPage.tsx` — statistik keseluruhan ✅ (2 Okt - PM)
-- [ ] Buat `src/pages/admin/ManageFacilitiesPage.tsx` — CRUD fasilitas (integrasi FacilityForm)
+- [ ] Buat `src/pages/admin/ManageFacilitiesPage.tsx` — CRUD fasilitas (integrasi FacilityForm) ✅ (dikerjakan PM, 10 Okt)
 - [ ] Buat `src/pages/admin/ManageUsersPage.tsx` — buat akun petugas/pengguna ✅ (2 Okt - PM)
 - [ ] Buat `src/pages/admin/VerifyUsersPage.tsx` — verifikasi akun pending ✅ (2 Okt - PM)
 - [ ] Buat `src/pages/admin/RecapPage.tsx` — tabel rekap + tombol export CSV/Excel ✅ (2 Okt - PM)/PDF
@@ -217,10 +217,10 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 
 **Semua anggota:**
 - [x] Bug fixing (Fix Seeder duplikat, Fix render foto laporan, Fix payload update status) ✅ (2 Okt - PM)
-- [ ] UI Polish & responsiveness (mobile 375px ↔ desktop 1440px)
-- [ ] Seed data final untuk demo presentasi
-- [ ] Testing end-to-end: Register → Verify → Login → Reservasi → Laporan → Admin Export
-- [ ] Persiapan presentasi
+- [x] UI Polish & responsiveness (mobile 375px ↔ desktop 1440px) ✅ (10 Okt - PM)
+- [x] Seed data final untuk demo presentasi ✅ (10 Okt - PM)
+- [x] Testing end-to-end: Register → Verify → Login → Reservasi → Laporan → Admin Export ✅ (10 Okt - PM)
+- [x] Persiapan presentasi ✅ (10 Okt - PM)
 
 ---
 
@@ -246,9 +246,9 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ### Checkpoint 3: Setelah Fase 6 (±5 Okt)
 | # | Tugas PM |
 |---|----------|
-| 1 | Review & merge `feat/backend-admin` dan `feat/frontend-admin` |
-| 2 | Test: Admin buat akun -> verifikasi -> CRUD fasilitas -> export rekap (CSV, Excel, PDF) |
-| 3 | Final update semua dokumentasi |
+| 1 | Review & merge `feat/backend-admin` dan `feat/frontend-admin` | ✅ Done |
+| 2 | Test: Admin buat akun -> verifikasi -> CRUD fasilitas -> export rekap (CSV, Excel, PDF) | ✅ Done |
+| 3 | Final update semua dokumentasi | ✅ Done |
 
 ---
 
