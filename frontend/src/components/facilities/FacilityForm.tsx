@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Building2, Layers, MapPin, Users, FileText, Image as ImageIcon } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { isAxiosError } from 'axios';
+import { Building2, Layers, MapPin, Users, FileText, Image as ImageIcon, Plus } from 'lucide-react';
 import type { Facility, FacilityType } from '../../types/facility';
 import { FileUploadCard, type UploadedFile } from '../ui/file-upload-card';
 
-// @ts-ignore
-import { mockFacilityTypes } from '../../__mocks__/facilities';
-
 interface FacilityFormProps {
   initialData?: Partial<Facility>;
+  facilityTypes: FacilityType[];
+  onCreateFacilityType: (name: string) => Promise<FacilityType>;
   onSubmit: (formData: FormData) => void;
   submitting?: boolean;
 }
@@ -27,7 +27,13 @@ interface FormErrors {
   fac_location?: string;
 }
 
-export default function FacilityForm({ initialData = {}, onSubmit, submitting }: FacilityFormProps) {
+export default function FacilityForm({
+  initialData = {},
+  facilityTypes,
+  onCreateFacilityType,
+  onSubmit,
+  submitting,
+}: FacilityFormProps) {
   const [form, setForm] = useState<FormState>({
     fac_name: initialData.fac_name || '',
     fac_type_id: String(initialData.type?.fac_type_id || ''),
@@ -41,6 +47,16 @@ export default function FacilityForm({ initialData = {}, onSubmit, submitting }:
   const [image, setImage] = useState<File | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [imagePreview, setImagePreview] = useState(initialData.fac_image || '');
+  const [imageUploadError, setImageUploadError] = useState('');
+  const [newTypeName, setNewTypeName] = useState('');
+  const [creatingType, setCreatingType] = useState(false);
+  const [typeError, setTypeError] = useState('');
+
+  useEffect(() => {
+    if (imagePreview.startsWith('blob:')) {
+      return () => URL.revokeObjectURL(imagePreview);
+    }
+  }, [imagePreview]);
 
   const handleChange = (field: keyof FormState) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -70,6 +86,21 @@ export default function FacilityForm({ initialData = {}, onSubmit, submitting }:
   const handleFilesChange = (newFiles: File[]) => {
     if (newFiles.length > 0) {
       const selectedImage = newFiles[0];
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      const allowedExtensions = /\.(jpe?g|png|webp)$/i;
+      if (
+        (selectedImage.type && !allowedTypes.includes(selectedImage.type)) ||
+        (!selectedImage.type && !allowedExtensions.test(selectedImage.name))
+      ) {
+        setImageUploadError('Format foto tidak didukung. Gunakan JPG, JPEG, PNG, atau WebP.');
+        return;
+      }
+      if (selectedImage.size > 5 * 1024 * 1024) {
+        setImageUploadError('Ukuran foto melebihi batas maksimal 5 MB.');
+        return;
+      }
+
+      setImageUploadError('');
       setUploadedFiles([{ id: `${selectedImage.name}-${Date.now()}`, file: selectedImage, progress: 100, status: 'completed' }]);
       setImage(selectedImage);
       setImagePreview(URL.createObjectURL(selectedImage));
@@ -80,6 +111,30 @@ export default function FacilityForm({ initialData = {}, onSubmit, submitting }:
     setUploadedFiles([]);
     setImage(null);
     setImagePreview(initialData.fac_image || '');
+    setImageUploadError('');
+  };
+
+  const handleCreateType = async () => {
+    const name = newTypeName.trim();
+    if (!name) {
+      setTypeError('Nama jenis fasilitas wajib diisi.');
+      return;
+    }
+
+    setCreatingType(true);
+    setTypeError('');
+    try {
+      const type = await onCreateFacilityType(name);
+      setForm((current) => ({ ...current, fac_type_id: String(type.fac_type_id) }));
+      setNewTypeName('');
+    } catch (requestError: unknown) {
+      const message = isAxiosError<{ message?: string }>(requestError)
+        ? requestError.response?.data?.message
+        : undefined;
+      setTypeError(message ?? 'Gagal menambahkan jenis fasilitas.');
+    } finally {
+      setCreatingType(false);
+    }
   };
 
   const labelStyle: React.CSSProperties = {
@@ -122,13 +177,35 @@ export default function FacilityForm({ initialData = {}, onSubmit, submitting }:
             onChange={handleChange('fac_type_id')}
           >
             <option value="">-- Pilih Tipe --</option>
-            {mockFacilityTypes.map((t: FacilityType) => (
+            {facilityTypes.map((t) => (
               <option key={t.fac_type_id} value={t.fac_type_id}>
                 {t.fac_type_name}
               </option>
             ))}
           </select>
           {errors.fac_type_id && <div style={{ color: '#dc2626', fontSize: '0.75rem', marginTop: '4px' }}>{errors.fac_type_id}</div>}
+          <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+            <input
+              type="text"
+              aria-label="Nama jenis fasilitas baru"
+              placeholder="Jenis baru, mis. Ruang Seminar"
+              style={inputStyle}
+              value={newTypeName}
+              maxLength={30}
+              onChange={(event) => setNewTypeName(event.target.value)}
+            />
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={() => void handleCreateType()}
+              disabled={creatingType}
+              aria-label="Tambah jenis fasilitas"
+              title="Tambah jenis fasilitas"
+            >
+              <Plus size={16} /> <span>Tambah jenis</span>
+            </button>
+          </div>
+          {typeError && <div role="alert" style={{ color: '#dc2626', fontSize: '0.75rem', marginTop: 4 }}>{typeError}</div>}
         </div>
 
         {/* Lokasi */}
@@ -185,11 +262,19 @@ export default function FacilityForm({ initialData = {}, onSubmit, submitting }:
             onFileRemove={handleFileRemove}
             className="mt-2 w-full max-w-full"
             title="Upload Gambar Fasilitas"
-            description="Format gambar (JPEG, PNG). Ukuran disarankan 16:9"
+            description="Format JPG, PNG, atau WebP. Ukuran maksimal 5 MB."
+            accept="image/jpeg,image/png,image/webp"
           />
-          {imagePreview && uploadedFiles.length === 0 && (
+          {imageUploadError && (
+            <div role="alert" className="alert alert-danger" style={{ marginTop: 12 }}>
+              {imageUploadError}
+            </div>
+          )}
+          {imagePreview && (
             <div style={{ marginTop: 12 }}>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase' }}>Preview Gambar Saat Ini:</p>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase' }}>
+                {image ? 'Preview Foto yang Dipilih:' : 'Preview Gambar Saat Ini:'}
+              </p>
               <img
                 src={imagePreview}
                 alt="Preview gambar fasilitas"

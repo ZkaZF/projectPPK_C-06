@@ -22,10 +22,11 @@ interface FileUploadCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
   onClose?: () => void;
   title?: string;
   description?: string;
+  accept?: string;
 }
 
 export const FileUploadCard = React.forwardRef<HTMLDivElement, FileUploadCardProps>(
-  ({ className, files = [], onFilesChange, onFileRemove, onClose, title = "Upload Foto Bukti", description = "Opsional: Tambahkan foto bukti kerusakan atau masalah", ...props }, ref) => {
+  ({ className, files = [], onFilesChange, onFileRemove, onClose, title = "Upload Foto Bukti", description = "Opsional: Tambahkan foto bukti kerusakan atau masalah", accept = "image/*", ...props }, ref) => {
     const [isDragging, setIsDragging] = React.useState(false);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -66,6 +67,7 @@ export const FileUploadCard = React.forwardRef<HTMLDivElement, FileUploadCardPro
       if (selectedFiles.length > 0) {
         onFilesChange(selectedFiles);
       }
+      e.target.value = "";
     };
 
     // Trigger file input click
@@ -140,7 +142,7 @@ export const FileUploadCard = React.forwardRef<HTMLDivElement, FileUploadCardPro
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept={accept}
               className="hidden"
               onChange={handleFileSelect}
             />

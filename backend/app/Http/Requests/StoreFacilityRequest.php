@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 
 /**
@@ -53,9 +54,65 @@ class StoreFacilityRequest extends FormRequest
             'fac_stat_id'     => 'required|integer|exists:facility_statuses,fac_stat_id',
             'fac_image'       => Rule::when(
                 $this->hasFile('fac_image'),
-                ['image', 'max:5120'],
+                ['image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
                 ['nullable', 'string', 'max:255']
             ),
         ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'fac_image.uploaded' => $this->uploadFailureMessage(),
+            'fac_image.image' => 'File yang dipilih bukan foto yang valid.',
+            'fac_image.mimes' => 'Jenis foto ini belum didukung. Pilih foto JPG, PNG, atau WebP.',
+            'fac_image.max' => 'Ukuran foto maksimal 5 MB. Silakan pilih foto yang lebih kecil.',
+        ];
+    }
+
+    private function uploadFailureMessage(): string
+    {
+        $file = $this->file('fac_image');
+        if (!$file instanceof UploadedFile) {
+            return 'Foto tidak berhasil dikirim. Periksa koneksi internet lalu coba lagi.';
+        }
+
+        return match ($file->getError()) {
+            UPLOAD_ERR_INI_SIZE => $this->fileTooLargeMessage(),
+            UPLOAD_ERR_FORM_SIZE => 'Foto terlalu besar untuk diunggah. Silakan pilih foto yang lebih kecil.',
+            UPLOAD_ERR_PARTIAL => 'Foto belum terkirim sepenuhnya. Periksa koneksi internet lalu coba lagi.',
+            UPLOAD_ERR_NO_TMP_DIR,
+            UPLOAD_ERR_CANT_WRITE,
+            UPLOAD_ERR_EXTENSION => 'Foto belum dapat diunggah saat ini. Coba lagi nanti, atau hubungi pengelola sistem jika masalah berlanjut.',
+            default => 'Foto tidak berhasil diunggah. Periksa koneksi internet lalu coba lagi.',
+        };
+    }
+
+    private function fileTooLargeMessage(): string
+    {
+        $setting = trim((string) ini_get('upload_max_filesize'));
+        if (preg_match('/^(\d+(?:\.\d+)?)\s*([KMG])?B?$/i', $setting, $matches) !== 1) {
+            return 'Foto terlalu besar untuk diunggah. Silakan pilih foto yang lebih kecil.';
+        }
+
+        $multiplier = match (strtoupper($matches[2] ?? '')) {
+            'G' => 1024 ** 3,
+            'M' => 1024 ** 2,
+            'K' => 1024,
+            default => 1,
+        };
+        $bytes = (float) $matches[1] * $multiplier;
+        $readableLimit = match (true) {
+            $bytes >= 1024 ** 3 => round($bytes / (1024 ** 3), 1) . ' GB',
+            $bytes >= 1024 ** 2 => round($bytes / (1024 ** 2), 1) . ' MB',
+            $bytes >= 1024 => round($bytes / 1024) . ' KB',
+            default => null,
+        };
+
+        if ($readableLimit === null) {
+            return 'Foto terlalu besar untuk diunggah. Silakan pilih foto yang lebih kecil.';
+        }
+
+        return "Foto terlalu besar untuk diunggah. Ukuran maksimal saat ini sekitar {$readableLimit}. Silakan pilih foto yang lebih kecil.";
     }
 }

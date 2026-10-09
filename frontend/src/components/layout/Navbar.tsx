@@ -33,14 +33,15 @@ export const Navbar = ({ onToggleSidebar, sidebarOpen }: NavbarProps) => {
 
   return (
     <nav className="navbar">
-      {/* Hamburger — mobile only */}
+      {/* Sidebar toggle */}
       {onToggleSidebar && (
         <button
           className="navbar-hamburger"
           onClick={onToggleSidebar}
           aria-label={sidebarOpen ? "Tutup menu" : "Buka menu"}
+          aria-expanded={sidebarOpen}
+          type="button"
           style={{
-            display: "none",
             alignItems: "center",
             justifyContent: "center",
             width: 36,

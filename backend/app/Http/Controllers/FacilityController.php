@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFacilityRequest;
 use App\Services\SupabaseStorageService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -265,9 +266,13 @@ class FacilityController extends Controller
         if ($request->hasFile('fac_image')) {
             try {
                 $imageValue = $this->storage->upload($request->file('fac_image'));
-            } catch (\RuntimeException $e) {
+            } catch (\RuntimeException|ConnectionException $e) {
                 Log::error('Facility image upload failed on store', ['error' => $e->getMessage()]);
-                return response()->json(['message' => 'Image upload failed. Please try again.'], 500);
+                return response()->json([
+                    'message' => $e instanceof ConnectionException
+                        ? 'Foto belum dapat diunggah karena koneksi terputus. Periksa koneksi internet lalu coba lagi.'
+                        : $e->getMessage(),
+                ], 502);
             }
         } else {
             $imageValue = $request->fac_image; // plain URL string (optional)
@@ -327,28 +332,31 @@ class FacilityController extends Controller
         $oldImage   = $existing[0]->fac_image ?? null;
         $imageValue = $oldImage; // Default: keep the current image unchanged.
 
-        // When a new file is uploaded, delete the old one first then upload the replacement.
+        // Upload the replacement before deleting the current image so a failed upload
+        // does not remove the image already attached to the facility.
         if ($request->hasFile('fac_image')) {
-            // Delete old image from the appropriate storage backend.
+            // Upload the new image to Supabase and store the public URL.
+            try {
+                $imageValue = $this->storage->upload($request->file('fac_image'));
+            } catch (\RuntimeException|ConnectionException $e) {
+                Log::error('Facility image upload failed on update', ['fac_id' => $id, 'error' => $e->getMessage()]);
+                return response()->json([
+                    'message' => $e instanceof ConnectionException
+                        ? 'Foto belum dapat diunggah karena koneksi terputus. Periksa koneksi internet lalu coba lagi.'
+                        : $e->getMessage(),
+                ], 502);
+            }
+
+            // The replacement is safely stored; now remove the old image.
             if ($oldImage) {
                 if ($this->storage->isSupabaseUrl($oldImage)) {
-                    // Old image lives in Supabase Storage — remove via API.
                     $this->storage->delete($oldImage);
                 } else {
-                    // Old image is a legacy local file — remove from the public disk.
                     $localPath = ltrim(parse_url($oldImage, PHP_URL_PATH), '/');
                     if (Storage::disk('public')->exists($localPath)) {
                         Storage::disk('public')->delete($localPath);
                     }
                 }
-            }
-
-            // Upload the new image to Supabase and store the public URL.
-            try {
-                $imageValue = $this->storage->upload($request->file('fac_image'));
-            } catch (\RuntimeException $e) {
-                Log::error('Facility image upload failed on update', ['fac_id' => $id, 'error' => $e->getMessage()]);
-                return response()->json(['message' => 'Image upload failed. Please try again.'], 500);
             }
         }
 

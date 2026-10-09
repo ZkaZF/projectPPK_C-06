@@ -4,7 +4,7 @@ import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";
 
 export const AppLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.matchMedia("(min-width: 769px)").matches);
 
   const closeSidebar = () => setSidebarOpen(false);
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
@@ -13,7 +13,7 @@ export const AppLayout = () => {
     <div className="app-shell">
       <Navbar onToggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
 
-      <div className="app-body">
+      <div className={`app-body${sidebarOpen ? "" : " sidebar-collapsed"}`}>
         {/* Mobile overlay */}
         <div
           className={`sidebar-overlay${sidebarOpen ? " sidebar-open" : ""}`}
