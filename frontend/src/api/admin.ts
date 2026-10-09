@@ -18,5 +18,5 @@ export const adminDeleteFacilityApi   = (id: number | string) => api.delete(`/ad
 // ── Admin: Recap & Stats ──────────────────────────────────────────────
 export const adminGetRecapApi   = (params?: object) => api.get('/admin/recap', { params });
 export const adminGetStatsApi   = ()                 => api.get('/admin/stats');
-export const adminExportRecapApi = (format: 'csv' | 'excel') =>
-  api.get(`/admin/recap/export?format=${format}`, { responseType: 'blob' });
+export const adminExportRecapApi = (format: 'csv' | 'excel' | 'pdf') =>
+  api.get(`/admin/recap/export?format=${format === 'excel' ? 'xlsx' : format}`, { responseType: 'blob' });

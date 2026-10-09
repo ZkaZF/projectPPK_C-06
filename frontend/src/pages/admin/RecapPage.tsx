@@ -15,7 +15,7 @@ export default function RecapPage() {
   const [data, setData]           = useState<RecapEntry[]>([]);
   const [loading, setLoading]     = useState(true);
   const [error, setError]         = useState('');
-  const [exporting, setExporting] = useState<'csv' | 'excel' | null>(null);
+  const [exporting, setExporting] = useState<'csv' | 'excel' | 'pdf' | null>(null);
   const [dateFrom, setDateFrom]   = useState('');
   const [dateTo, setDateTo]       = useState('');
 
@@ -32,12 +32,22 @@ export default function RecapPage() {
 
   useEffect(() => { load(); }, []);
 
-  const handleExport = async (format: 'csv' | 'excel') => {
+  const handleExport = async (format: 'csv' | 'excel' | 'pdf') => {
     setExporting(format);
     try {
       const res = await adminExportRecapApi(format);
-      const mime = format === 'csv' ? 'text/csv' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-      const ext  = format === 'csv' ? 'csv' : 'xlsx';
+      
+      let mime = 'application/pdf';
+      let ext = 'pdf';
+      
+      if (format === 'csv') {
+        mime = 'text/csv';
+        ext = 'csv';
+      } else if (format === 'excel') {
+        mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        ext = 'xlsx';
+      }
+      
       const url  = URL.createObjectURL(new Blob([res.data], { type: mime }));
       const a    = document.createElement('a');
       a.href = url;
@@ -78,6 +88,10 @@ export default function RecapPage() {
           <button onClick={() => handleExport('excel')} disabled={exporting !== null}
             style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '9px 18px', borderRadius: 'var(--radius)', background: 'var(--primary)', color: '#fff', border: 'none', fontWeight: 600, fontSize: '0.875rem', cursor: exporting ? 'not-allowed' : 'pointer' }}>
             <Download size={15} /> {exporting === 'excel' ? 'Mengekspor...' : 'Export Excel'}
+          </button>
+          <button onClick={() => handleExport('pdf')} disabled={exporting !== null}
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '9px 18px', borderRadius: 'var(--radius)', background: '#ef4444', color: '#fff', border: 'none', fontWeight: 600, fontSize: '0.875rem', cursor: exporting ? 'not-allowed' : 'pointer' }}>
+            <Download size={15} /> {exporting === 'pdf' ? 'Mengekspor...' : 'Export PDF'}
           </button>
         </div>
       </div>

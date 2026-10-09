@@ -75,13 +75,15 @@ class RecapController extends Controller
     {
         $from = $request->query('from');
         $to = $request->query('to');
-        $format = $request->query('format', 'csv'); // csv or xlsx
+        $format = $request->query('format', 'csv'); // csv, xlsx, pdf
 
         $fileName = 'rekapitulasi.' . $format;
         
         $writerType = \Maatwebsite\Excel\Excel::CSV;
         if ($format === 'xlsx') {
             $writerType = \Maatwebsite\Excel\Excel::XLSX;
+        } elseif ($format === 'pdf') {
+            $writerType = \Maatwebsite\Excel\Excel::DOMPDF;
         }
 
         return \Maatwebsite\Excel\Facades\Excel::download(
