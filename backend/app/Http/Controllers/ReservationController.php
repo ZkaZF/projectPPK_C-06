@@ -96,6 +96,13 @@ class ReservationController extends Controller
             return response()->json(['message' => 'Reservasi hanya dapat dilakukan pada jam operasional (07:00 - 20:00).'], 422);
         }
 
+        // Cek Kelipatan 30 Menit
+        $start_minutes = (int) substr($start_time, 3, 2);
+        $end_minutes = (int) substr($end_time, 3, 2);
+        if ($start_minutes % 30 !== 0 || $end_minutes % 30 !== 0) {
+            return response()->json(['message' => 'Waktu reservasi harus dalam kelipatan 30 menit.'], 422);
+        }
+
         // Cek Waktu Lampau (Hari ini)
         if ($validated['reservation_date'] === \Carbon\Carbon::today()->format('Y-m-d')) {
             if ($start_time < \Carbon\Carbon::now()->format('H:i')) {
@@ -213,6 +220,12 @@ class ReservationController extends Controller
         $statusName = $reservation->reservationStatus?->res_status_name;
         if (!in_array($statusName, ['pending', 'approved'])) {
             return response()->json(['message' => 'Only pending or approved reservations can be cancelled.'], 422);
+        }
+
+        // Time check: prevent cancelling if the reservation time has already passed
+        $reservationDateTime = \Carbon\Carbon::parse($reservation->res_date . ' ' . $reservation->res_start);
+        if (\Carbon\Carbon::now()->greaterThanOrEqualTo($reservationDateTime)) {
+            return response()->json(['message' => 'Waktu reservasi sudah terlewat, tidak dapat dibatalkan.'], 422);
         }
 
         // Fetch the "cancelled" status ID and apply it.

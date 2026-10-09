@@ -86,7 +86,7 @@ class ReportController extends Controller
                 report($e);
 
                 return response()->json([
-                    'message' => 'Failed to upload photo. Please try again.',
+                    'message' => $e->getMessage() ?: 'Foto belum dapat disimpan saat ini. Coba lagi nanti.',
                 ], 502);
             }
         }
