@@ -4,6 +4,12 @@ Aplikasi web **Uni-FaRe** untuk mengelola penggunaan fasilitas kampus (ruang kel
 
 ---
 
+## Status Proyek
+
+✅ **Selesai (100%)** — Semua fitur sesuai dokumen spesifikasi telah diimplementasikan, termasuk fitur ekspor rekapitulasi fasilitas dalam format CSV, Excel, dan PDF. Proses QA Testing dan perbaikan bug akhir diselesaikan oleh **PM**.
+
+---
+
 ## Tech Stack
 
 | Layer | Teknologi |

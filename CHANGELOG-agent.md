@@ -223,3 +223,17 @@
 - **[PM] Reorganisasi Sidebar UX**
   - **Status:** ✅ Selesai
   - **Detail:** Mengubah urutan penyajian menu di `Sidebar.tsx`. Jika pengguna login sebagai Admin, susunan prioritas menu berubah menjadi: 1. Administrasi, 2. Petugas, dan 3. Akses Pengguna Publik (pengganti nama "Menu Utama"). Tujuannya untuk mencegah kebingungan akibat adanya fitur duplikat seperti dua dashboard untuk roles yang berbeda.
+
+## 2026-10-10
+
+- **[PM] QA Dogfood Testing & Bug Fixes (Auth, Reservation, Report)**
+  - **Status:** ✅ Selesai
+  - **Detail:** Mengeksekusi uji QA dan memperbaiki bug [BUG-001] (Axios login reload), [BUG-004] (Validasi kelipatan 30 menit backend), [BUG-005] (Pembatalan reservasi lampau), serta [BUG-003] (Error message upload).
+
+- **[PM] Implementasi Ekspor PDF Rekap Data (US 17)**
+  - **Status:** ✅ Selesai
+  - **Detail:** Mengkonfigurasi DOMPDF pada Laravel Excel dan menambahkan fungsi tombol ekspor PDF di UI.
+
+- **[PM] Finalisasi Keseluruhan Proyek**
+  - **Status:** ✅ Selesai
+  - **Detail:** Update seluruh dokumentasi. Proyek dinyatakan 100% lengkap dan sesuai spesifikasi.
