@@ -64,7 +64,14 @@ class SupabaseStorageService
                 'status' => $response->status(),
                 'body'   => $response->body(),
             ]);
-            throw new \RuntimeException('Supabase storage upload failed: ' . $response->body());
+
+            $message = match ($response->status()) {
+                413 => 'Foto terlalu besar untuk diunggah. Silakan pilih foto yang lebih kecil.',
+                415 => 'Jenis foto ini belum didukung. Pilih foto JPG, PNG, atau WebP.',
+                default => 'Foto belum dapat disimpan saat ini. Coba lagi nanti, atau hubungi pengelola sistem jika masalah berlanjut.',
+            };
+
+            throw new \RuntimeException($message);
         }
 
         return $this->publicUrl($objectPath);

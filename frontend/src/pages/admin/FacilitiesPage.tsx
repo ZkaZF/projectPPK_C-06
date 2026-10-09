@@ -1,12 +1,49 @@
-import { useEffect, useState } from 'react';
-import { Building2, Pencil, Plus } from 'lucide-react';
-import { createFacilityApi, getFacilitiesApi, updateFacilityApi } from '../../api/facilities';
+import { useEffect, useMemo, useState } from 'react';
+import { isAxiosError } from 'axios';
+import { Building2, Pencil, Plus, Search, X } from 'lucide-react';
+import {
+  createFacilityApi,
+  createFacilityTypeApi,
+  getFacilitiesApi,
+  getFacilityTypesApi,
+  updateFacilityApi,
+} from '../../api/facilities';
 import FacilityForm from '../../components/facilities/FacilityForm';
-import type { Facility } from '../../types/facility';
+import type { Facility, FacilityType } from '../../types/facility';
+
+interface ApiErrorResponse {
+  message?: string;
+  errors?: Record<string, string[]>;
+}
+
+const getRequestErrorMessage = (requestError: unknown): string => {
+  if (!isAxiosError<ApiErrorResponse>(requestError)) {
+    return 'Fasilitas belum dapat disimpan. Silakan coba lagi.';
+  }
+
+  const response = requestError.response?.data;
+  const validationErrors = response?.errors;
+  if (validationErrors) {
+    const messages = Object.entries(validationErrors)
+      .flatMap(([field, errors]) => errors.map((message) => {
+        const label = field === 'fac_image' ? 'Foto fasilitas' : field;
+        return `${label}: ${message}`;
+      }));
+    if (messages.length > 0) return messages.join(' ');
+  }
+
+  return response?.message
+    ?? (requestError.response
+      ? 'Fasilitas belum dapat disimpan. Silakan coba lagi.'
+      : 'Tidak dapat terhubung ke server. Periksa koneksi lalu coba lagi.');
+};
 
 export default function FacilitiesPage() {
   const [facilities, setFacilities] = useState<Facility[]>([]);
+  const [facilityTypes, setFacilityTypes] = useState<FacilityType[]>([]);
   const [editing, setEditing] = useState<Facility | null>(null);
+  const [formVersion, setFormVersion] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -14,11 +51,15 @@ export default function FacilitiesPage() {
   const loadFacilities = async () => {
     setLoading(true);
     try {
-      const response = await getFacilitiesApi();
-      setFacilities(response.data.data ?? []);
+      const [facilitiesResponse, typesResponse] = await Promise.all([
+        getFacilitiesApi(),
+        getFacilityTypesApi(),
+      ]);
+      setFacilities(facilitiesResponse.data.data ?? []);
+      setFacilityTypes(typesResponse.data.data ?? []);
       setError('');
     } catch {
-      setError('Gagal memuat daftar fasilitas.');
+      setError('Gagal memuat daftar fasilitas atau jenis fasilitas.');
     } finally {
       setLoading(false);
     }
@@ -28,9 +69,29 @@ export default function FacilitiesPage() {
     void loadFacilities();
   }, []);
 
+  const filteredFacilities = useMemo(() => {
+    const query = searchQuery.trim().toLocaleLowerCase('id');
+    if (!query) return facilities;
+
+    return facilities.filter((facility) => [
+      facility.fac_name,
+      facility.fac_location,
+      facility.type?.fac_type_name,
+      facility.status?.fac_status_name,
+    ].some((value) => value?.toLocaleLowerCase('id').includes(query)));
+  }, [facilities, searchQuery]);
+
   const resetForm = () => {
     setEditing(null);
+    setFormVersion((version) => version + 1);
     setError('');
+  };
+
+  const createFacilityType = async (name: string) => {
+    const response = await createFacilityTypeApi(name);
+    const createdType = response.data.data;
+    setFacilityTypes((types) => [...types, createdType]);
+    return createdType;
   };
 
   const saveFacility = async (data: FormData) => {
@@ -44,8 +105,8 @@ export default function FacilitiesPage() {
       }
       resetForm();
       await loadFacilities();
-    } catch (requestError: any) {
-      setError(requestError.response?.data?.message ?? 'Gagal menyimpan fasilitas.');
+    } catch (requestError: unknown) {
+      setError(getRequestErrorMessage(requestError));
     } finally {
       setSubmitting(false);
     }
@@ -82,8 +143,10 @@ export default function FacilitiesPage() {
             )}
           </div>
           <FacilityForm
-            key={editing?.fac_id ?? 'new'}
+            key={editing?.fac_id ?? `new-${formVersion}`}
             initialData={editing ?? {}}
+            facilityTypes={facilityTypes}
+            onCreateFacilityType={createFacilityType}
             onSubmit={saveFacility}
             submitting={submitting}
           />
@@ -93,7 +156,32 @@ export default function FacilitiesPage() {
         <section className="admin-split-right">
           <div className="admin-split-right-head">
             <h2>Daftar Fasilitas</h2>
-            <span className="admin-count">{facilities.length} item</span>
+            <span className="admin-count">
+              {searchQuery.trim()
+                ? `${filteredFacilities.length} dari ${facilities.length} item`
+                : `${facilities.length} item`}
+            </span>
+          </div>
+
+          <div className="admin-facility-search">
+            <Search size={18} aria-hidden="true" />
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Cari nama fasilitas, lokasi, jenis..."
+              aria-label="Cari fasilitas"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                aria-label="Hapus pencarian"
+                title="Hapus pencarian"
+              >
+                <X size={16} />
+              </button>
+            )}
           </div>
 
           <div className="admin-table-wrap">
@@ -116,7 +204,13 @@ export default function FacilitiesPage() {
                       <Building2 size={18} /> Belum ada fasilitas.
                     </td>
                   </tr>
-                ) : facilities.map((facility) => (
+                ) : filteredFacilities.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="text-center py-4">
+                      Tidak ada fasilitas yang cocok dengan “{searchQuery}”.
+                    </td>
+                  </tr>
+                ) : filteredFacilities.map((facility) => (
                   <tr
                     key={facility.fac_id}
                     className={editing?.fac_id === facility.fac_id ? 'row-active' : ''}

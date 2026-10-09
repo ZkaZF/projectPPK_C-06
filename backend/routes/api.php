@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\FacilityController;
+use App\Http\Controllers\FacilityTypeController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
@@ -22,11 +23,13 @@ Route::prefix('auth')->group(function () {
 Route::get('/facilities',             [FacilityController::class, 'index']);
 Route::get('/facilities/{id}',        [FacilityController::class, 'show']);
 Route::get('/facilities/{id}/slots',  [FacilityController::class, 'slots']);
+Route::get('/facility-types',         [FacilityTypeController::class, 'index']);
 
 // Admin only
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/facilities',            [FacilityController::class, 'store']);
     Route::put('/facilities/{id}',        [FacilityController::class, 'update']);
+    Route::post('/facility-types',        [FacilityTypeController::class, 'store']);
     
     // Admin User Management
     Route::get('/admin/users',            [\App\Http\Controllers\Admin\UserController::class, 'index']);

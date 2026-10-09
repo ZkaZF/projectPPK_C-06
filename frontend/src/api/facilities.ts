@@ -1,13 +1,27 @@
 import type { AxiosResponse } from 'axios';
 import api from './axios';
-import type { Facility, FacilityFilterState } from '../types/facility';
+import type { Facility, FacilityFilterState, FacilityType } from '../types/facility';
 
 interface FacilityListResponse {
   data: Facility[];
 }
 
+interface FacilityTypeListResponse {
+  data: FacilityType[];
+}
+
+interface FacilityTypeResponse {
+  data: FacilityType;
+}
+
 export const getFacilitiesApi = (filters: Partial<FacilityFilterState> = {}):
   Promise<AxiosResponse<FacilityListResponse>> => api.get('/facilities', { params: filters });
+
+export const getFacilityTypesApi = (): Promise<AxiosResponse<FacilityTypeListResponse>> =>
+  api.get('/facility-types');
+
+export const createFacilityTypeApi = (fac_type_name: string): Promise<AxiosResponse<FacilityTypeResponse>> =>
+  api.post('/facility-types', { fac_type_name });
 
 export const getFacilityApi = (id: number | string): Promise<AxiosResponse<{ data: Facility }>> =>
   api.get(`/facilities/${id}`);
