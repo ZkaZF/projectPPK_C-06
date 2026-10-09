@@ -809,4 +809,11 @@ php artisan test
 | 2 | FullCalendar untuk SlotCalendar | Custom slot grid dengan tombol | FullCalendar v7 crash fatal, versi 6 tidak kompatibel |
 | 3 | Kategori laporan dari DB | Hardcoded 5 kategori di frontend | Backend sudah ada tabel, tapi belum ada endpoint GET untuk kategori |
 
-### Status Akhir Proyek\n\nSemua fase telah diselesaikan, termasuk **Fase 6** (Admin & Rekap) dan finalisasi QA oleh PM:\n\n- [x] Admin/UserController.php — index, store, verify\n- [x] Admin/RecapController.php — index, export CSV/Excel/PDF\n- [x] src/pages/admin/ — semua halaman admin selesai\n- [x] src/pages/officer/ — antrian reservasi dan laporan selesai\n- [x] GET /api/report-categories — endpoint integrasi kategori dinamis selesai\n- [x] **[PM]** QA Testing (Playwright), Bug Fixing (Auth, Jam Operasional Reservasi), dan Export PDF Rekap diselesaikan.
+### Yang Masih Harus Dikerjakan (Fase 6)
+
+- [ ] `Admin/UserController.php` — index, store, verify
+- [ ] `Admin/RecapController.php` — index, export CSV/Excel/PDF
+- [ ] `src/pages/admin/` — semua halaman admin
+- [ ] `src/pages/officer/ReservationQueuePage.tsx` — antrian petugas
+- [ ] `src/pages/officer/ReportQueuePage.tsx` — antrian laporan
+- [ ] `GET /api/report-categories` — endpoint untuk load kategori dinamis di frontend
