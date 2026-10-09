@@ -202,7 +202,7 @@ php artisan storage:link
 
 ---
 
-## Status Kode Saat Ini (Update: 1 Okt 2026)
+## Status Kode Saat Ini (Update: 10 Okt 2026)
 
 ### Backend (`backend/`)
 | Komponen | Status | Keterangan |
@@ -222,7 +222,7 @@ php artisan storage:link
 | `ReportController` | ✅ Selesai | store (+ foto upload), myList, queue, updateStatus |
 | `StoreReportRequest` | ✅ Selesai | Validasi laporan + foto |
 | Storage symlink | ✅ Selesai | `php artisan storage:link` sudah dijalankan |
-| Admin Controllers | ❌ Belum | Target Fase 6 |
+| Admin Controllers | ✅ Selesai | Semua endpoint admin beres (User, Recap, Export) |
 
 ### Frontend (`frontend/`)
 | Komponen | Status | Keterangan |
@@ -242,7 +242,7 @@ php artisan storage:link
 | MyReservationsPage | ✅ Ada | List reservasi + badge status + tombol batalkan |
 | NewReportPage | ✅ Ada | Form laporan + upload foto + preview |
 | MyReportsPage | ✅ Ada | List laporan + thumbnail foto + badge status/kategori |
-| Officer / Admin UI | ❌ Belum | Target Fase 6 |
+| Officer / Admin UI | ✅ Selesai | Semua UI Officer & Admin (Dashboard, Queue, Recap) |
 
 ---
 
@@ -257,8 +257,8 @@ Lihat detail lengkap di `implementation_plan.md` dan `parallel_work_plan.md`.
 | **3. Fasilitas** | M2 (11-23 Sep) | CRUD fasilitas, slot API, FacilityCard, SlotCalendar | ✅ **Selesai** (BE + FE merged 29 Sep) |
 | **4. Reservasi** | M3 (23-27 Sep) | Reservasi + conflict detection, form + antrian | ✅ **Selesai** (Backend + Frontend, 1 Okt) |
 | **5. Laporan** | M3-M4 (27-30 Sep) | Laporan kerusakan + foto, riwayat + antrian | ✅ **Selesai** (Backend + Frontend, 1 Okt) |
-| **6. Admin** | M4 (1-5 Okt) | User management, rekap, export CSV/Excel/PDF | 🔴 Harus dimulai sekarang |
-| **7. Polish** | M5 (6-10 Okt) | Bug fix, UI polish, persiapan presentasi | ⬜ Belum |
+| **6. Admin** | M4 (1-5 Okt) | User management, rekap, export CSV/Excel/PDF | ✅ **Selesai** (Backend + Frontend, 10 Okt) |
+| **7. Polish** | M5 (6-10 Okt) | Bug fix, UI polish, persiapan presentasi | ✅ **Selesai** (10 Okt) |
 
 ---
 
