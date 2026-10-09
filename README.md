@@ -28,10 +28,21 @@ Aplikasi web **Uni-FaRe** untuk mengelola penggunaan fasilitas kampus (ruang kel
 
 ```
 code/
-├── backend/                 # Laravel REST API
-├── frontend/                # React 18 SPA (Vite)
+├── backend/                 # Laravel REST API (PHP 8.2+)
+│   ├── app/                 # Logic Utama (Controllers, Models, Middleware)
+│   ├── routes/              # Routing (api.php)
+│   ├── database/            # Migrations & Seeders
+│   └── public/storage/      # Direktori upload gambar
+├── frontend/                # React 18 SPA (Vite + TypeScript)
+│   ├── src/
+│   │   ├── api/             # API layer (Axios interceptors)
+│   │   ├── components/      # UI components (Layout, Fasilitas, UI reusables)
+│   │   ├── pages/           # Page views (Admin, Officer, User)
+│   │   └── style.css        # CSS globals & tokens
+│   └── tests/               # Playwright E2E Tests
 ├── CHANGELOG-agent.md       # Log eksekusi agent AI
-├── implementation_plan.md   # Panduan implementasi lengkap
+├── implementation_plan.md   # Panduan implementasi teknis lengkap
+├── parallel_work_plan.md    # Pembagian kerja tim
 ├── agentic-ai-sop.md        # SOP workflow AI agent
 └── README.md
 ```
