@@ -30,31 +30,10 @@ import ManageUsersPage from "./pages/admin/ManageUsersPage";
 import VerifyUsersPage from "./pages/admin/VerifyUsersPage";
 import RecapPage from "./pages/admin/RecapPage";
 
-// Placeholder (for pages not yet implemented)
-import { LayoutDashboard } from "lucide-react";
-const DummyPage = ({ title, icon: Icon, desc }: { title: string; icon: any; desc: string }) => (
-  <div style={{ padding: "32px", maxWidth: "1140px", margin: "0 auto" }}>
-    <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "32px" }}>
-      <div style={{ width: "48px", height: "48px", borderRadius: "10px", background: "var(--primary-bg)", color: "var(--primary-dark)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Icon size={24} />
-      </div>
-      <div>
-        <h1 style={{ fontSize: "1.75rem", fontWeight: 700, margin: 0, color: "var(--text-h)" }}>{title}</h1>
-        <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "0.95rem" }}>{desc}</p>
-      </div>
-    </div>
-    <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "48px", minHeight: "400px", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "var(--shadow)" }}>
-      <div style={{ textAlign: "center", color: "var(--text-muted)", maxWidth: "400px" }}>
-        <Icon size={56} style={{ opacity: 0.15, marginBottom: "20px" }} />
-        <p style={{ fontWeight: 500, color: "var(--text-h)", fontSize: "1.1rem" }}>Modul "{title}" Belum Tersedia</p>
-        <p style={{ fontSize: "0.9rem", marginTop: "8px", lineHeight: 1.6 }}>Halaman ini sedang dalam tahap pengembangan.</p>
-      </div>
-    </div>
-  </div>
-);
+
+import OfficerDashboardPage from "./pages/officer/OfficerDashboardPage";
 
 const AdminFacilPage = FacilitiesPage;
-const OfficerDashboardPage = () => <DummyPage title="Dashboard Petugas" icon={LayoutDashboard} desc="Ringkasan tugas dan antrian penanganan fasilitas." />;
 
 function App() {
   return (

@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { ClipboardList, Wrench, ShieldCheck, ArrowRight } from "lucide-react";
 // @ts-ignore
-import { getReservationsApi } from "../../api/reservations";
+import { getReservationQueueApi } from "../../api/reservations";
 // @ts-ignore
-import { getReportsApi } from "../../api/reports";
+import { getReportQueueApi } from "../../api/reports";
 
 export default function OfficerDashboardPage() {
   const { user } = useAuth();
@@ -18,8 +18,8 @@ export default function OfficerDashboardPage() {
       setLoading(true);
       try {
         const [resResv, resRep] = await Promise.all([
-          getReservationsApi(),
-          getReportsApi()
+          getReservationQueueApi(),
+          getReportQueueApi()
         ]);
         
         const reservations = resResv.data.data ?? resResv.data ?? [];

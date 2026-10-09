@@ -73,35 +73,21 @@ class RecapController extends Controller
      */
     public function export(Request $request)
     {
-        // For simplicity and since we don't have Laravel Excel fully set up here, 
-        // we'll return a simple CSV response directly.
-        $recap = json_decode($this->index($request)->getContent(), true)['data'];
+        $from = $request->query('from');
+        $to = $request->query('to');
+        $format = $request->query('format', 'csv'); // csv or xlsx
 
-        $headers = [
-            'Content-type'        => 'text/csv',
-            'Content-Disposition' => 'attachment; filename=rekapitulasi.csv',
-            'Pragma'              => 'no-cache',
-            'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
-            'Expires'             => '0'
-        ];
+        $fileName = 'rekapitulasi.' . $format;
+        
+        $writerType = \Maatwebsite\Excel\Excel::CSV;
+        if ($format === 'xlsx') {
+            $writerType = \Maatwebsite\Excel\Excel::XLSX;
+        }
 
-        $callback = function() use ($recap) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, ['Nama Fasilitas', 'Total Reservasi', 'Disetujui', 'Ditolak', 'Dibatalkan', 'Total Laporan Kerusakan']);
-
-            foreach ($recap as $row) {
-                fputcsv($file, [
-                    $row['facility_name'],
-                    $row['total_reservations'],
-                    $row['approved'],
-                    $row['rejected'],
-                    $row['cancelled'],
-                    $row['total_reports'],
-                ]);
-            }
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\RecapExport($from, $to), 
+            $fileName,
+            $writerType
+        );
     }
 }

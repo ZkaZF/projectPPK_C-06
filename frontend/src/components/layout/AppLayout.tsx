@@ -6,7 +6,11 @@ import { Sidebar } from "./Sidebar";
 export const AppLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(() => window.matchMedia("(min-width: 769px)").matches);
 
-  const closeSidebar = () => setSidebarOpen(false);
+  const closeSidebar = () => {
+    if (window.innerWidth < 769) {
+      setSidebarOpen(false);
+    }
+  };
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
   return (

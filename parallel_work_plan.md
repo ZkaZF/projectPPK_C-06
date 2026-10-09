@@ -115,17 +115,17 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ### 👤 Orang 1 — Backend Reservasi
 **Branch Git:** `feat/backend-reservation`
 
-- [x] Buat `app/Http/Requests/StoreReservationRequest.php` ✅ (dikerjakan PM, 1 Okt)
-- [x] Isi `ReservationController` yang sudah ada:
-  - [x] `store()` → validasi + cek conflict → simpan dengan status `pending` ✅
-  - [x] `myList()` → reservasi milik user yang login ✅
-  - [x] `show($id)` → detail + relasi facility, user ✅
-  - [x] `cancel($id)` → batalkan milik sendiri ✅
-  - [x] `queue()` → daftar antrian status `pending` (untuk petugas) ✅
-  - [x] `approve($id)` → cek conflict lagi → ubah status ke `approved` ✅
-  - [x] `reject($id)` → ubah status ke `rejected` + `cancel_reason` ✅
-  - [x] `forceCancel($id)` → ubah status `approved` → `cancelled` + alasan ✅
-- [x] Tambahkan routes reservasi ke `routes/api.php` ✅
+- [ ] Buat `app/Http/Requests/StoreReservationRequest.php` ✅ (dikerjakan PM, 1 Okt)
+- [ ] Isi `ReservationController` yang sudah ada:
+  - [ ] `store()` → validasi + cek conflict → simpan dengan status `pending` ✅
+  - [ ] `myList()` → reservasi milik user yang login ✅
+  - [ ] `show($id)` → detail + relasi facility, user ✅
+  - [ ] `cancel($id)` → batalkan milik sendiri ✅
+  - [ ] `queue()` → daftar antrian status `pending` (untuk petugas) ✅
+  - [ ] `approve($id)` → cek conflict lagi → ubah status ke `approved` ✅
+  - [ ] `reject($id)` → ubah status ke `rejected` + `cancel_reason` ✅
+  - [ ] `forceCancel($id)` → ubah status `approved` → `cancelled` + alasan ✅
+- [ ] Tambahkan routes reservasi ke `routes/api.php` ✅
 
 **Output:** Semua endpoint reservasi bisa di-hit via Postman dengan response JSON yang benar.
 
@@ -134,11 +134,11 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ### 👤 Orang 2 — Frontend Reservasi
 **Branch Git:** `feat/frontend-reservation`
 
-- [x] Buat `src/api/reservations.ts` ✅ (dikerjakan PM, 1 Okt)
-- [x] Buat `src/pages/user/NewReservationPage.tsx` ✅
-- [x] Buat `src/pages/user/MyReservationsPage.tsx` ✅
-- [x] Buat `src/pages/user/DashboardPage.tsx` ✅ (sudah ada sebelumnya)
-- [x] Buat `src/pages/officer/ReservationQueuePage.tsx` — Antrian petugas ✅ (2 Okt - PM)
+- [ ] Buat `src/api/reservations.ts` ✅ (dikerjakan PM, 1 Okt)
+- [ ] Buat `src/pages/user/NewReservationPage.tsx` ✅
+- [ ] Buat `src/pages/user/MyReservationsPage.tsx` ✅
+- [ ] Buat `src/pages/user/DashboardPage.tsx` ✅ (sudah ada sebelumnya)
+- [ ] Buat `src/pages/officer/ReservationQueuePage.tsx` — Antrian petugas ✅ (2 Okt - PM)
 
 **Output:** User bisa ajukan reservasi, lihat riwayat, batalkan. Petugas bisa approve/reject dari antrian.
 
@@ -147,9 +147,9 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ### 👤 Orang 3 — Ekstraksi Komponen Reservasi & Fasilitas
 **Branch Git:** Buat branch `feat/frontend-refactor-components` dari `main`
 
-- [x] **PRIORITAS:** Resolve konflik merge `feat/frontend-facility` → `main` bersama PM ✅ (Diselesaikan PM)
-- [x] Ganti mock data di `HomePage.tsx` dengan API call real dari backend ✅ (Diselesaikan PM)
-- [x] Pastikan `SlotCalendar` bisa fetch slot dari backend ✅ (Diselesaikan PM)
+- [ ] **PRIORITAS:** Resolve konflik merge `feat/frontend-facility` → `main` bersama PM ✅ (Diselesaikan PM)
+- [ ] Ganti mock data di `HomePage.tsx` dengan API call real dari backend ✅ (Diselesaikan PM)
+- [ ] Pastikan `SlotCalendar` bisa fetch slot dari backend ✅ (Diselesaikan PM)
 - [ ] **TUGAS UTAMA:** Ekstrak UI form reservasi dari `src/pages/user/NewReservationPage.tsx` menjadi komponen reusable `src/components/reservations/ReservationForm.tsx`.
 - [ ] **TUGAS UTAMA:** Ekstrak UI list riwayat reservasi dari `src/pages/user/MyReservationsPage.tsx` menjadi komponen reusable `src/components/reservations/ReservationTable.tsx`.
 
@@ -162,27 +162,27 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 ### 👤 Orang 1 — Backend Laporan
 **Branch Git:** `feat/backend-report`
 
-- [x] Buat `app/Http/Controllers/ReportController.php` ✅ (dikerjakan PM, 1 Okt)
-  - [x] `store()` → simpan laporan + upload foto ke `storage/app/public/reports/` ✅
-  - [x] `myList()` → laporan milik user login ✅
-  - [x] `queue()` → antrian laporan untuk petugas (status `baru`/`diproses`) ✅
-  - [x] `updateStatus($id)` → ubah status + catatan resolusi + catat `handled_by` ✅
-- [x] Buat `app/Http/Requests/StoreReportRequest.php` ✅
-- [x] Jalankan `php artisan storage:link` untuk akses foto via URL publik ✅
-- [x] Tambahkan routes laporan ke `routes/api.php` ✅
+- [ ] Buat `app/Http/Controllers/ReportController.php` ✅ (dikerjakan PM, 1 Okt)
+  - [ ] `store()` → simpan laporan + upload foto ke `storage/app/public/reports/` ✅
+  - [ ] `myList()` → laporan milik user login ✅
+  - [ ] `queue()` → antrian laporan untuk petugas (status `baru`/`diproses`) ✅
+  - [ ] `updateStatus($id)` → ubah status + catatan resolusi + catat `handled_by` ✅
+- [ ] Buat `app/Http/Requests/StoreReportRequest.php` ✅
+- [ ] Jalankan `php artisan storage:link` untuk akses foto via URL publik ✅
+- [ ] Tambahkan routes laporan ke `routes/api.php` ✅
 
 ### 👤 Orang 2 — Frontend Laporan
 **Branch Git:** `feat/frontend-report`
 
-- [x] Buat `src/api/reports.ts` ✅ (dikerjakan PM, 1 Okt)
-- [x] Buat `src/pages/user/NewReportPage.tsx` — form laporan + upload foto + preview ✅
-- [x] Buat `src/pages/user/MyReportsPage.tsx` — riwayat laporan + StatusBadge ✅
-- [x] Buat `src/pages/officer/ReportQueuePage.tsx` — antrian laporan, ubah status ✅ (2 Okt - PM)
-- [ ] Buat `src/pages/officer/OfficerDashboardPage.tsx` *(target Fase 6)*
+- [ ] Buat `src/api/reports.ts` ✅ (dikerjakan PM, 1 Okt)
+- [ ] Buat `src/pages/user/NewReportPage.tsx` — form laporan + upload foto + preview ✅
+- [ ] Buat `src/pages/user/MyReportsPage.tsx` — riwayat laporan + StatusBadge ✅
+- [ ] Buat `src/pages/officer/ReportQueuePage.tsx` — antrian laporan, ubah status ✅ (2 Okt - PM)
+- [ ] Buat `src/pages/officer/OfficerDashboardPage.tsx` *(target Fase 6)* ✅ (Selesai diintegrasikan ke App.tsx)
 
 ### 👤 Orang 3 — Ekstraksi Komponen Laporan
-- [x] **TUGAS UTAMA:** Ekstrak UI form laporan dari `src/pages/user/NewReportPage.tsx` menjadi komponen reusable `src/components/reports/ReportForm.tsx` ✅ (2 Okt - PM)
-- [x] **TUGAS UTAMA:** Ekstrak UI list riwayat laporan dari `src/pages/user/MyReportsPage.tsx` menjadi komponen reusable `src/components/reports/ReportTable.tsx` ✅ (2 Okt - PM)
+- [ ] **TUGAS UTAMA:** Ekstrak UI form laporan dari `src/pages/user/NewReportPage.tsx` menjadi komponen reusable `src/components/reports/ReportForm.tsx` ✅ (2 Okt - PM)
+- [ ] **TUGAS UTAMA:** Ekstrak UI list riwayat laporan dari `src/pages/user/MyReportsPage.tsx` menjadi komponen reusable `src/components/reports/ReportTable.tsx` ✅ (2 Okt - PM)
 - [ ] Buat `src/components/reports/ReportQueue.tsx` — tabel antrian laporan untuk petugas.
 
 ---
@@ -199,17 +199,17 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 - [ ] Buat `app/Http/Controllers/Admin/RecapController.php`
   - `index()` → data rekap (jumlah reservasi per fasilitas, laporan per kategori, dll)
   - `export($format)` → export CSV / Excel / PDF
-- [ ] Buat `app/Exports/RecapExport.php` (menggunakan `maatwebsite/excel`)
+- [ ] Buat `app/Exports/RecapExport.php` (menggunakan `maatwebsite/excel`) ✅
 
 ### 👤 Orang 2 — Frontend Admin
 **Branch Git:** `feat/frontend-admin`
 
-- [x] Buat `src/api/admin.ts` ✅ (2 Okt - PM)
-- [x] Buat `src/pages/admin/AdminDashboardPage.tsx` — statistik keseluruhan ✅ (2 Okt - PM)
+- [ ] Buat `src/api/admin.ts` ✅ (2 Okt - PM)
+- [ ] Buat `src/pages/admin/AdminDashboardPage.tsx` — statistik keseluruhan ✅ (2 Okt - PM)
 - [ ] Buat `src/pages/admin/ManageFacilitiesPage.tsx` — CRUD fasilitas (integrasi FacilityForm)
-- [x] Buat `src/pages/admin/ManageUsersPage.tsx` — buat akun petugas/pengguna ✅ (2 Okt - PM)
-- [x] Buat `src/pages/admin/VerifyUsersPage.tsx` — verifikasi akun pending ✅ (2 Okt - PM)
-- [x] Buat `src/pages/admin/RecapPage.tsx` — tabel rekap + tombol export CSV/Excel ✅ (2 Okt - PM)/PDF
+- [ ] Buat `src/pages/admin/ManageUsersPage.tsx` — buat akun petugas/pengguna ✅ (2 Okt - PM)
+- [ ] Buat `src/pages/admin/VerifyUsersPage.tsx` — verifikasi akun pending ✅ (2 Okt - PM)
+- [ ] Buat `src/pages/admin/RecapPage.tsx` — tabel rekap + tombol export CSV/Excel ✅ (2 Okt - PM)/PDF
 
 ---
 
