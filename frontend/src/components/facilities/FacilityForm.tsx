@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { Building2, Layers, MapPin, Users, FileText, Image as ImageIcon } from 'lucide-react';
 import type { Facility, FacilityType } from '../../types/facility';
+import { FileUploadCard, type UploadedFile } from '../ui/file-upload-card';
 
 // @ts-ignore
 import { mockFacilityTypes } from '../../__mocks__/facilities';
@@ -37,6 +39,7 @@ export default function FacilityForm({ initialData = {}, onSubmit, submitting }:
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [image, setImage] = useState<File | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [imagePreview, setImagePreview] = useState(initialData.fac_image || '');
 
   const handleChange = (field: keyof FormState) => (
@@ -64,95 +67,151 @@ export default function FacilityForm({ initialData = {}, onSubmit, submitting }:
     onSubmit(formData);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedImage = e.target.files?.[0] ?? null;
-    setImage(selectedImage);
-    setImagePreview(selectedImage ? URL.createObjectURL(selectedImage) : initialData.fac_image || '');
+  const handleFilesChange = (newFiles: File[]) => {
+    if (newFiles.length > 0) {
+      const selectedImage = newFiles[0];
+      setUploadedFiles([{ id: `${selectedImage.name}-${Date.now()}`, file: selectedImage, progress: 100, status: 'completed' }]);
+      setImage(selectedImage);
+      setImagePreview(URL.createObjectURL(selectedImage));
+    }
   };
 
+  const handleFileRemove = () => {
+    setUploadedFiles([]);
+    setImage(null);
+    setImagePreview(initialData.fac_image || '');
+  };
+
+  const labelStyle: React.CSSProperties = {
+    display: 'block', marginBottom: '6px', fontSize: '0.78rem',
+    fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em',
+  };
+  const inputStyle: React.CSSProperties = {
+    width: '100%', padding: '10px 14px', borderRadius: 'var(--radius-sm)',
+    border: '1px solid var(--border)', background: 'var(--surface-2)',
+    color: 'var(--text-h)', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box',
+  };
+  const inputErrorStyle: React.CSSProperties = { ...inputStyle, borderColor: '#fca5a5', background: '#fef2f2' };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-3">
-        <label className="form-label">Nama Fasilitas</label>
-        <input
-          type="text"
-          className={`form-control ${errors.fac_name ? 'is-invalid' : ''}`}
-          value={form.fac_name}
-          onChange={handleChange('fac_name')}
-        />
-        {errors.fac_name && <div className="invalid-feedback">{errors.fac_name}</div>}
-      </div>
-
-      <div className="mb-3">
-        <label className="form-label">Tipe Fasilitas</label>
-        <select
-          className={`form-select ${errors.fac_type_id ? 'is-invalid' : ''}`}
-          value={form.fac_type_id}
-          onChange={handleChange('fac_type_id')}
-        >
-          <option value="">Pilih Tipe</option>
-          {mockFacilityTypes.map((t: FacilityType) => (
-            <option key={t.fac_type_id} value={t.fac_type_id}>
-              {t.fac_type_name}
-            </option>
-          ))}
-        </select>
-        {errors.fac_type_id && <div className="invalid-feedback">{errors.fac_type_id}</div>}
-      </div>
-
-      <div className="mb-3">
-        <label className="form-label">Lokasi</label>
-        <input
-          type="text"
-          className={`form-control ${errors.fac_location ? 'is-invalid' : ''}`}
-          value={form.fac_location}
-          onChange={handleChange('fac_location')}
-        />
-        {errors.fac_location && <div className="invalid-feedback">{errors.fac_location}</div>}
-      </div>
-
-      <div className="mb-3">
-        <label className="form-label">Kapasitas</label>
-        <input
-          type="number"
-          min="1"
-          className="form-control"
-          value={form.fac_capacity}
-          onChange={handleChange('fac_capacity')}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label className="form-label">Deskripsi</label>
-        <textarea
-          className="form-control"
-          rows={3}
-          value={form.fac_description}
-          onChange={handleChange('fac_description')}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label className="form-label" htmlFor="facility-image">Gambar Fasilitas</label>
-        <input
-          id="facility-image"
-          type="file"
-          className="form-control"
-          accept="image/*"
-          onChange={handleImageChange}
-        />
-        {imagePreview && (
-          <img
-            src={imagePreview}
-            alt="Preview gambar fasilitas"
-            style={{ width: '100%', maxHeight: 220, objectFit: 'cover', marginTop: 12, borderRadius: 6 }}
+    <div style={{ background: 'var(--surface)', borderRadius: 'var(--radius-lg)' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        
+        {/* Nama Fasilitas */}
+        <div>
+          <label style={labelStyle}>
+            <Building2 size={13} style={{ display: 'inline', marginRight: 6 }} />Nama Fasilitas
+          </label>
+          <input
+            type="text"
+            style={errors.fac_name ? inputErrorStyle : inputStyle}
+            value={form.fac_name}
+            onChange={handleChange('fac_name')}
           />
-        )}
-      </div>
+          {errors.fac_name && <div style={{ color: '#dc2626', fontSize: '0.75rem', marginTop: '4px' }}>{errors.fac_name}</div>}
+        </div>
 
-      <button type="submit" className="btn btn-primary" disabled={submitting}>
-        {submitting ? 'Menyimpan...' : 'Simpan'}
-      </button>
-    </form>
+        {/* Tipe Fasilitas */}
+        <div>
+          <label style={labelStyle}>
+            <Layers size={13} style={{ display: 'inline', marginRight: 6 }} />Tipe Fasilitas
+          </label>
+          <select
+            style={errors.fac_type_id ? inputErrorStyle : inputStyle}
+            value={form.fac_type_id}
+            onChange={handleChange('fac_type_id')}
+          >
+            <option value="">-- Pilih Tipe --</option>
+            {mockFacilityTypes.map((t: FacilityType) => (
+              <option key={t.fac_type_id} value={t.fac_type_id}>
+                {t.fac_type_name}
+              </option>
+            ))}
+          </select>
+          {errors.fac_type_id && <div style={{ color: '#dc2626', fontSize: '0.75rem', marginTop: '4px' }}>{errors.fac_type_id}</div>}
+        </div>
+
+        {/* Lokasi */}
+        <div>
+          <label style={labelStyle}>
+            <MapPin size={13} style={{ display: 'inline', marginRight: 6 }} />Lokasi
+          </label>
+          <input
+            type="text"
+            style={errors.fac_location ? inputErrorStyle : inputStyle}
+            value={form.fac_location}
+            onChange={handleChange('fac_location')}
+          />
+          {errors.fac_location && <div style={{ color: '#dc2626', fontSize: '0.75rem', marginTop: '4px' }}>{errors.fac_location}</div>}
+        </div>
+
+        {/* Kapasitas */}
+        <div>
+          <label style={labelStyle}>
+            <Users size={13} style={{ display: 'inline', marginRight: 6 }} />Kapasitas
+          </label>
+          <input
+            type="number"
+            min="1"
+            style={inputStyle}
+            value={form.fac_capacity}
+            onChange={handleChange('fac_capacity')}
+          />
+        </div>
+
+        {/* Divider */}
+        <div style={{ borderTop: '1px solid var(--border)', margin: '4px 0' }} />
+
+        {/* Deskripsi */}
+        <div>
+          <label style={labelStyle}>
+            <FileText size={13} style={{ display: 'inline', marginRight: 6 }} />Deskripsi
+          </label>
+          <textarea
+            style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }}
+            value={form.fac_description}
+            onChange={handleChange('fac_description')}
+          />
+        </div>
+
+        {/* Gambar */}
+        <div>
+          <label style={labelStyle}>
+            <ImageIcon size={13} style={{ display: 'inline', marginRight: 6 }} />Gambar Fasilitas
+          </label>
+          <FileUploadCard
+            files={uploadedFiles}
+            onFilesChange={handleFilesChange}
+            onFileRemove={handleFileRemove}
+            className="mt-2 w-full max-w-full"
+            title="Upload Gambar Fasilitas"
+            description="Format gambar (JPEG, PNG). Ukuran disarankan 16:9"
+          />
+          {imagePreview && uploadedFiles.length === 0 && (
+            <div style={{ marginTop: 12 }}>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase' }}>Preview Gambar Saat Ini:</p>
+              <img
+                src={imagePreview}
+                alt="Preview gambar fasilitas"
+                style={{ width: '100%', maxHeight: 200, objectFit: 'cover', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Submit */}
+        <button
+          type="submit"
+          disabled={submitting}
+          style={{
+            width: '100%', padding: '12px', background: 'var(--primary)', color: 'white',
+            border: 'none', borderRadius: 'var(--radius-md)', fontWeight: 600, fontSize: '0.95rem',
+            cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.7 : 1, marginTop: '8px'
+          }}
+        >
+          {submitting ? 'Menyimpan...' : 'Simpan Fasilitas'}
+        </button>
+      </form>
+    </div>
   );
 }

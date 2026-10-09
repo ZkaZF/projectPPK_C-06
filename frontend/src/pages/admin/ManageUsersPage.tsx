@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Plus, X, AlertCircle } from 'lucide-react';
+import { Users, Plus, X, AlertCircle, User as UserIcon, Mail, Lock, Shield } from 'lucide-react';
 import { adminGetUsersApi, adminCreateUserApi } from '../../api/admin';
 
 interface User {
@@ -160,34 +160,42 @@ export default function ManageUsersPage() {
               <div style={{ padding: '10px 14px', marginBottom: '16px', borderRadius: 'var(--radius-sm)', background: '#fee2e2', color: '#dc2626', fontSize: '0.875rem' }}>{createError}</div>
             )}
 
-            <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div>
-                <label style={labelStyle}>Nama Lengkap</label>
+                <label style={labelStyle}>
+                  <UserIcon size={13} style={{ display: 'inline', marginRight: 6 }} />Nama Lengkap
+                </label>
                 <input style={inputStyle} type="text" required placeholder="Nama lengkap" value={form.user_name} onChange={e => setForm(f => ({ ...f, user_name: e.target.value }))} />
               </div>
               <div>
-                <label style={labelStyle}>Email</label>
+                <label style={labelStyle}>
+                  <Mail size={13} style={{ display: 'inline', marginRight: 6 }} />Email
+                </label>
                 <input style={inputStyle} type="email" required placeholder="email@domain.com" value={form.user_email} onChange={e => setForm(f => ({ ...f, user_email: e.target.value }))} />
               </div>
               <div>
-                <label style={labelStyle}>Password</label>
+                <label style={labelStyle}>
+                  <Lock size={13} style={{ display: 'inline', marginRight: 6 }} />Password
+                </label>
                 <input style={inputStyle} type="password" required minLength={8} placeholder="Min. 8 karakter" value={form.user_password} onChange={e => setForm(f => ({ ...f, user_password: e.target.value }))} />
               </div>
               <div>
-                <label style={labelStyle}>Role</label>
+                <label style={labelStyle}>
+                  <Shield size={13} style={{ display: 'inline', marginRight: 6 }} />Role
+                </label>
                 <select style={inputStyle} value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))}>
                   <option value="petugas">Petugas</option>
                   <option value="pengguna">Pengguna</option>
                   <option value="admin">Admin</option>
                 </select>
               </div>
-              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '8px' }}>
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '12px', paddingTop: '16px', borderTop: '1px solid var(--border)' }}>
                 <button type="button" onClick={() => setShowCreate(false)}
                   style={{ padding: '10px 20px', borderRadius: 'var(--radius)', background: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--border)', fontWeight: 600, cursor: 'pointer' }}>
                   Batal
                 </button>
                 <button type="submit" disabled={submitting}
-                  style={{ padding: '10px 20px', borderRadius: 'var(--radius)', background: 'var(--primary)', color: '#fff', border: 'none', fontWeight: 600, cursor: submitting ? 'not-allowed' : 'pointer' }}>
+                  style={{ padding: '10px 20px', borderRadius: 'var(--radius)', background: 'var(--primary)', color: '#fff', border: 'none', fontWeight: 600, cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.7 : 1 }}>
                   {submitting ? 'Membuat...' : 'Buat Akun'}
                 </button>
               </div>

@@ -27,25 +27,31 @@ Kamu bertanggung jawab di **seluruh fase** dengan tugas yang berbeda-beda:
 - [x] Review PR #7 dari Orang 3 — memberikan feedback 6 poin (3 bug kritis + 3 minor)
 
 ### Fase 4–6 (Checkpoint Review)
-- [ ] Review & test setiap PR sebelum merge ke `main`
-- [ ] Test end-to-end setelah merge (Login → Fasilitas → Reservasi → Laporan → Admin)
-- [ ] Koordinasi antar anggota jika ada bottleneck / dependency
+- [x] Review & test setiap PR sebelum merge ke `main` ✅
+- [x] Test end-to-end setelah merge (Login → Fasilitas → Reservasi → Laporan → Admin) ✅
+- [x] Koordinasi antar anggota jika ada bottleneck / dependency ✅
 - [x] Pastikan semua blocking issue terselesaikan (misal tabel `personal_access_tokens`) ✅
 
 ### Fase 7 — UI Finishing & Polish (Ini bagianmu!)
 - [x] Review seluruh tampilan UI secara menyeluruh
 - [x] Perbaiki konsistensi warna, spacing, font, dan layout antar halaman
-- [ ] Pastikan responsiveness di mobile (375px) dan desktop (1440px)
-- [x] Polish micro-interactions: hover effects, transisi halaman, loading states ✅ (2 Okt - Fix loading spinner setelah login)
-- [ ] Pastikan error states ditampilkan dengan baik
-- [ ] Review dan rapikan CSS/styling secara keseluruhan
+- [x] Pastikan responsiveness di mobile (375px) dan desktop (1440px) ✅ (9 Okt - Hero Section & Search Bar)
+- [x] Polish micro-interactions: hover effects, transisi halaman, loading states ✅ (2 Okt & 9 Okt - Floating Cards)
+- [x] Pastikan error states ditampilkan dengan baik ✅ (9 Okt)
+- [x] Review dan rapikan CSS/styling secara keseluruhan ✅ (9 Okt - Redesign Hero & Catalog)
 - [x] Tambah `FacilitySeeder` — 10 data fasilitas dummy (semua tipe) ✅ (1 Okt)
 - [x] Perbaikan Sidebar UX untuk Admin/Petugas (Reorder menu & ubah label) ✅ (2 Okt)
 - [x] Integrasi UI `FileUploadCard` dengan setup Tailwind CSS v3 untuk form laporan ✅ (2 Okt)
 - [x] Fix blank page issue (missing imports) di `NewReportPage` ✅ (2 Okt)
-- [ ] Finalisasi seed data untuk demo presentasi
-- [ ] Persiapan slide / alur demo presentasi
-- [ ] Testing end-to-end final: Register → Verify → Login → Reservasi → Laporan → Admin Export
+- [x] Samakan styling form admin (Kelola Fasilitas & Kelola User) dengan form Reservasi ✅ (9 Okt)
+- [x] Finalisasi seed data untuk demo presentasi ✅ (9 Okt)
+- [x] Persiapan slide / alur demo presentasi ✅ (9 Okt)
+- [x] Testing end-to-end final: Register → Verify → Login → Reservasi → Laporan → Admin Export ✅ (9 Okt)
+
+### PM & AI — Penyelesaian Fase 6 (Backend Admin) (9 Okt)
+- [x] Buat `UserController.php` (CRUD Admin/User, Verifikasi) ✅
+- [x] Buat `RecapController.php` (Statistik, Rekapitulasi) ✅
+- [x] Daftarkan route `/admin/users` dan `/admin/recap` di `routes/api.php` ✅
 
 ### PM mengambil alih Fase 4 & 5 (PM, 1 Okt)
 - [x] Implementasi `StoreReservationRequest` (validasi lengkap) ✅

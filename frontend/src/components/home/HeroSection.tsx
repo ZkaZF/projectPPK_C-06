@@ -270,25 +270,23 @@ export const HeroSection = ({ totalFacilities, totalLocations }: HeroSectionProp
                 display: "flex",
                 alignItems: "center",
                 gap: "16px",
-                background: "rgba(15, 23, 42, 0.7)",
-                backdropFilter: "blur(24px)",
-                border: "1px solid rgba(255,255,255,0.12)",
+                background: "#ffffff",
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderBottom: "3px solid rgba(13, 148, 136, 0.15)", // Aksen teal di bawah sebagai pembatas
                 padding: "20px 24px",
                 borderRadius: "16px",
-                boxShadow: "0 10px 40px rgba(0,0,0,0.2), 0 1px 3px rgba(0,0,0,0.1)",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08)",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.boxShadow = "0 14px 45px rgba(0,0,0,0.3), 0 4px 10px rgba(0,0,0,0.1)";
-                e.currentTarget.style.background = "rgba(15, 23, 42, 0.85)";
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+                e.currentTarget.style.boxShadow = "0 20px 40px rgba(0,0,0,0.18), 0 8px 16px rgba(0,0,0,0.1)";
+                e.currentTarget.style.borderBottomColor = "rgba(13, 148, 136, 0.5)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 10px 40px rgba(0,0,0,0.2), 0 1px 3px rgba(0,0,0,0.1)";
-                e.currentTarget.style.background = "rgba(15, 23, 42, 0.7)";
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
+                e.currentTarget.style.boxShadow = "0 10px 30px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08)";
+                e.currentTarget.style.borderBottomColor = "rgba(13, 148, 136, 0.15)";
               }}
             >
               <div
@@ -296,13 +294,12 @@ export const HeroSection = ({ totalFacilities, totalLocations }: HeroSectionProp
                   width: "44px",
                   height: "44px",
                   borderRadius: "10px",
-                  background: "linear-gradient(135deg, rgba(13, 148, 136, 0.2), rgba(13, 148, 136, 0.05))",
-                  border: "1px solid rgba(13, 148, 136, 0.3)",
+                  background: "#f0fdfa",
+                  border: "1px solid rgba(13, 148, 136, 0.1)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   flexShrink: 0,
-                  boxShadow: "inset 0 1px 1px rgba(255,255,255,0.1)",
                 }}
               >
                 <svg
@@ -310,7 +307,7 @@ export const HeroSection = ({ totalFacilities, totalLocations }: HeroSectionProp
                   height="20"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#2dd4bf" // Bright Teal
+                  stroke="#0d9488"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -323,7 +320,7 @@ export const HeroSection = ({ totalFacilities, totalLocations }: HeroSectionProp
                   style={{
                     fontSize: "1.4rem",
                     fontWeight: 800,
-                    color: "#fff",
+                    color: "#0f172a",
                     lineHeight: 1.1,
                     letterSpacing: "-0.02em",
                   }}
@@ -333,7 +330,7 @@ export const HeroSection = ({ totalFacilities, totalLocations }: HeroSectionProp
                 <div
                   style={{
                     fontSize: "0.8rem",
-                    color: "rgba(255,255,255,0.6)",
+                    color: "#475569",
                     fontWeight: 500,
                     marginTop: "2px",
                   }}

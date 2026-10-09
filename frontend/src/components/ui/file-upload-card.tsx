@@ -20,10 +20,12 @@ interface FileUploadCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
   onFilesChange: (files: File[]) => void;
   onFileRemove: (id: string) => void;
   onClose?: () => void;
+  title?: string;
+  description?: string;
 }
 
 export const FileUploadCard = React.forwardRef<HTMLDivElement, FileUploadCardProps>(
-  ({ className, files = [], onFilesChange, onFileRemove, onClose, ...props }, ref) => {
+  ({ className, files = [], onFilesChange, onFileRemove, onClose, title = "Upload Foto Bukti", description = "Opsional: Tambahkan foto bukti kerusakan atau masalah", ...props }, ref) => {
     const [isDragging, setIsDragging] = React.useState(false);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -109,9 +111,9 @@ export const FileUploadCard = React.forwardRef<HTMLDivElement, FileUploadCardPro
                 <UploadCloud className="w-6 h-6 text-muted-foreground" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-foreground">Upload Foto Bukti</h3>
+                <h3 className="text-lg font-semibold text-foreground">{title}</h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Opsional: Tambahkan foto bukti kerusakan atau masalah
+                  {description}
                 </p>
               </div>
             </div>

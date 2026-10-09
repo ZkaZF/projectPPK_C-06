@@ -27,6 +27,16 @@ Route::get('/facilities/{id}/slots',  [FacilityController::class, 'slots']);
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/facilities',            [FacilityController::class, 'store']);
     Route::put('/facilities/{id}',        [FacilityController::class, 'update']);
+    
+    // Admin User Management
+    Route::get('/admin/users',            [\App\Http\Controllers\Admin\UserController::class, 'index']);
+    Route::post('/admin/users',           [\App\Http\Controllers\Admin\UserController::class, 'store']);
+    Route::patch('/admin/users/{id}/verify', [\App\Http\Controllers\Admin\UserController::class, 'verify']);
+    Route::patch('/admin/users/{id}/reject', [\App\Http\Controllers\Admin\UserController::class, 'reject']);
+    
+    // Admin Recap
+    Route::get('/admin/recap',            [\App\Http\Controllers\Admin\RecapController::class, 'index']);
+    Route::get('/admin/recap/export',     [\App\Http\Controllers\Admin\RecapController::class, 'export']);
 });
 
 // Petugas or Admin

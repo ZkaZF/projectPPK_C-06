@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FacilityCard from '../../components/facilities/FacilityCard';
 import FacilityCardSkeleton from '../../components/facilities/FacilityCardSkeleton';
-import FacilityFilter, { EMPTY_FILTERS } from '../../components/facilities/FacilityFilter';
+import { EMPTY_FILTERS } from '../../components/facilities/FacilityFilter';
 import type { Facility, FacilityFilterState } from '../../types/facility';
 import { Pagination } from '../../components/common/Pagination';
 import { isAvailable } from '../../utils/facility';
