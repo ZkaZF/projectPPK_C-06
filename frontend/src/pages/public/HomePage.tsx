@@ -230,7 +230,7 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Error state */}
       {error && (
