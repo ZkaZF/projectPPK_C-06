@@ -63,7 +63,7 @@ class ReportController extends Controller
      * can show an error without saving an incomplete report record.
      *
      * @param  \App\Http\Requests\StoreReportRequest  $request  Validated payload (fac_id, rep_cat_id, rep_description, rep_photo?)
-     * @param  \App\Services\SupabaseStorage          $storage  Photo upload service (auto-injected by Laravel's IoC container)
+     * @param  \App\Services\SupabaseStorageService     $storage  Photo upload service (auto-injected by Laravel's IoC container)
      * @return \Illuminate\Http\JsonResponse          201 with report data, or 502 if upload fails
      */
     public function store(StoreReportRequest $request, SupabaseStorageService $storage)

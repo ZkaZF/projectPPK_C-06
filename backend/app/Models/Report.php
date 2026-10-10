@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Services\SupabaseStorage;
+use App\Services\SupabaseStorageService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**
@@ -49,7 +49,7 @@ class Report extends Model
      */
     protected function repPhotoUrl(): Attribute
     {
-        return Attribute::get(fn () => app(SupabaseStorage::class)->publicUrl($this->rep_photo));
+        return Attribute::get(fn () => app(SupabaseStorageService::class)->publicUrl($this->rep_photo));
     }
 
     // ─── Main table relations ─────────────────────────────────────────────────
