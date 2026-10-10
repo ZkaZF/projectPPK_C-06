@@ -85,6 +85,7 @@ export const Navbar = ({ onToggleSidebar, sidebarOpen }: NavbarProps) => {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "6px",
+                  marginRight: "12px",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.opacity = "0.85";
@@ -116,7 +117,8 @@ export const Navbar = ({ onToggleSidebar, sidebarOpen }: NavbarProps) => {
                 border: "1px solid rgba(255,255,255,0.2)",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "6px"
+                gap: "6px",
+                marginLeft: "12px",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = "rgba(255,255,255,0.1)";
