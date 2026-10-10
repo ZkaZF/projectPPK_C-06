@@ -4,7 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { 
   Home, Calendar, FileText, ClipboardList, Wrench, 
   BarChart, Building2, Users, CheckCircle, TrendingUp,
-  PlusCircle, FilePlus
+  PlusCircle, FilePlus, Globe
 } from "lucide-react";
 
 interface NavItem {
@@ -60,6 +60,11 @@ export const Sidebar = ({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
 
   return (
     <aside className={`sidebar${isOpen ? " sidebar-open" : ""}`}>
+      {/* Quick link to public homepage */}
+      <div className="sidebar-section">
+        <SidebarItem to="/" icon={<Globe size={20} />} label="Jelajahi Fasilitas" onClose={onClose} />
+      </div>
+
       <div className="sidebar-section">
         <div className="sidebar-section-label">Umum</div>
         {roleGeneralMenuItems.map((item) => (
