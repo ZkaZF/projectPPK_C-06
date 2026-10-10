@@ -143,7 +143,7 @@ class SupabaseStorageService
     /**
      * Build the publicly accessible URL for a stored object.
      */
-    private function publicUrl(string $objectPath): string
+    public function publicUrl(string $objectPath): string
     {
         return "{$this->baseUrl}/storage/v1/object/public/{$this->bucket}/{$objectPath}";
     }
