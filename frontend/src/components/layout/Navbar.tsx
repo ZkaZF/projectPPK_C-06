@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { UniversityLogo } from "../common/UniversityLogo";
-import { LogOut, Menu, X } from "lucide-react";
+import { LogOut, Menu, X, LayoutDashboard } from "lucide-react";
 
 interface NavbarProps {
   onToggleSidebar?: () => void;
@@ -71,6 +71,31 @@ export const Navbar = ({ onToggleSidebar, sidebarOpen }: NavbarProps) => {
       <div className="navbar-user">
         {user ? (
           <>
+            {/* Dashboard shortcut — visible when user is on public pages */}
+            {!onToggleSidebar && (
+              <Link
+                to={user.role.role_name === "admin" ? "/admin" : "/dashboard"}
+                className="btn"
+                style={{
+                  padding: "8px 16px",
+                  fontSize: "0.875rem",
+                  background: "var(--primary)",
+                  color: "var(--text-white)",
+                  border: "1px solid var(--primary)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = "0.85";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = "1";
+                }}
+              >
+                <LayoutDashboard size={16} /> Dashboard
+              </Link>
+            )}
             <div style={{ textAlign: "right" }}>
               <div className="navbar-user-name">{user.full_name}</div>
               <div style={{ fontSize: "0.75rem", color: "rgba(255, 255, 255, 0.7)" }}>

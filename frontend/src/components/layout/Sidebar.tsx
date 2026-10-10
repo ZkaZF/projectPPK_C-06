@@ -34,10 +34,6 @@ const adminMenuItems: NavItem[] = [
   { to: "/admin/recap",      icon: <TrendingUp size={20} />, label: "Rekap Data" },
 ];
 
-const generalMenuItems: NavItem[] = [
-  { to: "/general", icon: <Home size={20} />, label: "Dashboard Umum" },
-];
-
 const SidebarItem = ({ to, icon, label, onClose }: NavItem & { onClose?: () => void }) => (
   <NavLink
     to={to}
@@ -53,23 +49,12 @@ const SidebarItem = ({ to, icon, label, onClose }: NavItem & { onClose?: () => v
 export const Sidebar = ({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) => {
   const { user } = useAuth();
   const role = user?.role.role_name;
-  const roleGeneralMenuItems = generalMenuItems.map((item) => ({
-    ...item,
-    to: role === "admin" ? "/admin/general" : item.to,
-  }));
 
   return (
     <aside className={`sidebar${isOpen ? " sidebar-open" : ""}`}>
       {/* Quick link to public homepage */}
       <div className="sidebar-section">
         <SidebarItem to="/" icon={<Globe size={20} />} label="Jelajahi Fasilitas" onClose={onClose} />
-      </div>
-
-      <div className="sidebar-section">
-        <div className="sidebar-section-label">Umum</div>
-        {roleGeneralMenuItems.map((item) => (
-          <SidebarItem key={item.to} onClose={onClose} {...item} />
-        ))}
       </div>
 
       {/* Admin only */}
