@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import FacilityCard from '../../components/facilities/FacilityCard';
 import FacilityCardSkeleton from '../../components/facilities/FacilityCardSkeleton';
 import { EMPTY_FILTERS } from '../../components/facilities/FacilityFilter';
@@ -10,6 +11,25 @@ import { HeroSection } from '../../components/home/HeroSection';
 
 // @ts-ignore
 import { getFacilitiesApi } from '../../api/facilities';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { type: "spring", stiffness: 300, damping: 24 }
+  }
+};
 
 export default function HomePage() {
   const [facilities, setFacilities] = useState<Facility[]>([]);
@@ -80,10 +100,17 @@ export default function HomePage() {
       />
 
       {/* Catalog Section */}
-      <div id="catalog-section" className="max-w-[1280px] w-full mx-auto px-4 sm:px-6 pt-24 pb-16 flex-1 animate-fade-in">
+      <motion.div 
+        id="catalog-section" 
+        className="max-w-[1280px] w-full mx-auto px-4 sm:px-6 pt-24 pb-16 flex-1"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+      >
       
       {/* Option B: Header Section - Google-style Unified Search */}
-      <div className="mb-10">
+      <motion.div variants={itemVariants} className="mb-10">
         
         {/* Top Header Line: Title & Stats */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-6">
@@ -244,11 +271,22 @@ export default function HomePage() {
       {!loading && filtered.length > 0 && (
         <>
           {viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" data-purpose="facility-card-grid">
-              {paginatedFacilities.map((f) => (
-                <FacilityCard key={f.fac_id} facility={f} />
-              ))}
-            </div>
+            <motion.div 
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" 
+              data-purpose="facility-card-grid"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <AnimatePresence>
+                {paginatedFacilities.map((f) => (
+                  <motion.div key={f.fac_id} variants={itemVariants} layout>
+                    <FacilityCard facility={f} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
           ) : (
             /* ── Table View ─────────────────────────────────────────── */
             <div className="bg-white rounded-lg border border-institution-200 overflow-hidden shadow-sm">
@@ -320,7 +358,7 @@ export default function HomePage() {
           />
         </>
       )}
-      </div>
+      </motion.div>
     </>
   );
 }
